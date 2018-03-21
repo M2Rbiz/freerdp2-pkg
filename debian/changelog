@@ -1,3 +1,9 @@
+freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-7~bpo9+1) stretch-backports; urgency=medium
+
+  * Rebuild for stretch-backports.
+
+ -- Matteo F. Vescovi <mfv@debian.org>  Wed, 21 Mar 2018 10:53:01 +0100
+
 freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-7) unstable; urgency=medium
 
   * Team upload.
