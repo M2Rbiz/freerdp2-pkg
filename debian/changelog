@@ -1,14 +1,73 @@
+freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-7) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Bernhard Miklautz ]
+  * debian/patches
+    + add 0002-fix-nla-don-t-use-server-version.patch to fix
+      NLA connection problems with latest Windows update.
+  * debian/libwinpr2-2.docs
+    + add to fix lintian error "missing-notice-file-for-apache-license"
+
+  [ Matteo F. Vescovi ]
+  * debian/control: S-V bump 4.1.1 -> 4.1.3 (no changes needed)
+  * debian/control: Vcs-* fields updated to point to salsa
+  * debian/: debhelper bump 9 -> 11
+  * debian/rules: "--parallel" parameter dropped
+  * debian/control: autotools-dev b-dep dropped
+  * debian/rules: fix dpkg-architecture variables
+
+ -- Matteo F. Vescovi <mfv@debian.org>  Thu, 15 Mar 2018 14:35:27 +0100
+
+freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-6) unstable; urgency=medium
+
+  [ Mike Gabriel ]
+  * debian/changelog:
+    + Post-upload fix of 2.0.0~git20170725.1.1648deb+dfsg1-5 stanza. We forgot
+      to mention inclusion of pkg-info.pkg into debian/rules.
+
+  [ Jeremy Bicha ]
+  * debian/rules:
+    + Disable FFmpeg and GSM on Ubuntu (Closes: #880157)
+  * debian/gbp.conf:
+    + Add this file.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Thu, 02 Nov 2017 12:10:06 +0100
+
+freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-5) unstable; urgency=medium
+
+  * debian/{control,rules}:
+    + Don't build the wayland part of FreeRDP on non-Linux systems.
+    + Explicitly have libsystemd-dev as B-D. Disable building against
+      libsystemd-dev for non-Linux host.
+  * debian/control:
+    + Bump Standards-Version: to 4.1.1. No changes needed.
+    + Remove Multi-Arch: same field (for bin:pkg freerdp2-dev). (Closes:
+      #874222).
+  * debian/rules:
+    + FreeRDP2 does not build against oss4's alsa layer. Thus, deactivating
+      alsa support on non-linux hosts.
+    + Avoid using dpkg-parsechangelog.
+    + Include pkg-info.pkg from dpkg to have DEB_SOURCE and DEB_VERSION
+      available.
+  * debian/{control,*.install}:
+    + Process with wrap-and-sort -t -s -a.
+  * debian/copyright{,.in}:
+    + White-space fix.
+  * debian/libwinpr2-2.symbols{.kfreebsd-*,hurd-*}:
+    + The libwinpr/comm/comm_serial_sys.c API is Linux-only.
+  * debian/patches:
+    + Add 1003_fix-FTBFS-on-kFreeBSD.patch,
+          1004_FreeBSD-is-not-kFreeBSD.patch.
+      Fix upstream passages for building against GNU/kFreeBSD.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Sun, 22 Oct 2017 00:30:08 +0200
+
 freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-4~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.
 
  -- Matteo F. Vescovi <mfv@debian.org>  Sun, 15 Oct 2017 14:23:48 +0200
-
-freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-2~bpo9+1) stretch-backports; urgency=medium
-
-  * Rebuild for stretch-backports.
-
- -- Matteo F. Vescovi <mfv@debian.org>  Thu, 12 Oct 2017 21:04:11 +0200
 
 freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-4) unstable; urgency=medium
 
@@ -27,6 +86,12 @@ freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-3) unstable; urgency=medium
       (Closes: #877456).
 
  -- Mike Gabriel <sunweaver@debian.org>  Mon, 09 Oct 2017 11:15:16 +0200
+
+freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-2~bpo9+1) stretch-backports; urgency=medium
+
+  * Rebuild for stretch-backports.
+
+ -- Matteo F. Vescovi <mfv@debian.org>  Thu, 12 Oct 2017 21:04:11 +0200
 
 freerdp2 (2.0.0~git20170725.1.1648deb+dfsg1-2) unstable; urgency=medium
 

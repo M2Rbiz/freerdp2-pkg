@@ -6,16 +6,27 @@ include /usr/share/dpkg/buildflags.mk
 CFLAGS+=$(CPPFLAGS)
 CXXFLAGS+=$(CPPFLAGS)
 
-DEB_HOST_ARCH=$(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_ARCH?=$(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifneq (,$(filter armel,$(DEB_HOST_ARCH)))
 WITH_NEON = -DWITH_NEON=OFF
 else
 WITH_NEON =
 endif
 
+DEB_HOST_ARCH_OS?=$(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
+ifeq (,$(filter linux, $(DEB_HOST_ARCH_OS)))
+WITH_WAYLAND = -DWITH_WAYLAND=OFF
+WITH_LIBSYSTEMD = -DWITH_LIBSYSTEMD=OFF
+WITH_ALSA = -DWITH_ALSA=OFF
+else
+WITH_WAYLAND =
+WITH_LIBSYSTEMD =
+WITH_ALSA =
+endif
+
 NULL =
 
-DEB_HOST_ARCH_OS=$(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
+DEB_HOST_ARCH_OS?=$(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
 ifneq (,$(filter linux,$(DEB_HOST_ARCH_OS)))
 LINUX_URBDRC_CLIENT = -DCHANNEL_URBDRC=ON \
                       -DCHANNEL_URBDRC_CLIENT=ON \
@@ -30,6 +41,7 @@ DEB_CMAKE_EXTRA_FLAGS :=  -DCMAKE_INSTALL_INCLUDEDIR=include/$(shell dpkg-archit
                           -DCMAKE_SKIP_RPATH=FALSE \
                           -DCMAKE_SKIP_INSTALL_RPATH=TRUE \
                           -DWITH_PULSE=ON \
+                          ${WITH_ALSA} \
                           -DWITH_CHANNELS=ON \
                           -DBUILTIN_CHANNELS=ON \
                           -DWITH_CUPS=ON \
@@ -37,17 +49,25 @@ DEB_CMAKE_EXTRA_FLAGS :=  -DCMAKE_INSTALL_INCLUDEDIR=include/$(shell dpkg-archit
                           -DWITH_JPEG=ON \
                           -DWITH_GSTREAMER_0_10=OFF \
                           -DWITH_GSTREAMER_1_0=ON \
-                          -DWITH_GSM=ON \
                           $(LINUX_URBDRC_CLIENT) \
                           -DWITH_SERVER=ON \
                           -DBUILD_TESTING=OFF \
                           -DCMAKE_BUILD_TYPE=RELWITHDEBINFO \
-                          -DWITH_WAYLAND=ON \
+                          $(WITH_WAYLAND) \
+                          $(WITH_LIBSYSTEMD) \
                           -DWITH_CLIENT_INTERFACE=OFF \
                           $(WITH_NEON) \
                           $(NULL)
+
+# Ubuntu can't have ffmpeg in main
+ifeq ($(shell dpkg-vendor --is Ubuntu && echo yes),yes)
+DEB_CMAKE_EXTRA_FLAGS += -DWITH_FFMPEG=OFF -DWITH_GSM=OFF
+else
+DEB_CMAKE_EXTRA_FLAGS += -DWITH_GSM=ON
+endif
+
 %:
-	dh $@ --parallel
+	dh $@
 
 .PHONY: override_dh_auto_configure override_dh_install override_dh_strip
 override_dh_auto_configure:
@@ -72,9 +92,11 @@ override_dh_strip:
 	dh_strip -pfreerdp2-wayland --dbgsym-migration='freerdp2-wayland-dbg (<< 2.0.0~git20161130.1.e60d0d5+dfsg1-1~exp1~)'
 	dh_strip -plibuwac0-0 --dbgsym-migration='libuwac0-dbg (<< 2.0.0~git20161130.1.e60d0d5+dfsg1-1~exp1~)'
 
+include /usr/share/dpkg/pkg-info.mk
+
 PKD   = $(word 1,$(abspath $(dir $(MAKEFILE_LIST))))
-PKG   = $(word 2,$(shell dpkg-parsechangelog -l$(PKD)/changelog | grep ^Source))
-UVER  = $(shell dpkg-parsechangelog -l$(PKD)/changelog | perl -ne 'print $$1 if m{^Version:\s+(?:\d+:)?(\d.*)(?:\-\d+.*)};')
+PKG   = $(DEB_SOURCE)
+UVER  = $(shell echo $(DEB_VERSION) | cut -d "-" -f1)
 DTYPE = +dfsg1
 VER  ?= $(subst $(DTYPE),,$(UVER))
 
