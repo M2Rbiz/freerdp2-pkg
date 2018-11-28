@@ -1,7 +1,7 @@
 Source: freerdp2
 Section: x11
 Priority: optional
-Maintainer: Debian Remote Maintainers <pkg-remote-team@lists.alioth.debian.org>
+Maintainer: Debian Remote Maintainers <debian-remote@lists.debian.org>
 Uploaders:
  Mike Gabriel <sunweaver@debian.org>,
  Bernhard Miklautz <bernhard.miklautz@shacknet.at>,
@@ -43,7 +43,8 @@ Build-Depends:
  uuid-dev,
  xmlto,
  xsltproc,
-Standards-Version: 4.1.4
+ libicu-dev
+Standards-Version: 4.2.1
 Homepage: http://www.freerdp.com/
 Vcs-Browser: https://salsa.debian.org/debian-remote-team/freerdp2
 Vcs-Git: https://salsa.debian.org/debian-remote-team/freerdp2.git
