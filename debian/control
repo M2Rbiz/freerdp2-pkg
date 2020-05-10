@@ -14,7 +14,6 @@ Build-Depends:
  libavcodec-dev,
  libavutil-dev,
  libcups2-dev,
- libdbus-glib-1-dev,
  libgsm1-dev,
  libgstreamer-plugins-base1.0-dev,
  libgstreamer1.0-dev,
