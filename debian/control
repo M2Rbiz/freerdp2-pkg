@@ -45,7 +45,7 @@ Build-Depends:
  libicu-dev
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
-Homepage: http://www.freerdp.com/
+Homepage: https://www.freerdp.com/
 Vcs-Browser: https://salsa.debian.org/debian-remote-team/freerdp2
 Vcs-Git: https://salsa.debian.org/debian-remote-team/freerdp2.git
 
