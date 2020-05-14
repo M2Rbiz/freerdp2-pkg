@@ -2,9 +2,19 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: FreeRDP
 Upstream-Contact: FreeRDP project <freerdp-devel@lists.sourceforge.net>
 Source: https://github.com/FreeRDP/FreeRDP
-Comment:
- Upstream Git snapshot gets repacked for Debian and we drop all non-Linux code
- while doing so.
+Files-Excluded:
+ client/Android
+ client/iOS
+ client/Mac
+ client/Windows
+ docs/FreeRDP.vsd
+ packaging
+ server/Sample/rfx_test.pcap
+ resources/FreeRDP_OSX.icns
+ resources/FreeRDP_Logo_Icon.ai
+ scripts/OpenSSL-DownloadAndBuild.command
+ usr
+ winpr/libwinpr/crt/utf.*
 
 Files: *
 Copyright: *No Copyright*
