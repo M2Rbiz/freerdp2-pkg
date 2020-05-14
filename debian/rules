@@ -1,83 +1,87 @@
 #!/usr/bin/make -f
 
+include /usr/share/dpkg/default.mk
+
+ifeq (,$(filter terse,$(DEB_BUILD_OPTIONS)))
+    export DH_VERBOSE = 1
+endif
+
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 DPKG_EXPORT_BUILDFLAGS = 1
-include /usr/share/dpkg/buildflags.mk
-CFLAGS+=$(CPPFLAGS)
-CXXFLAGS+=$(CPPFLAGS)
 
-DEB_HOST_ARCH?=$(shell dpkg-architecture -qDEB_HOST_ARCH)
+CFLAGS   += $(CPPFLAGS)
+CXXFLAGS += $(CPPFLAGS)
+
+empty :=
+
+DEB_CMAKE_EXTRA_FLAGS = \
+    -DCMAKE_INSTALL_INCLUDEDIR=include/$(DEB_HOST_MULTIARCH) \
+    -DCMAKE_SKIP_RPATH=FALSE \
+    -DCMAKE_SKIP_INSTALL_RPATH=TRUE \
+    -DCMAKE_BUILD_TYPE=RELWITHDEBINFO \
+    -DBUILD_TESTING=OFF \
+    -DWITH_CHANNELS=ON \
+    -DBUILTIN_CHANNELS=ON \
+    -DWITH_SERVER=ON \
+    -DWITH_CLIENT_INTERFACE=OFF \
+    -DWITH_PULSE=ON \
+    -DWITH_ICU=ON \
+    -DWITH_CUPS=ON \
+    -DWITH_PCSC=ON \
+    -DWITH_JPEG=ON \
+    -DWITH_GSTREAMER_1_0=ON \
+    -DWITH_GSTREAMER_0_10=OFF \
+    $(empty)
+
 ifneq (,$(filter armel,$(DEB_HOST_ARCH)))
-WITH_NEON = -DWITH_NEON=OFF
-else
-WITH_NEON =
+    DEB_CMAKE_EXTRA_FLAGS += \
+        -DWITH_NEON=OFF \
+        $(empty)
 endif
 
-DEB_HOST_ARCH_OS?=$(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
-ifeq (,$(filter linux, $(DEB_HOST_ARCH_OS)))
-WITH_WAYLAND = -DWITH_WAYLAND=OFF
-WITH_LIBSYSTEMD = -DWITH_LIBSYSTEMD=OFF
-WITH_ALSA = -DWITH_ALSA=OFF
-else
-WITH_WAYLAND =
-WITH_LIBSYSTEMD =
-WITH_ALSA =
-endif
-
-NULL =
-
-DEB_HOST_ARCH_OS?=$(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
 ifneq (,$(filter linux,$(DEB_HOST_ARCH_OS)))
-LINUX_URBDRC_CLIENT = -DCHANNEL_URBDRC=ON \
-                      -DCHANNEL_URBDRC_CLIENT=ON \
-                      $(NULL)
+    DEB_CMAKE_EXTRA_FLAGS += \
+        -DCHANNEL_URBDRC=ON \
+        -DCHANNEL_URBDRC_CLIENT=ON \
+        $(empty)
 else
-LINUX_URBDRC_CLIENT = -DCHANNEL_URBDRC=OFF \
-                      -DCHANNEL_URBDRC_CLIENT=OFF \
-                      $(NULL)
-endif
+    DEB_CMAKE_EXTRA_FLAGS += \
+        -DCHANNEL_URBDRC=OFF \
+        -DCHANNEL_URBDRC_CLIENT=OFF \
+        $(empty)
 
-DEB_CMAKE_EXTRA_FLAGS :=  -DCMAKE_INSTALL_INCLUDEDIR=include/$(shell dpkg-architecture -qDEB_HOST_MULTIARCH) \
-                          -DCMAKE_SKIP_RPATH=FALSE \
-                          -DCMAKE_SKIP_INSTALL_RPATH=TRUE \
-                          -DWITH_PULSE=ON \
-                          ${WITH_ALSA} \
-                          -DWITH_CHANNELS=ON \
-                          -DBUILTIN_CHANNELS=ON \
-                          -DWITH_CUPS=ON \
-                          -DWITH_PCSC=ON \
-                          -DWITH_JPEG=ON \
-                          -DWITH_GSTREAMER_0_10=OFF \
-                          -DWITH_GSTREAMER_1_0=ON \
-                          $(LINUX_URBDRC_CLIENT) \
-                          -DWITH_SERVER=ON \
-                          -DBUILD_TESTING=OFF \
-                          -DCMAKE_BUILD_TYPE=RELWITHDEBINFO \
-                          $(WITH_WAYLAND) \
-                          $(WITH_LIBSYSTEMD) \
-                          -DWITH_CLIENT_INTERFACE=OFF \
-                          -DWITH_ICU=ON \
-                          $(WITH_NEON) \
-                          $(NULL)
+    DEB_CMAKE_EXTRA_FLAGS += \
+        -DWITH_ALSA=OFF \
+        -DWITH_LIBSYSTEMD=OFF \
+        -DWITH_WAYLAND=OFF \
+        $(empty)
+endif
 
 # Ubuntu can't have ffmpeg in main
 ifeq ($(shell dpkg-vendor --is Ubuntu && echo yes),yes)
-DEB_CMAKE_EXTRA_FLAGS += -DWITH_FFMPEG=OFF -DWITH_GSM=OFF
+    DEB_CMAKE_EXTRA_FLAGS += \
+        -DWITH_FFMPEG=OFF \
+        -DWITH_GSM=OFF \
+        $(empty)
 else
-DEB_CMAKE_EXTRA_FLAGS += -DWITH_GSM=ON
+    DEB_CMAKE_EXTRA_FLAGS += \
+        -DWITH_GSM=ON \
+        $(empty)
 endif
 
 %:
 	dh $@
 
-.PHONY: override_dh_auto_configure override_dh_install override_dh_strip
 override_dh_auto_configure:
 	dh_auto_configure -- $(DEB_CMAKE_EXTRA_FLAGS)
 
+# NB debhelper 13+: convert to execute_before_dh_install
+override_dh_install: TMP_LIB = debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)
 override_dh_install:
-	rm -rf debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/*.a
-	mkdir -p debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/freerdp/
+	rm -rf $(TMP_LIB)/*.a
+	mkdir -p $(TMP_LIB)/freerdp/
 	dh_install
 
+# NB debhelper 13+: remove override
 override_dh_missing:
 	dh_missing --fail-missing
