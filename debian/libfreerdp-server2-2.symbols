@@ -4,12 +4,17 @@ libfreerdp-server2.so.2 libfreerdp-server2-2 #MINVER#
  audin_server_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  cliprdr_server_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  cliprdr_server_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ disp_server_context_free@Base 2.1.0+dfsg1
+ disp_server_context_new@Base 2.1.0+dfsg1
  drdynvc_server_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  drdynvc_server_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  echo_server_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  echo_server_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  encomsp_server_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  encomsp_server_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ rail_server_context_free@Base 2.1.0+dfsg1
+ rail_server_context_new@Base 2.1.0+dfsg1
+ rail_server_handle_messages@Base 2.1.0+dfsg1
  rdpdr_server_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rdpdr_server_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rdpei_server_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
