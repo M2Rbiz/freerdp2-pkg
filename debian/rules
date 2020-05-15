@@ -77,8 +77,28 @@ endif
 %:
 	dh $@
 
+# char 026 (0x16) is seemed to be safe separator for sed "s" command;
+# idea taken from Debian src:nginx/debian/dh_nginx.
+# (however, they're using 0x17)
+xSEDx :=$(shell printf '\026')
+
 override_dh_auto_configure:
 	dh_auto_configure -- $(DEB_CMAKE_EXTRA_FLAGS)
+	# mangle CFLAGS value stored in buildflags.h.
+	# fixes build path leakage.
+	o='-f(debug|file)-prefix-map' ; \
+	sed -E -i \
+	    -e "s$(xSEDx)$${o}=[^=]+=\. $(xSEDx)$(xSEDx)g;" \
+	    -e "s$(xSEDx) $${o}=[^=]+=\.$(xSEDx)$(xSEDx)g;" \
+	obj-$(DEB_HOST_GNU_TYPE)/buildflags.h
+	# remove unused config define (not packaging freerdp-proxy so far).
+	# fixes build path leakage.
+	# NB: mangle that define to something like
+	#   /usr/lib/$(DEB_HOST_MULTIARCH)/freerdp/proxy-plugins
+	# if you consider to package freerdp-proxy.
+	sed -i \
+	    -e '/FREERDP_PROXY_PLUGINDIR/d' \
+	    obj-$(DEB_HOST_GNU_TYPE)/include/freerdp/build-config.h
 
 # NB debhelper 13+: convert to execute_before_dh_install
 override_dh_install: TMP_LIB = debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)
