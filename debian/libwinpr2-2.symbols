@@ -14,8 +14,8 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  AcceptSecurityContext@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  AcquireCredentialsHandleA@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  AcquireCredentialsHandleW@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
- AcquireSRWLockExclusive@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- AcquireSRWLockShared@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# AcquireSRWLockExclusive@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# AcquireSRWLockShared@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  AddDllDirectory@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  AddVectoredContinueHandler@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  AddVectoredExceptionHandler@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -141,6 +141,8 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  CommandLineFindNextArgumentA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CommandLineParseArgumentsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CommandLineParseArgumentsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ CommandLineParseCommaSeparatedValues@Base 2.1.0+dfsg1
+ CommandLineParseCommaSeparatedValuesEx@Base 2.1.0+dfsg1
  CommandLineToArgvA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CommandLineToArgvW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CompleteAuthToken@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
@@ -269,6 +271,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  DsCrackSpnW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  DsMakeSpnA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  DsMakeSpnW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ DumpThreadHandles@Base 2.1.0+dfsg1
  DuplicateHandle@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  EncryptMessage@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  EnterCriticalSection@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -312,8 +315,10 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  GetCommTimeouts@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  GetCommandLineA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  GetCommandLineW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ GetComputerNameA@Base 2.1.0+dfsg1
  GetComputerNameExA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  GetComputerNameExW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ GetComputerNameW@Base 2.1.0+dfsg1
  GetCurrentDirectoryA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  GetCurrentDirectoryW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  GetCurrentProcessId@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -454,88 +459,88 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  InitializeCriticalSectionEx@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  InitializeListHead@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  InitializeSListHead@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- InitializeSRWLock@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# InitializeSRWLock@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  InitializeSecurityContextA@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  InitializeSecurityContextW@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  InitializeSecurityDescriptor@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  InsertHeadList@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  InsertTailList@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_GetOpenCardNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_GetOpenCardNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardAccessStartedEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardAddReaderToGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardAddReaderToGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardAudit@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardBeginTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardCancel@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardCancelTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardConnectA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardConnectW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardControl@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardDisconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardDlgExtendedError@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardEndTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardEstablishContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardForgetCardTypeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardForgetCardTypeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardForgetReaderA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardForgetReaderGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardForgetReaderGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardForgetReaderW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardFreeMemory@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetAttrib@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetCardTypeProviderNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetCardTypeProviderNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetDeviceTypeIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetDeviceTypeIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetProviderIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetProviderIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetReaderDeviceInstanceIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetReaderDeviceInstanceIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetReaderIconA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetReaderIconW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetStatusChangeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetStatusChangeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardGetTransmitCount@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardIntroduceCardTypeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardIntroduceCardTypeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardIntroduceReaderA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardIntroduceReaderGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardIntroduceReaderGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardIntroduceReaderW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardIsValidContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListCardsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListCardsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListInterfacesA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListInterfacesW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListReaderGroupsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListReaderGroupsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListReadersA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListReadersW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListReadersWithDeviceInstanceIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardListReadersWithDeviceInstanceIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardLocateCardsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardLocateCardsByATRA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardLocateCardsByATRW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardLocateCardsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardReadCacheA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardReadCacheW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardReconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardReleaseContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardReleaseStartedEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardRemoveReaderFromGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardRemoveReaderFromGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardSetAttrib@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardSetCardTypeProviderNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardSetCardTypeProviderNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardState@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardStatusA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardStatusW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardTransmit@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardUIDlgSelectCardA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardUIDlgSelectCardW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardWriteCacheA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- Inspect_SCardWriteCacheW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_GetOpenCardNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_GetOpenCardNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardAccessStartedEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardAddReaderToGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardAddReaderToGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardAudit@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardBeginTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardCancel@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardCancelTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardConnectA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardConnectW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardControl@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardDisconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardDlgExtendedError@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardEndTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardEstablishContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardForgetCardTypeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardForgetCardTypeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardForgetReaderA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardForgetReaderGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardForgetReaderGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardForgetReaderW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardFreeMemory@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetAttrib@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetCardTypeProviderNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetCardTypeProviderNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetDeviceTypeIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetDeviceTypeIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetProviderIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetProviderIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetReaderDeviceInstanceIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetReaderDeviceInstanceIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetReaderIconA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetReaderIconW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetStatusChangeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetStatusChangeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardGetTransmitCount@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardIntroduceCardTypeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardIntroduceCardTypeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardIntroduceReaderA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardIntroduceReaderGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardIntroduceReaderGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardIntroduceReaderW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardIsValidContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListCardsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListCardsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListInterfacesA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListInterfacesW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListReaderGroupsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListReaderGroupsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListReadersA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListReadersW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListReadersWithDeviceInstanceIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardListReadersWithDeviceInstanceIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardLocateCardsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardLocateCardsByATRA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardLocateCardsByATRW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardLocateCardsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardReadCacheA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardReadCacheW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardReconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardReleaseContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardReleaseStartedEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardRemoveReaderFromGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardRemoveReaderFromGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardSetAttrib@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardSetCardTypeProviderNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardSetCardTypeProviderNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardState@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardStatusA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardStatusW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardTransmit@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardUIDlgSelectCardA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardUIDlgSelectCardW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardWriteCacheA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# Inspect_SCardWriteCacheW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  InterlockedCompareExchange64@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  InterlockedCompareExchange@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  InterlockedCompareExchangePointer@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -642,6 +647,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  NeedCurrentDirectoryForExePathA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  NeedCurrentDirectoryForExePathW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  NtCurrentTeb@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ NtStatus2Tag@Base 2.1.0+dfsg1
  ObjectPool_Clear@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  ObjectPool_Free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  ObjectPool_New@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -657,92 +663,92 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  OpenSemaphoreW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  OpenWaitableTimerA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  OpenWaitableTimerW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_GetOpenCardNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_GetOpenCardNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardAccessStartedEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardAddReaderToGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardAddReaderToGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardAudit@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardBeginTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardCancel@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardCancelTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardConnectA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardConnectW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardConnect_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardControl@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardDisconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardDlgExtendedError@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardEndTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardEstablishContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardEstablishContext_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardForgetCardTypeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardForgetCardTypeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardForgetReaderA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardForgetReaderGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardForgetReaderGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardForgetReaderW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardFreeMemory@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardFreeMemory_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetAttrib@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetAttrib_FriendlyName@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetAttrib_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetCardTypeProviderNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetCardTypeProviderNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetDeviceTypeIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetDeviceTypeIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetProviderIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetProviderIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetReaderDeviceInstanceIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetReaderDeviceInstanceIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetReaderIconA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetReaderIconW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetStatusChangeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetStatusChangeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetStatusChange_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardGetTransmitCount@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardIntroduceCardTypeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardIntroduceCardTypeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardIntroduceReaderA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardIntroduceReaderGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardIntroduceReaderGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardIntroduceReaderW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardIsValidContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListCardsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListCardsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListInterfacesA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListInterfacesW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListReaderGroupsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListReaderGroupsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListReaderGroups_Internal@Base 2.0.0~git20170725.1.1648deb+dfsg1
- PCSC_SCardListReadersA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListReadersW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListReadersWithDeviceInstanceIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListReadersWithDeviceInstanceIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardListReaders_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardLocateCardsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardLocateCardsByATRA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardLocateCardsByATRW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardLocateCardsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardReadCacheA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardReadCacheW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardReconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardReleaseContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardReleaseContext_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardReleaseStartedEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardRemoveReaderFromGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardRemoveReaderFromGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardSetAttrib@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardSetCardTypeProviderNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardSetCardTypeProviderNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardState@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardStatusA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardStatusW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardStatus_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardTransmit@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardUIDlgSelectCardA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardUIDlgSelectCardW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardWriteCacheA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- PCSC_SCardWriteCacheW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_GetOpenCardNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_GetOpenCardNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardAccessStartedEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardAddReaderToGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardAddReaderToGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardAudit@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardBeginTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardCancel@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardCancelTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardConnectA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardConnectW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardConnect_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardControl@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardDisconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardDlgExtendedError@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardEndTransaction@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardEstablishContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardEstablishContext_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardForgetCardTypeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardForgetCardTypeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardForgetReaderA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardForgetReaderGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardForgetReaderGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardForgetReaderW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardFreeMemory@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardFreeMemory_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetAttrib@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetAttrib_FriendlyName@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetAttrib_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetCardTypeProviderNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetCardTypeProviderNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetDeviceTypeIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetDeviceTypeIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetProviderIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetProviderIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetReaderDeviceInstanceIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetReaderDeviceInstanceIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetReaderIconA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetReaderIconW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetStatusChangeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetStatusChangeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetStatusChange_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardGetTransmitCount@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardIntroduceCardTypeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardIntroduceCardTypeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardIntroduceReaderA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardIntroduceReaderGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardIntroduceReaderGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardIntroduceReaderW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardIsValidContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListCardsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListCardsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListInterfacesA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListInterfacesW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListReaderGroupsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListReaderGroupsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListReaderGroups_Internal@Base 2.0.0~git20170725.1.1648deb+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListReadersA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListReadersW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListReadersWithDeviceInstanceIdA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListReadersWithDeviceInstanceIdW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardListReaders_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardLocateCardsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardLocateCardsByATRA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardLocateCardsByATRW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardLocateCardsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardReadCacheA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardReadCacheW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardReconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardReleaseContext@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardReleaseContext_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardReleaseStartedEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardRemoveReaderFromGroupA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardRemoveReaderFromGroupW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardSetAttrib@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardSetCardTypeProviderNameA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardSetCardTypeProviderNameW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardState@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardStatusA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardStatusW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardStatus_Internal@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardTransmit@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardUIDlgSelectCardA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardUIDlgSelectCardW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardWriteCacheA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# PCSC_SCardWriteCacheW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  PathAllocCanonicalizeA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  PathAllocCanonicalizeW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  PathAllocCombineA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -803,6 +809,8 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  PathGetSharedLibraryExtensionW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  PathIsDirectoryEmptyA@Base 2.0.0~git20170725.1.1648deb+dfsg1
  PathIsDirectoryEmptyW@Base 2.0.0~git20170725.1.1648deb+dfsg1
+ PathIsRelativeA@Base 2.1.0+dfsg1
+ PathIsRelativeW@Base 2.1.0+dfsg1
  PathIsUNCExA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  PathIsUNCExW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  PathMakePathA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -901,8 +909,8 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  RegisterClassExW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  RegisterClassW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  ReleaseMutex@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- ReleaseSRWLockExclusive@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- ReleaseSRWLockShared@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# ReleaseSRWLockExclusive@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# ReleaseSRWLockShared@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  ReleaseSemaphore@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  RemoveDirectoryA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  RemoveDirectoryW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -1222,8 +1230,8 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  TransactNamedPipe@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  TranslateMessage@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  TransmitCommChar@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- TryAcquireSRWLockExclusive@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- TryAcquireSRWLockShared@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# TryAcquireSRWLockExclusive@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+#MISSING: 2.1.0+dfsg1# TryAcquireSRWLockShared@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  TryEnterCriticalSection@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  TzSpecificLocalTimeToSystemTime@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  TzSpecificLocalTimeToSystemTimeEx@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -1263,6 +1271,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  WLog_GetLogLevel@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WLog_GetRoot@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WLog_Init@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ WLog_IsLevelActive@Base 2.1.0+dfsg1
  WLog_Layout_SetPrefixFormat@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WLog_OpenAppender@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WLog_PrintMessage@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -1527,6 +1536,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  winpr_HMAC_New@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_HMAC_Update@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_HexDump@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ winpr_HexLogDump@Base 2.1.0+dfsg1
  winpr_InitOnceBeginInitialize@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_InitOnceComplete@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_InitOnceExecuteOnce@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
@@ -1573,6 +1583,8 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  winpr_image_write@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_log_backtrace@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_log_backtrace_ex@Base 2.0.0~git20190204.1.2693389a+dfsg1
+ winpr_md_type_from_string@Base 2.1.0+dfsg1
+ winpr_md_type_to_string@Base 2.1.0+dfsg1
  winpr_strerror@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  wmemmove_s@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  wprintfx@Base 2.0.0~git20160317.1.75ae3f5+dfsg1

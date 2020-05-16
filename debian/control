@@ -6,21 +6,23 @@ Uploaders:
  Mike Gabriel <sunweaver@debian.org>,
  Bernhard Miklautz <bernhard.miklautz@shacknet.at>,
 Build-Depends:
- cmake,
  debhelper-compat (= 12),
+ cmake,
  docbook-xsl,
- dpkg-dev (>= 1.16.1.1),
  libasound2-dev,
  libavcodec-dev,
  libavutil-dev,
+ libcairo2-dev,
  libcups2-dev,
  libgsm1-dev,
- libgstreamer-plugins-base1.0-dev,
  libgstreamer1.0-dev,
+ libgstreamer-plugins-base1.0-dev,
+ libicu-dev,
  libjpeg-dev,
  libpcsclite-dev,
  libpulse-dev,
  libssl-dev,
+ libswscale-dev,
  libsystemd-dev [linux-any],
  libudev-dev [linux-any],
  libusb-1.0-0-dev [linux-any],
@@ -30,8 +32,8 @@ Build-Depends:
  libxdamage-dev,
  libxext-dev,
  libxfixes-dev,
- libxi-dev,
  libxinerama-dev,
+ libxi-dev,
  libxkbcommon-dev,
  libxkbfile-dev,
  libxrandr-dev,
@@ -42,10 +44,9 @@ Build-Depends:
  uuid-dev,
  xmlto,
  xsltproc,
- libicu-dev
-Standards-Version: 4.4.1
+Standards-Version: 4.5.0
 Rules-Requires-Root: no
-Homepage: http://www.freerdp.com/
+Homepage: https://www.freerdp.com/
 Vcs-Browser: https://salsa.debian.org/debian-remote-team/freerdp2
 Vcs-Git: https://salsa.debian.org/debian-remote-team/freerdp2.git
 

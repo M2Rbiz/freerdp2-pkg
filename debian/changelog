@@ -1,3 +1,11 @@
+freerdp2 (2.1.0+dfsg1-1) UNRELEASED; urgency=medium
+
+  * New upstream stable release.
+  * debian/control:
+    + drop needless libdbus-glib-1-dev.
+
+ -- Konstantin Demin <rockdrilla@gmail.com>  Fri, 15 May 2020 00:02:34 +0300
+
 freerdp2 (2.0.0~git20190204.1.2693389a+dfsg1-2) unstable; urgency=medium
 
   * debian/control:

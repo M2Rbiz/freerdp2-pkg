@@ -20,6 +20,7 @@ libuwac0.so.0 libuwac0-0 #MINVER#
  UwacInstallErrorHandler@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  UwacNextEvent@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  UwacOpenDisplay@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ UwacOutputGetPosition@Base 2.1.0+dfsg1
  UwacOutputGetResolution@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  UwacSeatGetId@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  UwacSeatGetName@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
