@@ -35,38 +35,24 @@
 #include "uwac-os.h"
 #include "wayland-cursor.h"
 
-#define TARGET_COMPOSITOR_INTERFACE 3
-#define TARGET_SHM_INTERFACE 1
-#define TARGET_SHELL_INTERFACE 1
-#define TARGET_DDM_INTERFACE 1
-#define TARGET_SEAT_INTERFACE 5
-#define TARGET_XDG_VERSION 5 /* The version of xdg-shell that we implement */
+#define TARGET_COMPOSITOR_INTERFACE 3U
+#define TARGET_SHM_INTERFACE 1U
+#define TARGET_SHELL_INTERFACE 1U
+#define TARGET_DDM_INTERFACE 1U
+#define TARGET_SEAT_INTERFACE 5U
+#define TARGET_XDG_VERSION 5U /* The version of xdg-shell that we implement */
 
-static const char* event_names[] =
-{
-	"new seat",
-	"removed seat",
-	"new output",
-	"configure",
-	"pointer enter",
-	"pointer leave",
-	"pointer motion",
-	"pointer buttons",
-	"pointer axis",
-	"keyboard enter",
-	"key",
-	"touch frame begin",
-	"touch up",
-	"touch down",
-	"touch motion",
-	"touch cancel",
-	"touch frame end",
-	"frame done",
-	"close",
-	NULL
+#if !defined(NDEBUG)
+static const char* event_names[] = {
+	"new seat",      "removed seat",      "new output",      "configure",    "pointer enter",
+	"pointer leave", "pointer motion",    "pointer buttons", "pointer axis", "keyboard enter",
+	"key",           "touch frame begin", "touch up",        "touch down",   "touch motion",
+	"touch cancel",  "touch frame end",   "frame done",      "close",        NULL
 };
+#endif
 
-bool uwac_default_error_handler(UwacDisplay* display, UwacReturnCode code, const char* msg, ...)
+static bool uwac_default_error_handler(UwacDisplay* display, UwacReturnCode code, const char* msg,
+                                       ...)
 {
 	va_list args;
 	va_start(args, msg);
@@ -85,7 +71,6 @@ void UwacInstallErrorHandler(UwacErrorHandler handler)
 		uwacErrorHandler = uwac_default_error_handler;
 }
 
-
 static void cb_shm_format(void* data, struct wl_shm* wl_shm, uint32_t format)
 {
 	UwacDisplay* d = data;
@@ -94,46 +79,38 @@ static void cb_shm_format(void* data, struct wl_shm* wl_shm, uint32_t format)
 		d->has_rgb565 = true;
 
 	d->shm_formats_nb++;
-	d->shm_formats = xrealloc((void*)d->shm_formats, sizeof(enum wl_shm_format) * d->shm_formats_nb);
+	d->shm_formats =
+	    xrealloc((void*)d->shm_formats, sizeof(enum wl_shm_format) * d->shm_formats_nb);
 	d->shm_formats[d->shm_formats_nb - 1] = format;
 }
 
+struct wl_shm_listener shm_listener = { cb_shm_format };
 
-struct wl_shm_listener shm_listener =
-{
-	cb_shm_format
-};
-
-static void xdg_shell_ping(void *data,
-                                       struct xdg_wm_base *xdg_wm_base,
-                                       uint32_t serial)
+static void xdg_shell_ping(void* data, struct xdg_wm_base* xdg_wm_base, uint32_t serial)
 {
 	xdg_wm_base_pong(xdg_wm_base, serial);
 }
 
-static const struct xdg_wm_base_listener xdg_wm_base_listener =
-{
+static const struct xdg_wm_base_listener xdg_wm_base_listener = {
 	xdg_shell_ping,
 };
 
 #ifdef BUILD_FULLSCREEN_SHELL
-static void fullscreen_capability(void *data,
-                                                     struct zwp_fullscreen_shell_v1 *zwp_fullscreen_shell_v1,
-                                                     uint32_t capability)
+static void fullscreen_capability(void* data,
+                                  struct zwp_fullscreen_shell_v1* zwp_fullscreen_shell_v1,
+                                  uint32_t capability)
 {
 }
 
-static const struct zwp_fullscreen_shell_v1_listener fullscreen_shell_listener =
-{
+static const struct zwp_fullscreen_shell_v1_listener fullscreen_shell_listener = {
 	fullscreen_capability,
 };
 #endif
 
-
 static void display_destroy_seat(UwacDisplay* d, uint32_t name)
 {
-	UwacSeat* seat;
-	wl_list_for_each(seat, &d->seats, link)
+	UwacSeat *seat, *tmp;
+	wl_list_for_each_safe(seat, tmp, &d->seats, link)
 	{
 		if (seat->seat_id == name)
 		{
@@ -142,14 +119,15 @@ static void display_destroy_seat(UwacDisplay* d, uint32_t name)
 	}
 }
 
-static void UwacSeatRegisterDDM(UwacSeat *seat)
+static void UwacSeatRegisterDDM(UwacSeat* seat)
 {
-	UwacDisplay *d = seat->display;
+	UwacDisplay* d = seat->display;
 	if (!d->data_device_manager)
 		return;
 
 	if (!seat->data_device)
-		seat->data_device = wl_data_device_manager_get_data_device(d->data_device_manager, seat->seat);
+		seat->data_device =
+		    wl_data_device_manager_get_data_device(d->data_device_manager, seat->seat);
 }
 
 static void UwacRegisterCursor(UwacSeat* seat)
@@ -165,7 +143,7 @@ static void registry_handle_global(void* data, struct wl_registry* registry, uin
 {
 	UwacDisplay* d = data;
 	UwacGlobal* global;
-	global = xmalloc(sizeof * global);
+	global = xzalloc(sizeof *global);
 	global->name = id;
 	global->interface = xstrdup(interface);
 	global->version = version;
@@ -178,20 +156,9 @@ static void registry_handle_global(void* data, struct wl_registry* registry, uin
 	}
 	else if (strcmp(interface, "wl_shm") == 0)
 	{
-		d->shm = wl_registry_bind(registry, id, &wl_shm_interface, min(TARGET_SHM_INTERFACE, version));
+		d->shm =
+		    wl_registry_bind(registry, id, &wl_shm_interface, min(TARGET_SHM_INTERFACE, version));
 		wl_shm_add_listener(d->shm, &shm_listener, d);
-
-		d->cursor_theme = wl_cursor_theme_load(NULL, 32, d->shm);
-		if (!d->cursor_theme) {
-			assert(uwacErrorHandler(d, UWAC_ERROR_NOMEMORY, "unable to get wayland cursor theme\n"));
-			return;
-		}
-
-		d->default_cursor = wl_cursor_theme_get_cursor(d->cursor_theme, "left_ptr");
-		if (!d->default_cursor) {
-			assert(uwacErrorHandler(d, UWAC_ERROR_NOMEMORY, "unable to get wayland cursor left_ptr\n"));
-			return;
-		}
 	}
 	else if (strcmp(interface, "wl_output") == 0)
 	{
@@ -237,12 +204,12 @@ static void registry_handle_global(void* data, struct wl_registry* registry, uin
 	}
 	else if (strcmp(interface, "wl_data_device_manager") == 0)
 	{
-		UwacSeat* seat;
+		UwacSeat *seat, *tmp;
 
 		d->data_device_manager = wl_registry_bind(registry, id, &wl_data_device_manager_interface,
-		                         min(TARGET_DDM_INTERFACE, version));
+		                                          min(TARGET_DDM_INTERFACE, version));
 
-		wl_list_for_each(seat, &d->seats, link)
+		wl_list_for_each_safe(seat, tmp, &d->seats, link)
 		{
 			UwacSeatRegisterDDM(seat);
 			UwacSeatRegisterClipboard(seat);
@@ -251,8 +218,8 @@ static void registry_handle_global(void* data, struct wl_registry* registry, uin
 	}
 	else if (strcmp(interface, "wl_shell") == 0)
 	{
-		d->shell = wl_registry_bind(registry, id, &wl_shell_interface, min(TARGET_SHELL_INTERFACE,
-		                            version));
+		d->shell = wl_registry_bind(registry, id, &wl_shell_interface,
+		                            min(TARGET_SHELL_INTERFACE, version));
 	}
 	else if (strcmp(interface, "xdg_wm_base") == 0)
 	{
@@ -261,7 +228,8 @@ static void registry_handle_global(void* data, struct wl_registry* registry, uin
 	}
 	else if (strcmp(interface, "zwp_keyboard_shortcuts_inhibit_manager_v1") == 0)
 	{
-		d->keyboard_inhibit_manager = wl_registry_bind(registry, id, &zwp_keyboard_shortcuts_inhibit_manager_v1_interface, 1);
+		d->keyboard_inhibit_manager =
+		    wl_registry_bind(registry, id, &zwp_keyboard_shortcuts_inhibit_manager_v1_interface, 1);
 	}
 	else if (strcmp(interface, "zxdg_decoration_manager_v1") == 0)
 	{
@@ -269,7 +237,8 @@ static void registry_handle_global(void* data, struct wl_registry* registry, uin
 	}
 	else if (strcmp(interface, "org_kde_kwin_server_decoration_manager") == 0)
 	{
-		d->kde_deco_manager = wl_registry_bind(registry, id, &org_kde_kwin_server_decoration_manager_interface, 1);
+		d->kde_deco_manager =
+		    wl_registry_bind(registry, id, &org_kde_kwin_server_decoration_manager_interface, 1);
 	}
 #if BUILD_IVI
 	else if (strcmp(interface, "ivi_application") == 0)
@@ -332,25 +301,21 @@ static void registry_handle_global_remove(void* data, struct wl_registry* regist
 	}
 }
 
-void UwacDestroyGlobal(UwacGlobal* global)
+static void UwacDestroyGlobal(UwacGlobal* global)
 {
 	free(global->interface);
 	wl_list_remove(&global->link);
 	free(global);
 }
 
-void* display_bind(UwacDisplay* display, uint32_t name, const struct wl_interface* interface,
-                   uint32_t version)
+static void* display_bind(UwacDisplay* display, uint32_t name, const struct wl_interface* interface,
+                          uint32_t version)
 {
 	return wl_registry_bind(display->registry, name, interface, version);
 }
 
-static const struct wl_registry_listener registry_listener =
-{
-	registry_handle_global,
-	registry_handle_global_remove
-};
-
+static const struct wl_registry_listener registry_listener = { registry_handle_global,
+	                                                           registry_handle_global_remove };
 
 int UwacDisplayWatchFd(UwacDisplay* display, int fd, uint32_t events, UwacTask* task)
 {
@@ -360,7 +325,7 @@ int UwacDisplayWatchFd(UwacDisplay* display, int fd, uint32_t events, UwacTask* 
 	return epoll_ctl(display->epoll_fd, EPOLL_CTL_ADD, fd, &ep);
 }
 
-void UwacDisplayUnwatchFd(UwacDisplay* display, int fd)
+static void UwacDisplayUnwatchFd(UwacDisplay* display, int fd)
 {
 	epoll_ctl(display->epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 }
@@ -412,11 +377,10 @@ static void display_dispatch_events(UwacTask* task, uint32_t events)
 	}
 }
 
-
 UwacDisplay* UwacOpenDisplay(const char* name, UwacReturnCode* err)
 {
 	UwacDisplay* ret;
-	ret = (UwacDisplay*)calloc(1, sizeof(*ret));
+	ret = (UwacDisplay*)xzalloc(sizeof(*ret));
 
 	if (!ret)
 	{
@@ -458,7 +422,8 @@ UwacDisplay* UwacOpenDisplay(const char* name, UwacReturnCode* err)
 
 	if ((wl_display_roundtrip(ret->display) < 0) || (wl_display_roundtrip(ret->display) < 0))
 	{
-		uwacErrorHandler(ret, UWAC_ERROR_UNABLE_TO_CONNECT, "Failed to process Wayland connection: %m\n");
+		uwacErrorHandler(ret, UWAC_ERROR_UNABLE_TO_CONNECT,
+		                 "Failed to process Wayland connection: %m\n");
 		*err = UWAC_ERROR_UNABLE_TO_CONNECT;
 		goto out_free_registry;
 	}
@@ -521,8 +486,6 @@ int UwacDisplayDispatch(UwacDisplay* display, int timeout)
 	return 1;
 }
 
-
-
 UwacReturnCode UwacDisplayGetLastError(const UwacDisplay* display)
 {
 	return display->last_error;
@@ -531,10 +494,10 @@ UwacReturnCode UwacDisplayGetLastError(const UwacDisplay* display)
 UwacReturnCode UwacCloseDisplay(UwacDisplay** pdisplay)
 {
 	UwacDisplay* display;
-	UwacSeat* seat, *tmpSeat;
-	UwacWindow* window, *tmpWindow;
-	UwacOutput* output, *tmpOutput;
-	UwacGlobal* global, *tmpGlobal;
+	UwacSeat *seat, *tmpSeat;
+	UwacWindow *window, *tmpWindow;
+	UwacOutput *output, *tmpOutput;
+	UwacGlobal *global, *tmpGlobal;
 	assert(pdisplay);
 	display = *pdisplay;
 
@@ -596,9 +559,6 @@ UwacReturnCode UwacCloseDisplay(UwacDisplay** pdisplay)
 	if (display->shell)
 		wl_shell_destroy(display->shell);
 
-	if (display->cursor_theme)
-		wl_cursor_theme_destroy(display->cursor_theme);
-
 	if (display->shm)
 		wl_shm_destroy(display->shm);
 
@@ -631,8 +591,7 @@ int UwacDisplayGetFd(UwacDisplay* display)
 	return display->epoll_fd;
 }
 
-static const char* errorStrings[] =
-{
+static const char* errorStrings[] = {
 	"success",
 	"out of memory error",
 	"unable to connect to wayland display",
@@ -654,14 +613,14 @@ const char* UwacErrorString(UwacReturnCode error)
 }
 
 UwacReturnCode UwacDisplayQueryInterfaceVersion(const UwacDisplay* display, const char* name,
-        uint32_t* version)
+                                                uint32_t* version)
 {
-	const UwacGlobal* global;
+	const UwacGlobal *global, *tmp;
 
 	if (!display)
 		return UWAC_ERROR_INVALID_DISPLAY;
 
-	wl_list_for_each(global, &display->globals, link)
+	wl_list_for_each_safe(global, tmp, &display->globals, link)
 	{
 		if (strcmp(global->interface, name) == 0)
 		{
@@ -691,50 +650,66 @@ uint32_t UwacDisplayQueryGetNbShmFormats(UwacDisplay* display)
 	return display->shm_formats_nb;
 }
 
-
 UwacReturnCode UwacDisplayQueryShmFormats(const UwacDisplay* display, enum wl_shm_format* formats,
-        int formats_size, int* filled)
+                                          int formats_size, int* filled)
 {
 	if (!display)
 		return UWAC_ERROR_INVALID_DISPLAY;
 
-	*filled = min(display->shm_formats_nb, formats_size);
+	*filled = min((int64_t)display->shm_formats_nb, formats_size);
 	memcpy(formats, (const void*)display->shm_formats, *filled * sizeof(enum wl_shm_format));
 	return UWAC_SUCCESS;
 }
 
-uint32_t UwacDisplayGetNbOutputs(UwacDisplay* display)
+uint32_t UwacDisplayGetNbOutputs(const UwacDisplay* display)
 {
 	return wl_list_length(&display->outputs);
 }
 
-UwacOutput* UwacDisplayGetOutput(UwacDisplay* display, int index)
+const UwacOutput* UwacDisplayGetOutput(UwacDisplay* display, int index)
 {
-	struct wl_list* l;
-	int i;
+	int i, display_count;
+	UwacOutput* ret = NULL;
 
 	if (!display)
 		return NULL;
 
-	for (i = 0, l = &display->outputs; l && i < index; i++, l = l->next)
-		;
+	display_count = wl_list_length(&display->outputs);
+	if (display_count <= index)
+		return NULL;
 
-	if (!l)
+	i = 0;
+	wl_list_for_each(ret, &display->outputs, link)
+	{
+		if (i == index)
+			break;
+		i++;
+	}
+
+	if (!ret)
 	{
 		display->last_error = UWAC_NOT_FOUND;
 		return NULL;
 	}
 
 	display->last_error = UWAC_SUCCESS;
-	return container_of(l, UwacOutput, link);
+	return ret;
 }
 
-UwacReturnCode UwacOutputGetResolution(UwacOutput* output, UwacSize* resolution)
+UwacReturnCode UwacOutputGetResolution(const UwacOutput* output, UwacSize* resolution)
 {
+	if ((output->resolution.height <= 0) || (output->resolution.width <= 0))
+		return UWAC_ERROR_INTERNAL;
+
 	*resolution = output->resolution;
 	return UWAC_SUCCESS;
 }
 
+UwacReturnCode UwacOutputGetPosition(const UwacOutput* output, UwacPosition* pos)
+{
+	*pos = output->position;
+	return UWAC_SUCCESS;
+}
 
 UwacEvent* UwacDisplayNewEvent(UwacDisplay* display, int type)
 {
@@ -745,7 +720,7 @@ UwacEvent* UwacDisplayNewEvent(UwacDisplay* display, int type)
 		return 0;
 	}
 
-	ret = zalloc(sizeof(UwacEventListItem));
+	ret = xzalloc(sizeof(UwacEventListItem));
 
 	if (!ret)
 	{

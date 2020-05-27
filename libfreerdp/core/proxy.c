@@ -24,7 +24,7 @@
 #include "freerdp/settings.h"
 #include "tcp.h"
 
-#include "winpr/environment.h"	/* For GetEnvironmentVariableA */
+#include "winpr/environment.h" /* For GetEnvironmentVariableA */
 
 #define CRLF "\r\n"
 #define TAG FREERDP_TAG("core.proxy")
@@ -52,25 +52,21 @@ enum
 };
 
 /* CONN REQ replies in enum. order */
-static const char* rplstat[] =
-{
-	"succeeded",
-	"general SOCKS server failure",
-	"connection not allowed by ruleset",
-	"Network unreachable",
-	"Host unreachable",
-	"Connection refused",
-	"TTL expired",
-	"Command not supported",
-	"Address type not supported"
-};
-
-
+static const char* rplstat[] = { "succeeded",
+	                             "general SOCKS server failure",
+	                             "connection not allowed by ruleset",
+	                             "Network unreachable",
+	                             "Host unreachable",
+	                             "Connection refused",
+	                             "TTL expired",
+	                             "Command not supported",
+	                             "Address type not supported" };
 
 static BOOL http_proxy_connect(BIO* bufferedBio, const char* hostname, UINT16 port);
 static BOOL socks_proxy_connect(BIO* bufferedBio, const char* proxyUsername,
                                 const char* proxyPassword, const char* hostname, UINT16 port);
-void proxy_read_environment(rdpSettings* settings, char* envname);
+static void proxy_read_environment(rdpSettings* settings, char* envname);
+static BOOL proxy_parse_uri(rdpSettings* settings, const char* uri);
 
 BOOL proxy_prepare(rdpSettings* settings, const char** lpPeerHostname, UINT16* lpPeerPort,
                    const char** lpProxyUsername, const char** lpProxyPassword)
@@ -148,6 +144,7 @@ static BOOL check_no_proxy(rdpSettings* settings, const char* no_proxy)
 	BOOL result = FALSE;
 	char* current;
 	char* copy;
+	char* context = NULL;
 	size_t host_len;
 	struct sockaddr_in sa4;
 	struct sockaddr_in6 sa6;
@@ -168,7 +165,7 @@ static BOOL check_no_proxy(rdpSettings* settings, const char* no_proxy)
 	if (!copy)
 		return FALSE;
 
-	current = strtok(copy, delimiter);
+	current = strtok_s(copy, delimiter, &context);
 
 	while (current && !result)
 	{
@@ -176,7 +173,7 @@ static BOOL check_no_proxy(rdpSettings* settings, const char* no_proxy)
 
 		if (currentlen > 0)
 		{
-			WLog_DBG(TAG, "%s => %s (%"PRIdz")", settings->ServerHostname, current, currentlen);
+			WLog_DBG(TAG, "%s => %s (%" PRIdz ")", settings->ServerHostname, current, currentlen);
 
 			/* detect left and right "*" wildcard */
 			if (current[0] == '*')
@@ -195,7 +192,8 @@ static BOOL check_no_proxy(rdpSettings* settings, const char* no_proxy)
 				if (strncmp(current, settings->ServerHostname, currentlen - 1) == 0)
 					result = TRUE;
 			}
-			else if (current[0] == '.') /* Only compare if the no_proxy variable contains a whole domain. */
+			else if (current[0] ==
+			         '.') /* Only compare if the no_proxy variable contains a whole domain. */
 			{
 				if (host_len > currentlen)
 				{
@@ -246,7 +244,7 @@ static BOOL check_no_proxy(rdpSettings* settings, const char* no_proxy)
 			}
 		}
 
-		current = strtok(NULL, delimiter);
+		current = strtok_s(NULL, delimiter, &context);
 	}
 
 	free(copy);
@@ -276,7 +274,8 @@ void proxy_read_environment(rdpSettings* settings, char* envname)
 		{
 			if (check_no_proxy(settings, env))
 			{
-				WLog_INFO(TAG, "deactivating proxy: %s [%s=%s]", settings->ServerHostname, envname, env);
+				WLog_INFO(TAG, "deactivating proxy: %s [%s=%s]", settings->ServerHostname, envname,
+				          env);
 				settings->ProxyType = PROXY_TYPE_NONE;
 			}
 		}
@@ -291,7 +290,7 @@ void proxy_read_environment(rdpSettings* settings, char* envname)
 
 BOOL proxy_parse_uri(rdpSettings* settings, const char* uri)
 {
-	const char* hostname, *pport;
+	const char *hostname, *pport;
 	const char* protocol;
 	const char* p;
 	UINT16 port;
@@ -305,9 +304,14 @@ BOOL proxy_parse_uri(rdpSettings* settings, const char* uri)
 			settings->ProxyType = PROXY_TYPE_HTTP;
 			protocol = "http";
 		}
+		else if (p == uri + 6 && !strncmp("socks5", uri, 6))
+		{
+			settings->ProxyType = PROXY_TYPE_SOCKS;
+			protocol = "socks5";
+		}
 		else
 		{
-			WLog_ERR(TAG, "Only HTTP proxys supported by now");
+			WLog_ERR(TAG, "Only HTTP and SOCKS5 proxies supported by now");
 			return FALSE;
 		}
 
@@ -365,8 +369,7 @@ BOOL proxy_parse_uri(rdpSettings* settings, const char* uri)
 }
 
 BOOL proxy_connect(rdpSettings* settings, BIO* bufferedBio, const char* proxyUsername,
-                   const char* proxyPassword,
-                   const char* hostname, UINT16 port)
+                   const char* proxyPassword, const char* hostname, UINT16 port)
 {
 	switch (settings->ProxyType)
 	{
@@ -386,12 +389,24 @@ BOOL proxy_connect(rdpSettings* settings, BIO* bufferedBio, const char* proxyUse
 	}
 }
 
+static const char* get_response_header(char* response)
+{
+	char* current_pos = strchr(response, '\r');
+	if (!current_pos)
+		current_pos = strchr(response, '\n');
+
+	if (current_pos)
+		*current_pos = '\0';
+
+	return response;
+}
+
 static BOOL http_proxy_connect(BIO* bufferedBio, const char* hostname, UINT16 port)
 {
 	int status;
 	wStream* s;
 	char port_str[10], recv_buf[256], *eol;
-	int resultsize;
+	size_t resultsize;
 	_itoa_s(port, port_str, sizeof(port_str), 10);
 	s = Stream_New(NULL, 200);
 	Stream_Write(s, "CONNECT ", 8);
@@ -401,11 +416,11 @@ static BOOL http_proxy_connect(BIO* bufferedBio, const char* hostname, UINT16 po
 	Stream_Write(s, " HTTP/1.1" CRLF "Host: ", 17);
 	Stream_Write(s, hostname, strlen(hostname));
 	Stream_Write_UINT8(s, ':');
-	Stream_Write(s, port_str, strlen(port_str));
+	Stream_Write(s, port_str, strnlen(port_str, sizeof(port_str)));
 	Stream_Write(s, CRLF CRLF, 4);
 	status = BIO_write(bufferedBio, Stream_Buffer(s), Stream_GetPosition(s));
 
-	if (status != Stream_GetPosition(s))
+	if ((status < 0) || ((size_t)status != Stream_GetPosition(s)))
 	{
 		Stream_Free(s, TRUE);
 		WLog_ERR(TAG, "HTTP proxy: failed to write CONNECT request");
@@ -423,11 +438,12 @@ static BOOL http_proxy_connect(BIO* bufferedBio, const char* hostname, UINT16 po
 	{
 		if (resultsize >= sizeof(recv_buf) - 1)
 		{
-			WLog_ERR(TAG, "HTTP Reply headers too long.");
+			WLog_ERR(TAG, "HTTP Reply headers too long: %s", get_response_header(recv_buf));
 			return FALSE;
 		}
 
-		status = BIO_read(bufferedBio, (BYTE*)recv_buf + resultsize, sizeof(recv_buf) - resultsize - 1);
+		status =
+		    BIO_read(bufferedBio, (BYTE*)recv_buf + resultsize, sizeof(recv_buf) - resultsize - 1);
 
 		if (status < 0)
 		{
@@ -463,7 +479,7 @@ static BOOL http_proxy_connect(BIO* bufferedBio, const char* hostname, UINT16 po
 	*eol = '\0';
 	WLog_INFO(TAG, "HTTP Proxy: %s", recv_buf);
 
-	if (strlen(recv_buf) < 12)
+	if (strnlen(recv_buf, sizeof(recv_buf)) < 12)
 	{
 		return FALSE;
 	}
@@ -485,9 +501,10 @@ static int recv_socks_reply(BIO* bufferedBio, BYTE* buf, int len, char* reason, 
 		status = BIO_read(bufferedBio, buf, len);
 
 		if (status > 0)
+		{
 			break;
-
-		if (status < 0)
+		}
+		else if (status < 0)
 		{
 			/* Error? */
 			if (BIO_should_retry(bufferedBio))
@@ -499,11 +516,11 @@ static int recv_socks_reply(BIO* bufferedBio, BYTE* buf, int len, char* reason, 
 			WLog_ERR(TAG, "Failed reading %s reply from SOCKS proxy (Status %d)", reason, status);
 			return -1;
 		}
-
-		if (status == 0)
+		else // if (status == 0)
 		{
 			/* Error? */
-			WLog_ERR(TAG, "Failed reading %s reply from SOCKS proxy (BIO_read returned zero)", reason);
+			WLog_ERR(TAG, "Failed reading %s reply from SOCKS proxy (BIO_read returned zero)",
+			         reason);
 			return -1;
 		}
 	}
@@ -524,8 +541,7 @@ static int recv_socks_reply(BIO* bufferedBio, BYTE* buf, int len, char* reason, 
 }
 
 static BOOL socks_proxy_connect(BIO* bufferedBio, const char* proxyUsername,
-                                const char* proxyPassword,
-                                const char* hostname, UINT16 port)
+                                const char* proxyPassword, const char* hostname, UINT16 port)
 {
 	int status;
 	int nauthMethods = 1, writeLen = 3;
@@ -539,7 +555,7 @@ static BOOL socks_proxy_connect(BIO* bufferedBio, const char* proxyUsername,
 	}
 
 	/* select auth. method */
-	buf[0] = 5; /* SOCKS version */
+	buf[0] = 5;            /* SOCKS version */
 	buf[1] = nauthMethods; /* #of methods offered */
 	buf[2] = AUTH_M_NO_AUTH;
 
@@ -617,18 +633,18 @@ static BOOL socks_proxy_connect(BIO* bufferedBio, const char* proxyUsername,
 	}
 
 	/* CONN request */
-	buf[0] = 5; /* SOCKS version */
+	buf[0] = 5;                 /* SOCKS version */
 	buf[1] = SOCKS_CMD_CONNECT; /* command */
-	buf[2] = 0; /* 3rd octet is reserved x00 */
-	buf[3] = SOCKS_ADDR_FQDN; /* addr.type */
-	buf[4] = hostnlen; /* DST.ADDR */
+	buf[2] = 0;                 /* 3rd octet is reserved x00 */
+	buf[3] = SOCKS_ADDR_FQDN;   /* addr.type */
+	buf[4] = hostnlen;          /* DST.ADDR */
 	memcpy(buf + 5, hostname, hostnlen);
 	/* follows DST.PORT in netw. format */
 	buf[hostnlen + 5] = (port >> 8) & 0xff;
 	buf[hostnlen + 6] = port & 0xff;
-	status = BIO_write(bufferedBio, buf, hostnlen + 7);
+	status = BIO_write(bufferedBio, buf, hostnlen + 7U);
 
-	if (status != (hostnlen + 7))
+	if ((status < 0) || ((size_t)status != (hostnlen + 7U)))
 	{
 		WLog_ERR(TAG, "SOCKS proxy: failed to write CONN REQ");
 		return FALSE;

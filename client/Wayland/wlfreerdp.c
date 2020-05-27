@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <locale.h>
+#include <float.h>
 
 #include <freerdp/client/cmdline.h>
 #include <freerdp/channels/channels.h>
@@ -40,6 +41,8 @@
 #include "wlf_disp.h"
 #include "wlf_channels.h"
 #include "wlf_pointer.h"
+
+#define TAG CLIENT_TAG("wayland")
 
 static BOOL wl_begin_paint(rdpContext* context)
 {
@@ -61,12 +64,11 @@ static BOOL wl_update_buffer(wlfContext* context_w, INT32 ix, INT32 iy, INT32 iw
 {
 	rdpGdi* gdi;
 	char* data;
-	size_t baseSrcOffset;
-	size_t baseDstOffset;
-	UINT32 i, x, y, w, h;
+	UINT32 x, y, w, h;
 	UwacSize geometry;
 	size_t stride;
 	UwacReturnCode rc;
+	RECTANGLE_16 area;
 
 	if (!context_w)
 		return FALSE;
@@ -90,24 +92,29 @@ static BOOL wl_update_buffer(wlfContext* context_w, INT32 ix, INT32 iy, INT32 iw
 		return FALSE;
 
 	/* Ignore output if the surface size does not match. */
-	if ((x > geometry.width) || (y > geometry.height))
+	if (((INT64)x > geometry.width) || ((INT64)y > geometry.height))
 		return TRUE;
 
-	baseSrcOffset = y * gdi->stride + x * GetBytesPerPixel(gdi->dstFormat);
-	baseDstOffset = y * stride + x * 4;
-	for (i = 0; i < MIN(h, geometry.height - y); i++)
-	{
-		const size_t srcOffset = i * gdi->stride + baseSrcOffset;
-		const size_t dstOffset = i * stride + baseDstOffset;
+	area.left = x;
+	area.top = y;
+	area.right = x + w;
+	area.bottom = y + h;
 
-		memcpy(data + dstOffset, gdi->primary_buffer + srcOffset,
-		       MIN(w, geometry.width - x) * GetBytesPerPixel(gdi->dstFormat));
-	}
+	if (!wlf_copy_image(gdi->primary_buffer, gdi->stride, gdi->width, gdi->height, data, stride,
+	                    geometry.width, geometry.height, &area,
+	                    context_w->context.settings->SmartSizing))
+		return FALSE;
+
+	if (!wlf_scale_coordinates(&context_w->context, &x, &y, FALSE))
+		return FALSE;
+
+	if (!wlf_scale_coordinates(&context_w->context, &w, &h, FALSE))
+		return FALSE;
 
 	if (UwacWindowAddDamage(context_w->window, x, y, w, h) != UWAC_SUCCESS)
 		return FALSE;
 
-	if (UwacWindowSubmitBuffer(context_w->window, true) != UWAC_SUCCESS)
+	if (UwacWindowSubmitBuffer(context_w->window, false) != UWAC_SUCCESS)
 		return FALSE;
 
 	return TRUE;
@@ -132,7 +139,7 @@ static BOOL wl_end_paint(rdpContext* context)
 	y = gdi->primary->hdc->hwnd->invalid->y;
 	w = gdi->primary->hdc->hwnd->invalid->w;
 	h = gdi->primary->hdc->hwnd->invalid->h;
-	context_w = (wlfContext*) context;
+	context_w = (wlfContext*)context;
 	return wl_update_buffer(context_w, x, y, w, h);
 }
 
@@ -163,13 +170,13 @@ static BOOL wl_pre_connect(freerdp* instance)
 {
 	rdpSettings* settings;
 	wlfContext* context;
-	UwacOutput* output;
+	const UwacOutput* output;
 	UwacSize resolution;
 
 	if (!instance)
 		return FALSE;
 
-	context = (wlfContext*) instance->context;
+	context = (wlfContext*)instance->context;
 	settings = instance->settings;
 
 	if (!context || !settings)
@@ -177,20 +184,19 @@ static BOOL wl_pre_connect(freerdp* instance)
 
 	settings->OsMajorType = OSMAJORTYPE_UNIX;
 	settings->OsMinorType = OSMINORTYPE_NATIVE_WAYLAND;
-	PubSub_SubscribeChannelConnected(instance->context->pubSub,
-	                                 wlf_OnChannelConnectedEventHandler);
+	PubSub_SubscribeChannelConnected(instance->context->pubSub, wlf_OnChannelConnectedEventHandler);
 	PubSub_SubscribeChannelDisconnected(instance->context->pubSub,
 	                                    wlf_OnChannelDisconnectedEventHandler);
 
 	if (settings->Fullscreen)
 	{
 		// Use the resolution of the first display output
-		output = UwacDisplayGetOutput(context->display, 1);
+		output = UwacDisplayGetOutput(context->display, 0);
 
-		if (output != NULL && UwacOutputGetResolution(output, &resolution) == UWAC_SUCCESS)
+		if ((output != NULL) && (UwacOutputGetResolution(output, &resolution) == UWAC_SUCCESS))
 		{
-			settings->DesktopWidth = (UINT32) resolution.width;
-			settings->DesktopHeight = (UINT32) resolution.height;
+			settings->DesktopWidth = (UINT32)resolution.width;
+			settings->DesktopHeight = (UINT32)resolution.height;
 		}
 		else
 		{
@@ -198,8 +204,7 @@ static BOOL wl_pre_connect(freerdp* instance)
 		}
 	}
 
-	if (!freerdp_client_load_addins(instance->context->channels,
-	                                instance->settings))
+	if (!freerdp_client_load_addins(instance->context->channels, instance->settings))
 		return FALSE;
 
 	return TRUE;
@@ -210,10 +215,18 @@ static BOOL wl_post_connect(freerdp* instance)
 	rdpGdi* gdi;
 	UwacWindow* window;
 	wlfContext* context;
+	rdpSettings* settings;
+	char* title = "FreeRDP";
 	UINT32 w, h;
 
 	if (!instance || !instance->context)
 		return FALSE;
+
+	context = (wlfContext*)instance->context;
+	settings = instance->context->settings;
+
+	if (settings->WindowTitle)
+		title = settings->WindowTitle;
 
 	if (!gdi_init(instance, PIXEL_FORMAT_BGRA32))
 		return FALSE;
@@ -228,14 +241,23 @@ static BOOL wl_post_connect(freerdp* instance)
 
 	w = (UINT32)gdi->width;
 	h = (UINT32)gdi->height;
-	context = (wlfContext*) instance->context;
+
+	if (settings->SmartSizing && !context->fullscreen)
+	{
+		if (settings->SmartSizingWidth > 0)
+			w = settings->SmartSizingWidth;
+
+		if (settings->SmartSizingHeight > 0)
+			h = settings->SmartSizingHeight;
+	}
+
 	context->window = window = UwacCreateWindowShm(context->display, w, h, WL_SHM_FORMAT_XRGB8888);
 
 	if (!window)
 		return FALSE;
 
 	UwacWindowSetFullscreenState(window, NULL, instance->context->settings->Fullscreen);
-	UwacWindowSetTitle(window, "FreeRDP");
+	UwacWindowSetTitle(window, title);
 	UwacWindowSetOpaqueRegion(context->window, 0, 0, w, h);
 	instance->update->BeginPaint = wl_begin_paint;
 	instance->update->EndPaint = wl_end_paint;
@@ -263,7 +285,7 @@ static void wl_post_disconnect(freerdp* instance)
 	if (!instance->context)
 		return;
 
-	context = (wlfContext*) instance->context;
+	context = (wlfContext*)instance->context;
 	gdi_free(instance);
 	wlf_clipboard_free(context->clipboard);
 	wlf_disp_free(context->disp);
@@ -299,6 +321,9 @@ static BOOL handle_uwac_events(freerdp* instance, UwacDisplay* display)
 				break;
 
 			case UWAC_EVENT_FRAME_DONE:
+				if (UwacWindowSubmitBuffer(context->window, false) != UWAC_SUCCESS)
+					return FALSE;
+
 				break;
 
 			case UWAC_EVENT_POINTER_ENTER:
@@ -331,16 +356,36 @@ static BOOL handle_uwac_events(freerdp* instance, UwacDisplay* display)
 
 				break;
 
+			case UWAC_EVENT_TOUCH_UP:
+				if (!wlf_handle_touch_up(instance, &event.touchUp))
+					return FALSE;
+
+				break;
+
+			case UWAC_EVENT_TOUCH_DOWN:
+				if (!wlf_handle_touch_down(instance, &event.touchDown))
+					return FALSE;
+
+				break;
+
+			case UWAC_EVENT_TOUCH_MOTION:
+				if (!wlf_handle_touch_motion(instance, &event.touchMotion))
+					return FALSE;
+
+				break;
+
 			case UWAC_EVENT_KEYBOARD_ENTER:
 				if (instance->context->settings->GrabKeyboard)
 					UwacSeatInhibitShortcuts(event.keyboard_enter_leave.seat, true);
+
 				if (!wlf_keyboard_enter(instance, &event.keyboard_enter_leave))
 					return FALSE;
 
 				break;
 
 			case UWAC_EVENT_CONFIGURE:
-				if (!wlf_disp_handle_configure(context->disp, event.configure.width, event.configure.height))
+				if (!wlf_disp_handle_configure(context->disp, event.configure.width,
+				                               event.configure.height))
 					return FALSE;
 
 				if (!wl_refresh_display(context))
@@ -359,6 +404,22 @@ static BOOL handle_uwac_events(freerdp* instance, UwacDisplay* display)
 			default:
 				break;
 		}
+	}
+
+	return TRUE;
+}
+
+static BOOL handle_window_events(freerdp* instance)
+{
+	rdpSettings* settings;
+
+	if (!instance || !instance->settings)
+		return FALSE;
+
+	settings = instance->settings;
+
+	if (!settings->AsyncInput)
+	{
 	}
 
 	return TRUE;
@@ -412,6 +473,18 @@ static int wlfreerdp_run(freerdp* instance)
 
 		if (freerdp_check_event_handles(instance->context) != TRUE)
 		{
+			if (client_auto_reconnect_ex(instance, handle_window_events))
+				continue;
+			else
+			{
+				/*
+				 * Indicate an unsuccessful connection attempt if reconnect
+				 * did not succeed and no other error was specified.
+				 */
+				if (freerdp_error_info(instance) == 0)
+					status = 42;
+			}
+
 			if (freerdp_get_last_error(instance->context) == FREERDP_ERROR_SUCCESS)
 				WLog_Print(context->log, WLOG_ERROR, "Failed to check FreeRDP file descriptor");
 
@@ -446,15 +519,15 @@ static int wlf_logon_error_info(freerdp* instance, UINT32 data, UINT32 type)
 	if (!instance || !instance->context)
 		return -1;
 
-	wlf = (wlfContext*) instance->context;
-	WLog_Print(wlf->log, WLOG_INFO,  "Logon Error Info %s [%s]", str_data, str_type);
+	wlf = (wlfContext*)instance->context;
+	WLog_Print(wlf->log, WLOG_INFO, "Logon Error Info %s [%s]", str_data, str_type);
 	return 1;
 }
 
 static BOOL wlf_client_new(freerdp* instance, rdpContext* context)
 {
 	UwacReturnCode status;
-	wlfContext* wfl = (wlfContext*) context;
+	wlfContext* wfl = (wlfContext*)context;
 
 	if (!instance || !context)
 		return FALSE;
@@ -474,7 +547,7 @@ static BOOL wlf_client_new(freerdp* instance, rdpContext* context)
 		return FALSE;
 
 	wfl->displayHandle = CreateFileDescriptorEvent(NULL, FALSE, FALSE,
-	                     UwacDisplayGetFd(wfl->display), WINPR_FD_READ);
+	                                               UwacDisplayGetFd(wfl->display), WINPR_FD_READ);
 
 	if (!wfl->displayHandle)
 		return FALSE;
@@ -482,10 +555,9 @@ static BOOL wlf_client_new(freerdp* instance, rdpContext* context)
 	return TRUE;
 }
 
-
 static void wlf_client_free(freerdp* instance, rdpContext* context)
 {
-	wlfContext* wlf = (wlfContext*) instance->context;
+	wlfContext* wlf = (wlfContext*)instance->context;
 
 	if (!context)
 		return;
@@ -530,19 +602,30 @@ int main(int argc, char* argv[])
 	int status;
 	RDP_CLIENT_ENTRY_POINTS clientEntryPoints;
 	rdpContext* context;
+	rdpSettings* settings;
+	wlfContext* wlc;
+
 	RdpClientEntry(&clientEntryPoints);
 	context = freerdp_client_context_new(&clientEntryPoints);
-
 	if (!context)
 		goto fail;
+	wlc = (wlfContext*)context;
+	settings = context->settings;
 
-	status = freerdp_client_settings_parse_command_line(context->settings, argc,
-	         argv, FALSE);
-	status = freerdp_client_settings_command_line_status_print(context->settings,
-	         status, argc, argv);
+	status = freerdp_client_settings_parse_command_line(settings, argc, argv, FALSE);
+	status = freerdp_client_settings_command_line_status_print(settings, status, argc, argv);
 
 	if (status)
-		return 0;
+	{
+		BOOL list = settings->ListMonitors;
+		if (list)
+			wlf_list_monitors(wlc);
+
+		freerdp_client_context_free(context);
+		if (list)
+			return 0;
+		return status;
+	}
 
 	if (freerdp_client_start(context) != 0)
 		goto fail;
@@ -555,4 +638,76 @@ int main(int argc, char* argv[])
 fail:
 	freerdp_client_context_free(context);
 	return rc;
+}
+
+BOOL wlf_copy_image(const void* src, size_t srcStride, size_t srcWidth, size_t srcHeight, void* dst,
+                    size_t dstStride, size_t dstWidth, size_t dstHeight, const RECTANGLE_16* area,
+                    BOOL scale)
+{
+	BOOL rc = FALSE;
+
+	if (!src || !dst || !area)
+		return FALSE;
+
+	if (scale)
+	{
+		return freerdp_image_scale(dst, PIXEL_FORMAT_BGRA32, dstStride, 0, 0, dstWidth, dstHeight,
+		                           src, PIXEL_FORMAT_BGRA32, srcStride, 0, 0, srcWidth, srcHeight);
+	}
+	else
+	{
+		size_t i;
+		const size_t baseSrcOffset = area->top * srcStride + area->left * 4;
+		const size_t baseDstOffset = area->top * dstStride + area->left * 4;
+		const size_t width = MIN((size_t)area->right - area->left, dstWidth - area->left);
+		const size_t height = MIN((size_t)area->bottom - area->top, dstHeight - area->top);
+		const BYTE* psrc = (const BYTE*)src;
+		BYTE* pdst = (BYTE*)dst;
+
+		for (i = 0; i < height; i++)
+		{
+			const size_t srcOffset = i * srcStride + baseSrcOffset;
+			const size_t dstOffset = i * dstStride + baseDstOffset;
+			memcpy(&pdst[dstOffset], &psrc[srcOffset], width * 4);
+		}
+
+		rc = TRUE;
+	}
+
+	return rc;
+}
+
+BOOL wlf_scale_coordinates(rdpContext* context, UINT32* px, UINT32* py, BOOL fromLocalToRDP)
+{
+	wlfContext* wlf = (wlfContext*)context;
+	rdpGdi* gdi;
+	UwacSize geometry;
+	double sx, sy;
+
+	if (!context || !px || !py || !context->gdi)
+		return FALSE;
+
+	if (!context->settings->SmartSizing)
+		return TRUE;
+
+	gdi = context->gdi;
+
+	if (UwacWindowGetDrawingBufferGeometry(wlf->window, &geometry, NULL) != UWAC_SUCCESS)
+		return FALSE;
+
+	sx = geometry.width / (double)gdi->width;
+	sy = geometry.height / (double)gdi->height;
+
+	if (!fromLocalToRDP)
+	{
+		*px *= sx;
+		*py *= sy;
+	}
+	else
+	{
+		*px /= sx;
+		*py /= sy;
+	}
+
+	return TRUE;
 }

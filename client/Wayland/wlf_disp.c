@@ -22,6 +22,8 @@
 
 #include "wlf_disp.h"
 
+#define TAG CLIENT_TAG("wayland.disp")
+
 #define RESIZE_MIN_DELAY 200 /* minimum delay in ms between two resizes */
 
 struct _wlfDispContext
@@ -109,9 +111,9 @@ static BOOL wlf_disp_sendResize(wlfDispContext* wlfDisp)
 	/* TODO: Multimonitor support for wayland
 	if (wlc->fullscreen && (settings->MonitorCount > 0))
 	{
-		if (wlf_disp_sendLayout(wlfDisp->disp, settings->MonitorDefArray,
-		                       settings->MonitorCount) != CHANNEL_RC_OK)
-			return FALSE;
+	    if (wlf_disp_sendLayout(wlfDisp->disp, settings->MonitorDefArray,
+	                           settings->MonitorCount) != CHANNEL_RC_OK)
+	        return FALSE;
 	}
 	else
 	*/
@@ -191,6 +193,7 @@ static void wlf_disp_OnGraphicsReset(void* context, GraphicsResetEventArgs* e)
 	wlfDispContext* wlfDisp;
 	rdpSettings* settings;
 
+	WINPR_UNUSED(e);
 	if (!wlf_disp_check_context(context, &wlc, &wlfDisp, &settings))
 		return;
 
@@ -209,6 +212,7 @@ static void wlf_disp_OnTimer(void* context, TimerEventArgs* e)
 	wlfDispContext* wlfDisp;
 	rdpSettings* settings;
 
+	WINPR_UNUSED(e);
 	if (!wlf_disp_check_context(context, &wlc, &wlfDisp, &settings))
 		return;
 
@@ -330,7 +334,8 @@ static UINT wlf_DisplayControlCaps(DispClientContext* disp, UINT32 maxNumMonitor
 	wlfDispContext* wlfDisp = (wlfDispContext*)disp->custom;
 	rdpSettings* settings = wlfDisp->wlc->context.settings;
 	WLog_DBG(TAG,
-	         "DisplayControlCapsPdu: MaxNumMonitors: %"PRIu32" MaxMonitorAreaFactorA: %"PRIu32" MaxMonitorAreaFactorB: %"PRIu32"",
+	         "DisplayControlCapsPdu: MaxNumMonitors: %" PRIu32 " MaxMonitorAreaFactorA: %" PRIu32
+	         " MaxMonitorAreaFactorB: %" PRIu32 "",
 	         maxNumMonitors, maxMonitorAreaFactorA, maxMonitorAreaFactorB);
 	wlfDisp->activated = TRUE;
 
@@ -354,7 +359,7 @@ BOOL wlf_disp_init(wlfDispContext* wlfDisp, DispClientContext* disp)
 		return FALSE;
 
 	wlfDisp->disp = disp;
-	disp->custom = (void*) wlfDisp;
+	disp->custom = (void*)wlfDisp;
 
 	if (settings->DynamicResolutionUpdate)
 	{
@@ -371,4 +376,26 @@ BOOL wlf_disp_uninit(wlfDispContext* wlfDisp, DispClientContext* disp)
 
 	wlfDisp->disp = NULL;
 	return TRUE;
+}
+
+int wlf_list_monitors(wlfContext* wlc)
+{
+	uint32_t i, nmonitors = UwacDisplayGetNbOutputs(wlc->display);
+
+	for (i = 0; i < nmonitors; i++)
+	{
+		const UwacOutput* monitor = UwacDisplayGetOutput(wlc->display, i);
+		UwacSize resolution;
+		UwacPosition pos;
+
+		if (!monitor)
+			continue;
+		UwacOutputGetPosition(monitor, &pos);
+		UwacOutputGetResolution(monitor, &resolution);
+
+		printf("     %s [%d] %dx%d\t+%d+%d\n", (i == 0) ? "*" : " ", i, resolution.width,
+		       resolution.height, pos.x, pos.y);
+	}
+
+	return 0;
 }
