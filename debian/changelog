@@ -1,10 +1,35 @@
-freerdp2 (2.1.0+dfsg1-1) UNRELEASED; urgency=medium
+freerdp2 (2.1.1+dfsg1-1) UNRELEASED; urgency=medium
 
-  * New upstream stable release.
+  [ Konstantin Demin ]
+  * New upstream release.
+    - Fix smartcard login failures. (Closes: #919281)
+  * debian/{copyright,rules,watch}:
+    + Use upstream tarball instead of Git snapshot.
   * debian/control:
-    + drop needless libdbus-glib-1-dev.
+    + Drop needless libdbus-glib-1-dev. (Closes: #955840).
+    + Bump Standards-Version: to 4.5.0. No changes needed.
+    + wrap-and-sort Build-Depends.
+    + Update Homepage URL scheme to https.
+  * debian/patches:
+    + Drop 0001_CVE-2019-17177.patch. Applied upstream.
+    + Drop 0002_fix-channels-smartcard-fix-statusw-call.patch.
+      Applied upstream.
+    + Refresh 1001_spelling-fixes.patch.
+    + Add 2001-fake-git-revision.patch. avoid Git interaction during build.
+  * debian/copyright:
+    + Update upstream Source URL scheme to https.
+  * debian/rules:
+    + Rework layout.
+    + Don't build freerdp-proxy so far.
+    + Specify correct build type.
+    + Fix build-time headers.
+    + Enable extended debug logging in freerdp2 itself.
+  * debian/{control,rules}:
+    + Enable image scaling support in freerdp.
+  * debian/*.symbols:
+    + Update symbols files.
 
- -- Konstantin Demin <rockdrilla@gmail.com>  Fri, 15 May 2020 00:02:34 +0300
+ -- Mike Gabriel <sunweaver@debian.org>  Wed, 27 May 2020 21:29:57 +0200
 
 freerdp2 (2.0.0~git20190204.1.2693389a+dfsg1-2) unstable; urgency=medium
 
