@@ -1,8 +1,10 @@
-freerdp2 (2.1.1+dfsg1-1) UNRELEASED; urgency=medium
+freerdp2 (2.1.1+dfsg1-1) unstable; urgency=medium
 
   [ Konstantin Demin ]
   * New upstream release.
     - Fix smartcard login failures. (Closes: #919281)
+    - Fix crash when /gfx option is used with /sound option.
+      (Closes: #940925).
   * debian/{copyright,rules,watch}:
     + Use upstream tarball instead of Git snapshot.
   * debian/control:
@@ -29,7 +31,17 @@ freerdp2 (2.1.1+dfsg1-1) UNRELEASED; urgency=medium
   * debian/*.symbols:
     + Update symbols files.
 
- -- Mike Gabriel <sunweaver@debian.org>  Wed, 27 May 2020 21:29:57 +0200
+  [ Mike Gabriel ]
+  * debian/control:
+    + Add B-D: libpam0g-dev. (Closes: #958230).
+    + Bump DH compat level to version 13.
+  * debian/rules:
+    + Re-add get-orig-source target for developers' convenience.
+  * debian/copyright:
+    + Update auto-generated copyright.in file.
+    + Update copyright attributions.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Wed, 27 May 2020 21:54:38 +0200
 
 freerdp2 (2.0.0~git20190204.1.2693389a+dfsg1-2) unstable; urgency=medium
 
