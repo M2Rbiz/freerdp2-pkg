@@ -19,6 +19,7 @@ Build-Depends:
  libgstreamer-plugins-base1.0-dev,
  libicu-dev,
  libjpeg-dev,
+ libpam0g-dev,
  libpcsclite-dev,
  libpulse-dev,
  libssl-dev,
