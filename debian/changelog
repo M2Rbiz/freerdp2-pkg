@@ -1,5 +1,6 @@
-freerdp2 (2.0.0~git20190204.1.2693389a+dfsg1-1+deb10u2) buster-security; urgency=medium
+freerdp2 (2.0.0~git20190204.1.2693389a+dfsg1-1+deb10u2) buster; urgency=medium
 
+  [ Bernhard Miklautz ]
   * debian/patches - security releated backports from upstream
     * Add 0003-Fixed-6007-Boundary-checks-in-rdp_read_flow_control.patch
     * Add 0004-Fixed-6009-Bounds-checks-in-autodetect_recv_bandwidt.patch
@@ -26,7 +27,12 @@ freerdp2 (2.0.0~git20190204.1.2693389a+dfsg1-1+deb10u2) buster-security; urgency
     * Add 0019-Fixed-possible-NULL-access.patch
     * Add 0020-Check-for-int-overflow-in-gdi_InvalidateRegion.patch
 
- -- Bernhard Miklautz <bernhard.miklautz@shacknet.at>  Mon, 13 Apr 2020 21:31:35 +0000
+  [ Mike Gabriel ]
+  * debian/patches:
+    + Add 0002_fix-channels-smartcard-fix-statusw-call.patch. Fix smartcard
+      login failures. (Closes: #919281).
+
+ -- Mike Gabriel <sunweaver@debian.org>  Mon, 01 Jun 2020 13:08:46 +0200
 
 freerdp2 (2.0.0~git20190204.1.2693389a+dfsg1-1+deb10u1) buster; urgency=medium
 
