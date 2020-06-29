@@ -780,6 +780,7 @@ Files: CMakeCPack.cmake
  scripts/android-build-openssl.sh
  scripts/android-build.conf
  scripts/blacklist-memory-sanitizer.txt
+ scripts/create_release_taball.sh
  scripts/specBytesToCode.py
  scripts/toolchains_path.py
  scripts/update-settings-tests
@@ -1342,6 +1343,66 @@ Copyright: 2012, Hewlett-Packard Development Company, L.P.
 License: Apache (v2.0)
  FIXME
 
+Files: channels/disp/disp_common.c
+ channels/disp/disp_common.h
+ channels/disp/server/CMakeLists.txt
+ channels/disp/server/disp_main.c
+ channels/disp/server/disp_main.h
+ channels/rdpsnd/client/proxy/rdpsnd_proxy.c
+ include/freerdp/channels/disp.h
+ include/freerdp/display.h
+ include/freerdp/server/disp.h
+ libfreerdp/core/display.c
+ libfreerdp/core/display.h
+ server/proxy/modules/CMakeLists.txt
+ server/proxy/modules/capture/CMakeLists.txt
+ server/proxy/modules/capture/cap_config.c
+ server/proxy/modules/capture/cap_config.h
+ server/proxy/modules/capture/cap_main.c
+ server/proxy/modules/capture/cap_protocol.c
+ server/proxy/modules/capture/cap_protocol.h
+ server/proxy/modules/demo/CMakeLists.txt
+ server/proxy/modules/demo/demo.cpp
+ server/proxy/pf_capture.c
+ server/proxy/pf_capture.h
+ server/proxy/pf_disp.c
+ server/proxy/pf_disp.h
+ server/proxy/pf_rdpsnd.c
+ server/proxy/pf_rdpsnd.h
+Copyright: 2019, Kobi Mizrachi <kmizrachi18@gmail.com>
+License: Apache (v2.0)
+ FIXME
+
+Files: channels/geometry/CMakeLists.txt
+ channels/geometry/client/CMakeLists.txt
+ channels/geometry/client/geometry_main.c
+ channels/geometry/client/geometry_main.h
+ channels/printer/printer.h
+ channels/video/CMakeLists.txt
+ channels/video/client/CMakeLists.txt
+ channels/video/client/video_main.c
+ channels/video/client/video_main.h
+ client/X11/xf_disp.c
+ client/X11/xf_disp.h
+ client/X11/xf_video.c
+ client/X11/xf_video.h
+ client/common/geometry.c
+ cmake/FindWayland.cmake
+ include/freerdp/channels/geometry.h
+ include/freerdp/channels/video.h
+ include/freerdp/client/geometry.h
+ include/freerdp/client/video.h
+ include/freerdp/codec/yuv.h
+ include/freerdp/gdi/video.h
+ include/freerdp/license.h
+ libfreerdp/gdi/video.c
+Copyright: 2015, David Fort <contact@hardening-consulting.com>
+  2016, David Fort <contact@hardening-consulting.com>
+  2017, David Fort <contact@hardening-consulting.com>
+  2018, David Fort <contact@hardening-consulting.com>
+License: Apache (v2.0)
+ FIXME
+
 Files: server/proxy/CMakeLists.txt
  server/proxy/freerdp_proxy.c
  server/proxy/pf_channels.c
@@ -1368,59 +1429,6 @@ Files: server/proxy/CMakeLists.txt
 Copyright: 2019, Idan Freiberg <speidy@gmail.com>
   2019, Kobi Mizrachi <kmizrachi18@gmail.com>
   2019, Mati Shabtay <matishabtay@gmail.com>
-License: Apache (v2.0)
- FIXME
-
-Files: channels/geometry/CMakeLists.txt
- channels/geometry/client/CMakeLists.txt
- channels/geometry/client/geometry_main.c
- channels/geometry/client/geometry_main.h
- channels/printer/printer.h
- channels/video/CMakeLists.txt
- channels/video/client/CMakeLists.txt
- channels/video/client/video_main.c
- channels/video/client/video_main.h
- client/X11/xf_disp.c
- client/X11/xf_disp.h
- client/X11/xf_video.c
- client/X11/xf_video.h
- cmake/FindWayland.cmake
- include/freerdp/channels/geometry.h
- include/freerdp/channels/video.h
- include/freerdp/client/geometry.h
- include/freerdp/client/video.h
- include/freerdp/codec/yuv.h
- include/freerdp/gdi/video.h
- include/freerdp/license.h
- libfreerdp/gdi/video.c
-Copyright: 2015, David Fort <contact@hardening-consulting.com>
-  2016, David Fort <contact@hardening-consulting.com>
-  2017, David Fort <contact@hardening-consulting.com>
-  2018, David Fort <contact@hardening-consulting.com>
-License: Apache (v2.0)
- FIXME
-
-Files: channels/disp/disp_common.c
- channels/disp/disp_common.h
- channels/disp/server/CMakeLists.txt
- channels/disp/server/disp_main.c
- channels/disp/server/disp_main.h
- channels/rdpsnd/client/proxy/rdpsnd_proxy.c
- include/freerdp/channels/disp.h
- include/freerdp/display.h
- include/freerdp/server/disp.h
- libfreerdp/core/display.c
- libfreerdp/core/display.h
- server/proxy/modules/CMakeLists.txt
- server/proxy/modules/demo/CMakeLists.txt
- server/proxy/modules/demo/demo.cpp
- server/proxy/pf_capture.c
- server/proxy/pf_capture.h
- server/proxy/pf_disp.c
- server/proxy/pf_disp.h
- server/proxy/pf_rdpsnd.c
- server/proxy/pf_rdpsnd.h
-Copyright: 2019, Kobi Mizrachi <kmizrachi18@gmail.com>
 License: Apache (v2.0)
  FIXME
 
@@ -2916,6 +2924,11 @@ Copyright: 2006, Andreas Schneider <mail@cynapses.org>
 License: BSD (3 clause)
  FIXME
 
+Files: debian/changelog
+Copyright: rules,watch}:
+License: GENERATED FILE
+ FIXME
+
 Files: winpr/libwinpr/crt/casing.c
 Copyright: was claimed by the wine
 License: GENERATED FILE
@@ -3069,11 +3082,6 @@ Copyright: bÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ�
   bÿÉ¸mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ¶mÿÈ¶m                                                                                                                    È·lÈ¶mßÇ¶mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÇ¶lÿÌ¼qÿ²YÿjOÿW:	ÿR4ÿR5ÿR5ÿR5ÿR5ÿR5ÿR5ÿR4ÿT7ÿ[?
   Rÿr6ÿrX!ÿbGÿ@ÿ@ÿ^CÿjPÿ}e+ÿDÿ¿­eÿÍ¼qÿÈ·mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÁ¯gÿDÿn3ÿ}e+ÿg-ÿv9í©R)                                                                                                                            È·mõÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÂ±hÿ¿­eÿ½«dÿ½«dÿ¾¬dÿÁ¯gÿÅ´jÿÉ¸mÿÈ·mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÅ´jÿi.ÿS6ÿQ4ÿQ4ÿQ4ÿR4êU8                                                                                                                    Ç¶m     È·lgÈ·lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿ½«cÿY<
   È¶lÈ·m                                                                                                                                                         £J£Jë£Jÿ¢Iÿ¥Lÿ¼ªbÿÉ¹nÿÇ¶lÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mþÈ·mÿÈ·mÝÈ·m                                                                                                                                                                £J£Jë£Jÿ£Jÿ¢Iÿ£Jÿ¶£ÿÉ¸nÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ¶mþÈ·mÿÈ·múÈ¶m    Ç¶l                                                                                                                                                             £J£Jë£Jÿ£Jÿ£Jÿ£Jÿ¢Iÿ³YÿÆµkÿÈ·mÿÇ¶lÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mþÇ¶lÿÈ¶lòÇ¶l/    È·l                                                                                                                                                                 £J£Jë£Jÿ£Jÿ£Jÿ£Jÿ¢Iÿ¡Hÿ¬SÿÀ­eÿÉ¸nÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mþÈ·mÿÇ¶lçÈ·m=    È·m                                                                                                                                                                     £J£Jë£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ¢Iÿ¥Lÿµ¢ÿÈ·mÿÈ·mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mþÈ¶mÿÈ·m×È·m                                                                                                                                                                                £J¢Jé¢Iÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ¢Iÿ¡Hÿ©PÿÁ¯fÿÇ¶lÿÈ·mÿÈ·mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÇ·mþÈ·mÿÇ·lÿÈ¶lùÇ·l§È·m     È·l                                                                                                                                                                             £J£JÚ¢Iÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ¢Iÿ¢Iÿ¯Vÿ¾«dÿÉ¹nÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mþÈ·mÿÈ·mÿÇ·mÐÇ¶mV                                                                                                                                                                                            £J£JÚ¢Iÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ¢Iÿ¢Iÿ¤Kÿ©Pÿ¾¬cÿÉ¸nÿÈ·mÿÈ·mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mòÈ·miÈ¶l        È·m                                                                                                                                                                                     £J£JÊ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ£Jÿ¢Iÿ¡Hÿ§Nÿ¹¦^ÿÄ²iÿÆµkÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÇ¶lÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·mÿÈ·lÿÇ¶m¢                                                                                                                                                                                                        £I
-License: UNKNOWN
- FIXME
-
-Files: debian/changelog
-Copyright: rules,watch}:
 License: UNKNOWN
  FIXME
 
