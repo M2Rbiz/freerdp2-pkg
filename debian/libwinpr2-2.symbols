@@ -1570,6 +1570,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  winpr_backtrace_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_backtrace_symbols@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_backtrace_symbols_fd@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ winpr_bitmap_construct_header@Base 2.1.2+dfsg1
  winpr_bitmap_write@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_get_build_config@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_get_build_date@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
