@@ -1,3 +1,12 @@
+freerdp2 (2.1.2+dfsg1-2) unstable; urgency=medium
+
+  [ Konstantin Demin ]
+  * debian/patches:
+    + Add 0001-mask-CACHED_BRUSH-when-checking-brush-style.patch. Fix
+      regression introduced in 2.1.2.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Thu, 02 Jul 2020 15:02:32 +0200
+
 freerdp2 (2.1.2+dfsg1-1) unstable; urgency=medium
 
   * New upstream release.
