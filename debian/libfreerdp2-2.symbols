@@ -269,6 +269,7 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  freerdp_get_version_string@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_glyph_convert@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_handle_signals@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ freerdp_heartbeat_send_heartbeat_pdu@Base 2.2.0+dfsg1
  freerdp_image_copy@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_image_copy_from_icon_data@Base 2.1.0+dfsg1
  freerdp_image_copy_from_monochrome@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
