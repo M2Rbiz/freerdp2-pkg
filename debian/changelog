@@ -1,8 +1,19 @@
-freerdp2 (2.2.0+dfsg1-1) UNRELEASED; urgency=medium
+freerdp2 (2.2.0+dfsg1-1) unstable; urgency=medium
 
   * New upstream release.
+    + CVE-2020-15103: Integer overflow due to missing input sanitation in
+      rdpegfx channel. (Closes: #965979).
+  * debian/patches:
+    + Drop 0001-mask-CACHED_BRUSH-when-checking-brush-style.patch. Applied
+      upstream.
+  * debian/copyright:
+    + Update copyright attributions.
+  * debian/libfreerdp2-2.symbols:
+    + Update symbols.
+  * debian/libfreerdp-server2-2.symbols:
+    + Update symbols.
 
- -- Mike Gabriel <sunweaver@debian.org>  Tue, 25 Aug 2020 09:07:31 +0200
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 25 Aug 2020 09:17:57 +0200
 
 freerdp2 (2.1.2+dfsg1-2) unstable; urgency=medium
 
