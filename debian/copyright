@@ -1643,7 +1643,8 @@ Copyright: 2014, David FORT <contact@hardening-consulting.com>
   2015, David FORT <contact@hardening-consulting.com>
 License: X11
 
-Files: libfreerdp/core/autodetect.c
+Files: include/freerdp/heartbeat.h
+ libfreerdp/core/autodetect.c
  libfreerdp/core/autodetect.h
  libfreerdp/core/heartbeat.c
  libfreerdp/core/heartbeat.h
