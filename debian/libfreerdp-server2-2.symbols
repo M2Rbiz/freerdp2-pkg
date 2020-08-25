@@ -15,6 +15,7 @@ libfreerdp-server2.so.2 libfreerdp-server2-2 #MINVER#
  rail_server_context_free@Base 2.1.0+dfsg1
  rail_server_context_new@Base 2.1.0+dfsg1
  rail_server_handle_messages@Base 2.1.0+dfsg1
+ rail_server_set_handshake_ex_flags@Base 2.2.0+dfsg1
  rdpdr_server_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rdpdr_server_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rdpei_server_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
