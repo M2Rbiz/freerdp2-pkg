@@ -1,2 +1,4 @@
 1001_spelling-fixes.patch
 2001-fake-git-revision.patch
+0001-remove-unwanted-log-debug.patch
+0002-fix-sound-buffering.patch

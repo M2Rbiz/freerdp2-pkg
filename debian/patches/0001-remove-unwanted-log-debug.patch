@@ -1,0 +1,30 @@
+From f3e5ebe315f81f61688b79aa979c8d4ea89f8e87 Mon Sep 17 00:00:00 2001
+From: Fabio Fantoni <fabio.fantoni@m2r.biz>
+Date: Sat, 28 Nov 2020 13:50:42 +0100
+Subject: [PATCH] remove unwanted log level set to debug in rfx
+
+I saw on debian packages (that have -DWITH_DEBUG_ALL=ON) remotefx logs always to
+debug without respect log-level and log-filters settings making diffult
+debugging of issue on other parts.
+After a search I found this that set loglevel to debug that akallabeth confirmed
+is unwanted, this patch remove it.
+
+Closes #6606
+---
+ libfreerdp/codec/rfx.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/libfreerdp/codec/rfx.c b/libfreerdp/codec/rfx.c
+index 652f02fe8..382f70cbd 100644
+--- a/libfreerdp/codec/rfx.c
++++ b/libfreerdp/codec/rfx.c
+@@ -220,9 +220,6 @@ RFX_CONTEXT* rfx_context_new(BOOL encoder)
+ 
+ 	priv->log = WLog_Get("com.freerdp.codec.rfx");
+ 	WLog_OpenAppender(priv->log);
+-#ifdef WITH_DEBUG_RFX
+-	WLog_SetLogLevel(priv->log, WLOG_DEBUG);
+-#endif
+ 	priv->TilePool = ObjectPool_New(TRUE);
+ 
+ 	if (!priv->TilePool)
