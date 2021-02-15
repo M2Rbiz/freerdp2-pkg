@@ -1,10 +1,12 @@
-freerdp2 (2.2.0+dfsg1-1~bpo10+1.1) buster-backports; urgency=medium
+freerdp2 (2.2.0+dfsg1-1~bpo10+1.2) buster-backports; urgency=medium
 
   * Testing build.
   * debian/patches: remove unwanted log level set to debug in rfx
     Fixed sound buffering issues with compressed formats
+  * Add missed binary version deps to avoid issue in some cases
+    like upgrade to -backports. (Closes: #964147)
 
- -- Fabio Fantoni <fantonifabio@tiscali.it>  Sat, 28 Nov 2020 20:11:42 +0100
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Mon, 15 Feb 2021 15:41:08 +0100
 
 freerdp2 (2.2.0+dfsg1-1~bpo10+1) buster-backports; urgency=medium
 

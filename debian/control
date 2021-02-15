@@ -56,6 +56,7 @@ Architecture: any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libfreerdp-client2-2 (= ${binary:Version}),
 Provides:
  freerdp,
 Replaces:
@@ -89,6 +90,7 @@ Pre-Depends:
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libwinpr2-2 (= ${binary:Version}),
 Breaks:
  libfreerdp2 (<< 2.0.0~git20170725.1.1648deb+dfsg1-1~),
 Replaces:
@@ -110,6 +112,7 @@ Pre-Depends:
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libfreerdp2-2 (= ${binary:Version}),
 Breaks:
  libfreerdp-client2 (<< 2.0.0~git20170725.1.1648deb+dfsg1-1~),
 Replaces:
@@ -129,6 +132,7 @@ Pre-Depends:
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libfreerdp2-2 (= ${binary:Version}),
 Breaks:
  libfreerdp-server2 (<< 2.0.0~git20170725.1.1648deb+dfsg1-1~),
 Replaces:
@@ -175,6 +179,7 @@ Pre-Depends:
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libwinpr2-2 (= ${binary:Version}),
 Breaks:
  libwinpr-tools2 (<< 2.0.0~git20170725.1.1648deb+dfsg1-1~),
 Replaces:
@@ -233,6 +238,7 @@ Architecture: any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libwinpr-tools2-2 (= ${binary:Version}),
 Description: Windows Portable Runtime library command line utilities
  WinPR is a spin-off project of FreeRDP which aims at providing a portable
  implementation of important portions of the Windows API. Just like FreeRDP,
@@ -253,6 +259,8 @@ Pre-Depends:
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libfreerdp-server2-2 (= ${binary:Version}),
+ libwinpr-tools2-2 (= ${binary:Version}),
 Breaks:
  libfreerdp-shadow2 (<< 2.0.0~git20170725.1.1648deb+dfsg1-1~),
 Replaces:
@@ -272,6 +280,7 @@ Pre-Depends:
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libfreerdp-shadow2-2 (= ${binary:Version}),
 Breaks:
  libfreerdp-shadow2 (<< 2.0.0~git20170725.1.1648deb+dfsg1-1~),
 Replaces:
@@ -288,6 +297,7 @@ Architecture: any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libfreerdp-shadow-subsystem2-2 (= ${binary:Version}),
 Provides:
  freerdp,
 Description: FreeRDP x11 shadowing server
@@ -305,6 +315,7 @@ Pre-Depends:
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libfreerdp2-2 (= ${binary:Version}),
 Breaks:
  libuwac0 (<< 2.0.0~git20170725.1.1648deb+dfsg1-1~),
 Replaces:
@@ -334,6 +345,8 @@ Architecture: linux-any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ libfreerdp-client2-2 (= ${binary:Version}),
+ libuwac0-0 (= ${binary:Version}),
 Description: RDP client for Windows Terminal Services (wayland client)
  FreeRDP is a libre client/server implementation of the Remote
  Desktop Protocol (RDP).
