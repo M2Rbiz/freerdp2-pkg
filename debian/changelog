@@ -1,13 +1,28 @@
-freerdp2 (2.3.0+dfsg1-1) UNRELEASED; urgency=medium
+freerdp2 (2.3.0+dfsg1-1) unstable; urgency=medium
 
   [ Fabio Fantoni ]
-  * Add missed binary version deps to avoid issue in some cases
-    like upgrade to -backports. (Closes: #964147)
+  * debian/control:
+    + Add missed binary version deps to avoid issue in some cases
+      like upgrade to -backports. (Closes: #964147)
 
   [ Mike Gabriel ]
-  * New upstream release.
+  * New upstream release. (Closes: #893733, #903646).
+  * debian/control:
+    + Bump to Standards-Version: 4.5.1. No changes needed.
+  * debian/copyright:
+    + Update auto-generated copyright.in file.
+    + Update copyright attributions:
+  * debian/patches:
+    + Drop 1001_spelling-fixes.patch. Applied upstream.
+    + Revert upstream's removal of the connectErrorCode symbol via
+      2002_revert-e4b30a5cb6100a8ea4f320b829c9c5712ed4a783.patch.
+      This re-instates ABI compatibility with FreeRDP 2.2.0.
+  * debian/*.symbols:
+    + Update symbols for FreeRDP 2.3.0.
+  * debian/watch:
+    + Switch to format version 4.
 
- -- Mike Gabriel <sunweaver@debian.org>  Thu, 25 Feb 2021 15:05:52 +0100
+ -- Mike Gabriel <sunweaver@debian.org>  Thu, 25 Feb 2021 16:14:52 +0100
 
 freerdp2 (2.2.0+dfsg1-1) unstable; urgency=medium
 
