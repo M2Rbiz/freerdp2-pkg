@@ -13,6 +13,7 @@ Files-Excluded:
  resources/FreeRDP_OSX.icns
  resources/FreeRDP_Logo_Icon.ai
  scripts/OpenSSL-DownloadAndBuild.command
+ scripts/android-build-release.conf
  winpr/libwinpr/crt/utf.*
 
 Files: .clang-format
@@ -20,6 +21,7 @@ Files: .clang-format
  .github/ISSUE_TEMPLATE/bug_report.md
  .github/ISSUE_TEMPLATE/feature_request.md
  .github/PULL_REQUEST_TEMPLATE.md
+ .github/workflows/codeql-analysis.yml
  .gitignore
  .travis.yml
  channels/client/.gitignore
@@ -193,6 +195,7 @@ Files: .clang-format
  libfreerdp/codec/test/TestFreeRDPCodecXCrush.c
  libfreerdp/codec/test/TestFreeRDPCodecZGfx.c
  libfreerdp/codec/test/rfx.bmp
+ libfreerdp/codec/test/progressive.bmp
  libfreerdp/codec/test/test01.bmp
  libfreerdp/codec/yuv.c
  libfreerdp/common/test/CMakeLists.txt
@@ -1195,7 +1198,7 @@ Copyright: 2010, Marc-Andre Moreau <marcandre.moreau@gmail.com>
 License: Apache-2.0
 
 Files: channels/audin/client/mac/CMakeLists.txt
- channels/audin/client/mac/audin_mac.c
+ channels/audin/client/mac/audin_mac.m
  channels/printer/client/cups/CMakeLists.txt
  channels/printer/client/win/CMakeLists.txt
  channels/rdpsnd/client/fake/CMakeLists.txt
@@ -2077,6 +2080,7 @@ License: Apache-2.0
 
 Files: channels/parallel/client/parallel_main.c
  channels/smartcard/client/smartcard_main.h
+ channels/smartcard/client/smartcard_operations.h
 Copyright: 2010, Eduardo Fiss Beloni <beloni@ossystems.com.br>
   2010, O.S. Systems Software Ltda.
   2011, Eduardo Fiss Beloni <beloni@ossystems.com.br>
@@ -2239,9 +2243,15 @@ Copyright: 2011, Anthony Tong <atong@trustedcs.com>
   2016, David PHAM-VAN <d.phamvan@inuvika.com>
 License: Apache-2.0
 
-Files: libfreerdp/codec/h264.h
-Copyright: 2018, Armin Novak <anovak@thincast.com>
+Files: include/freerdp/channels/echo.h
+ libfreerdp/codec/h264.h
+ libfreerdp/codec/progressive.h
+Copyright: 2017, Armin Novak <anovak@thincast.com>
+  2017, Thincast Technologies GmbH
+  2018, Armin Novak <anovak@thincast.com>
   2018, Thincast Technologies GmbH
+  2020, Armin Novak <anovak@thincast.com>
+  2020, Thincast Technologies GmbH
 License: Apache-2.0
 
 Files: channels/printer/client/printer_main.c
@@ -2758,11 +2768,6 @@ License: Apache-2.0
 Files: libfreerdp/codec/nsc_types.h
 Copyright: 2011, Samsung, Author Jiten Pathy
   2012, Vic Lee
-License: Apache-2.0
-
-Files: libfreerdp/codec/progressive.h
-Copyright: 2017, Armin Novak <anovak@thincast.com>
-  2017, Thincast Technologies GmbH
 License: Apache-2.0
 
 Files: libfreerdp/codec/rfx_constants.h
