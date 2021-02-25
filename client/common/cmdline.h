@@ -63,7 +63,7 @@ static const COMMAND_LINE_ARGUMENT_A args[] = {
 	{ "auth-only", COMMAND_LINE_VALUE_BOOL, NULL, BoolValueFalse, NULL, -1, NULL,
 	  "Authenticate only" },
 	{ "authentication", COMMAND_LINE_VALUE_BOOL, NULL, BoolValueTrue, NULL, -1, NULL,
-	  "Authentication (expermiental)" },
+	  "Authentication (experimental)" },
 	{ "auto-reconnect", COMMAND_LINE_VALUE_BOOL, NULL, BoolValueFalse, NULL, -1, NULL,
 	  "Automatic reconnection" },
 	{ "auto-reconnect-max-retries", COMMAND_LINE_VALUE_REQUIRED, "<retries>", NULL, NULL, -1, NULL,
@@ -102,8 +102,12 @@ static const COMMAND_LINE_ARGUMENT_A args[] = {
 	  "Client Build Number sent to server (influences smartcard behaviour, see [MS-RDPESC])" },
 	{ "client-hostname", COMMAND_LINE_VALUE_REQUIRED, "<name>", NULL, NULL, -1, NULL,
 	  "Client Hostname to send to server" },
-	{ "clipboard", COMMAND_LINE_VALUE_BOOL, NULL, BoolValueTrue, NULL, -1, NULL,
-	  "Redirect clipboard" },
+	{ "clipboard", COMMAND_LINE_VALUE_BOOL | COMMAND_LINE_VALUE_OPTIONAL, "[use-selection:<atom>]",
+	  BoolValueTrue, NULL, -1, NULL,
+	  "Redirect clipboard.                       "
+	  " * use-selection:<atom>  ... (X11) Specify which X selection to access. Default is "
+	  "CLIPBOARD."
+	  " PRIMARY is the X-style middle-click selection." },
 	{ "codec-cache", COMMAND_LINE_VALUE_REQUIRED, "[rfx|nsc|jpeg]", NULL, NULL, -1, NULL,
 	  "Bitmap codec cache" },
 	{ "compression", COMMAND_LINE_VALUE_BOOL, NULL, BoolValueTrue, NULL, -1, "z", "compression" },
@@ -206,6 +210,9 @@ static const COMMAND_LINE_ARGUMENT_A args[] = {
 	  "List keyboard layouts" },
 	{ "kbd-lang-list", COMMAND_LINE_VALUE_OPTIONAL | COMMAND_LINE_PRINT, NULL, NULL, NULL, -1, NULL,
 	  "List keyboard languages" },
+	{ "kbd-remap", COMMAND_LINE_VALUE_REQUIRED,
+	  "List of <key>=<value>,... pairs to remap scancodes", NULL, NULL, -1, NULL,
+	  "Keyboard scancode remapping" },
 	{ "kbd-subtype", COMMAND_LINE_VALUE_REQUIRED, "<id>", NULL, NULL, -1, NULL,
 	  "Keyboard subtype" },
 	{ "kbd-type", COMMAND_LINE_VALUE_REQUIRED, "<id>", NULL, NULL, -1, NULL, "Keyboard type" },

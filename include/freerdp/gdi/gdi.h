@@ -525,6 +525,7 @@ struct rdp_gdi
 	GeometryClientContext* geometry;
 
 	wLog* log;
+	UINT32 frameId;
 };
 
 #ifdef __cplusplus

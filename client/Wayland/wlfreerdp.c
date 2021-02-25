@@ -270,7 +270,8 @@ static BOOL wl_post_connect(freerdp* instance)
 	instance->update->BeginPaint = wl_begin_paint;
 	instance->update->EndPaint = wl_end_paint;
 	instance->update->DesktopResize = wl_resize_display;
-	freerdp_keyboard_init(instance->context->settings->KeyboardLayout);
+	freerdp_keyboard_init_ex(instance->context->settings->KeyboardLayout,
+	                         instance->context->settings->KeyboardRemappingList);
 
 	if (!(context->disp = wlf_disp_new(context)))
 		return FALSE;
@@ -356,6 +357,9 @@ static BOOL handle_uwac_events(freerdp* instance, UwacDisplay* display)
 				break;
 
 			case UWAC_EVENT_POINTER_AXIS:
+				break;
+
+			case UWAC_EVENT_POINTER_AXIS_DISCRETE:
 				if (!wlf_handle_pointer_axis(instance, &event.mouse_axis))
 					return FALSE;
 
@@ -394,6 +398,12 @@ static BOOL handle_uwac_events(freerdp* instance, UwacDisplay* display)
 
 				break;
 
+			case UWAC_EVENT_KEYBOARD_MODIFIERS:
+				if (!wlf_keyboard_modifiers(instance, &event.keyboard_modifiers))
+					return FALSE;
+
+				break;
+
 			case UWAC_EVENT_CONFIGURE:
 				if (!wlf_disp_handle_configure(context->disp, event.configure.width,
 				                               event.configure.height))
@@ -409,6 +419,11 @@ static BOOL handle_uwac_events(freerdp* instance, UwacDisplay* display)
 			case UWAC_EVENT_CLIPBOARD_SELECT:
 				if (!wlf_cliprdr_handle_event(context->clipboard, &event.clipboard))
 					return FALSE;
+
+				break;
+
+			case UWAC_EVENT_CLOSE:
+				context->closed = TRUE;
 
 				break;
 
@@ -482,6 +497,12 @@ static int wlfreerdp_run(freerdp* instance)
 			break;
 		}
 
+		if (context->closed)
+		{
+			WLog_Print(context->log, WLOG_INFO, "Closed from Wayland");
+			break;
+		}
+
 		if (freerdp_check_event_handles(instance->context) != TRUE)
 		{
 			if (client_auto_reconnect_ex(instance, handle_window_events))
@@ -550,6 +571,7 @@ static BOOL wlf_client_new(freerdp* instance, rdpContext* context)
 	instance->GatewayAuthenticate = client_cli_gw_authenticate;
 	instance->VerifyCertificateEx = client_cli_verify_certificate_ex;
 	instance->VerifyChangedCertificateEx = client_cli_verify_changed_certificate_ex;
+	instance->PresentGatewayMessage = client_cli_present_gateway_message;
 	instance->LogonErrorInfo = wlf_logon_error_info;
 	wfl->log = WLog_Get(TAG);
 	wfl->display = UwacOpenDisplay(NULL, &status);
@@ -627,18 +649,16 @@ int main(int argc, char* argv[])
 	settings = context->settings;
 
 	status = freerdp_client_settings_parse_command_line(settings, argc, argv, FALSE);
-	status = freerdp_client_settings_command_line_status_print(settings, status, argc, argv);
-
 	if (status)
 	{
 		BOOL list = settings->ListMonitors;
+
+		rc = freerdp_client_settings_command_line_status_print(settings, status, argc, argv);
+
 		if (list)
 			wlf_list_monitors(wlc);
 
-		freerdp_client_context_free(context);
-		if (list)
-			return 0;
-		return status;
+		goto fail;
 	}
 
 	if (freerdp_client_start(context) != 0)
