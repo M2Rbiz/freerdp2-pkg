@@ -291,6 +291,7 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  freerdp_keyboard_get_rdp_scancode_from_x11_keycode@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_keyboard_get_x11_keycode_from_rdp_scancode@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_keyboard_init@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ freerdp_keyboard_init_ex@Base 2.3.0+dfsg1
  freerdp_keyboard_layouts_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_listener_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_listener_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -310,6 +311,7 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  freerdp_peer_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_performance_flags_make@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_performance_flags_split@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ freerdp_planar_switch_bgr@Base 2.3.0+dfsg1
  freerdp_reconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_register_addin_provider@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_send_error_info@Base 2.1.0+dfsg1
@@ -527,11 +529,13 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  profiler_print_footer@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  profiler_print_header@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  progressive_compress@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ progressive_compress_ex@Base 2.3.0+dfsg1
  progressive_context_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  progressive_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  progressive_context_reset@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  progressive_create_surface_context@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  progressive_decompress@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ progressive_decompress_ex@Base 2.3.0+dfsg1
  progressive_delete_surface_context@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rail_read_unicode_string@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rectangle_is_empty@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -557,6 +561,7 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  rfx_context_set_pixel_format@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rfx_encode_message@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rfx_encode_messages@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ rfx_encode_messages_ex@Base 2.3.0+dfsg1
  rfx_message_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rfx_message_get_rect_count@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  rfx_message_get_tile_count@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
