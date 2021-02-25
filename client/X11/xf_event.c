@@ -503,6 +503,10 @@ static BOOL xf_event_FocusIn(xfContext* xfc, const XFocusInEvent* event, BOOL ap
 		              CurrentTime);
 	}
 
+	/* Release all keys, should already be done at FocusOut but might be missed
+	 * if the WM decided to use an alternate event order */
+	xf_keyboard_release_all_keypress(xfc);
+
 	if (app)
 	{
 		xfAppWindow* appWindow;
@@ -532,7 +536,6 @@ static BOOL xf_event_FocusOut(xfContext* xfc, const XFocusOutEvent* event, BOOL 
 		XUngrabKeyboard(xfc->display, CurrentTime);
 
 	xf_keyboard_release_all_keypress(xfc);
-	xf_keyboard_clear(xfc);
 
 	if (app)
 		xf_rail_send_activate(xfc, event->window, FALSE);
@@ -600,15 +603,10 @@ static BOOL xf_event_EnterNotify(xfContext* xfc, const XEnterWindowEvent* event,
 	}
 	else
 	{
-		xfAppWindow* appWindow;
-		appWindow = xf_AppWindowFromX11Window(xfc, event->window);
+		xfAppWindow* appWindow = xf_AppWindowFromX11Window(xfc, event->window);
 
 		/* keep track of which window has focus so that we can apply pointer updates */
-
-		if (appWindow)
-		{
-			xfc->appWindow = appWindow;
-		}
+		xfc->appWindow = appWindow;
 	}
 
 	return TRUE;
@@ -616,14 +614,19 @@ static BOOL xf_event_EnterNotify(xfContext* xfc, const XEnterWindowEvent* event,
 
 static BOOL xf_event_LeaveNotify(xfContext* xfc, const XLeaveWindowEvent* event, BOOL app)
 {
-	WINPR_UNUSED(event);
-
 	if (!app)
 	{
 		xfc->mouse_active = FALSE;
 		XUngrabKeyboard(xfc->display, CurrentTime);
 	}
+	else
+	{
+		xfAppWindow* appWindow = xf_AppWindowFromX11Window(xfc, event->window);
 
+		/* keep track of which window has focus so that we can apply pointer updates */
+		if (xfc->appWindow == appWindow)
+			xfc->appWindow = NULL;
+	}
 	return TRUE;
 }
 

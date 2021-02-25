@@ -221,6 +221,7 @@ static UINT gdi_StartFrame(RdpgfxClientContext* context, const RDPGFX_START_FRAM
 {
 	rdpGdi* gdi = (rdpGdi*)context->custom;
 	gdi->inGfxFrame = TRUE;
+	gdi->frameId = startFrame->frameId;
 	return CHANNEL_RC_OK;
 }
 
@@ -824,13 +825,13 @@ static UINT gdi_SurfaceCommand_Progressive(rdpGdi* gdi, RdpgfxClientContext* con
 	}
 
 	region16_init(&invalidRegion);
-	rc = progressive_decompress(surface->codecs->progressive, cmd->data, cmd->length, surface->data,
-	                            surface->format, surface->scanline, cmd->left, cmd->top,
-	                            &invalidRegion, cmd->surfaceId);
+	rc = progressive_decompress_ex(surface->codecs->progressive, cmd->data, cmd->length,
+	                               surface->data, surface->format, surface->scanline, cmd->left,
+	                               cmd->top, &invalidRegion, cmd->surfaceId, gdi->frameId);
 
 	if (rc < 0)
 	{
-		WLog_ERR(TAG, "progressive_decompress failure: %" PRId32 "", rc);
+		WLog_ERR(TAG, "progressive_decompress_ex failure: %" PRId32 "", rc);
 		region16_uninit(&invalidRegion);
 		return ERROR_INTERNAL_ERROR;
 	}
@@ -1468,8 +1469,12 @@ BOOL gdi_graphics_pipeline_init_ex(rdpGdi* gdi, RdpgfxClientContext* gfx,
                                    pcRdpgfxUnmapWindowForSurface unmap,
                                    pcRdpgfxUpdateSurfaceArea update)
 {
-	if (!gdi || !gfx)
+	rdpContext* context;
+
+	if (!gdi || !gfx || !gdi->context || !gdi->context->settings)
 		return FALSE;
+
+	context = gdi->context;
 
 	gdi->gfx = gfx;
 	gfx->custom = (void*)gdi;
