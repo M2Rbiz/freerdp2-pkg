@@ -1,3 +1,34 @@
+freerdp2 (2.3.0+dfsg1-2) UNRELEASED; urgency=medium
+
+  * debian/watch:
+    + Fix Github watch URL.
+  * debian/patches:
+    + Backport changes from 2.3.2 (bound checks, API compat fixes, Smartcard
+      issues fixes, etc.).
+      - 0001-Added-compatibility-define.patch
+      - 0003-Reverted-connectErrorCode-removal.patch
+      - 0004-Fixed-a-leak-on-mouse-cursor-updates.patch
+      - 0007-Fixed-format-string-in-smartcard_trace_state_return.patch
+      - 0008-Fixed-linking-dependencies-for-client-geometry-chann.patch
+      - 0010-Fixed-smartcard_convert_string_list-with-0-length.patch
+      - 0012-Parse-on-a-copy-of-the-argument-string-for-printer.patch
+      - 0015-Fix-xf_Pointer_SetPosition-with-smart-sizing.patch
+      - 0017-Backported-6865-Disable-websockets-command-line-opti.patch
+      - 0019-Check-smartcard_convert_string_list-for-NULL-string.patch
+      - 0020-Use-specific-names-for-drive-hotplug-special-values.patch
+      - 0021-Filter-RDPDR-types-other-than-drives-on-windows-hotp.patch
+      - 0023-use-tlsOut-BIO-when-using-websocket-in-rdg_bio_ctrl.patch
+      - 0024-Added-bounds-checks-to-gfx-commands.patch
+      - 0025-Added-bounds-check-in-rdpgfx_recv_wire_to_surface_1_.patch
+      - 0026-Added-fuzzying-test-for-planar-decoder.patch
+      - 0027-Added-missing-bounds-check.patch
+      - 0028-Fixed-mac-issues-with-smartcard-context-cleanup-6890.patch
+      - 0031-Fix-monitor-list.patch
+      - 0032-Fixed-CodeQL-warnings.patch
+      - 0033-Reverted-winpr_BinToHexString-argument-change.patch
+
+ -- Mike Gabriel <sunweaver@debian.org>  Thu, 29 Apr 2021 12:06:48 +0200
+
 freerdp2 (2.3.0+dfsg1-1) unstable; urgency=medium
 
   [ Fabio Fantoni ]
