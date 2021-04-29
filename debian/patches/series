@@ -20,3 +20,4 @@
 0031-Fix-monitor-list.patch
 0032-Fixed-CodeQL-warnings.patch
 0033-Reverted-winpr_BinToHexString-argument-change.patch
+0034-Fixed-6938-Remote-app-mode-clipboard-fix.patch
