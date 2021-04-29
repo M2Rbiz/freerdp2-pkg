@@ -1,0 +1,37 @@
+From 9249d900c466d3341f4c4e072fc535e9aecc0e9d Mon Sep 17 00:00:00 2001
+From: Armin Novak <armin.novak@thincast.com>
+Date: Fri, 12 Mar 2021 09:29:55 +0100
+Subject: [PATCH 25/36] Added bounds check in rdpgfx_recv_wire_to_surface_1_pdu
+
+(cherry picked from commit 5fc3846f7793d4afe48387ac3aeffd4ad6852bab)
+---
+ channels/rdpgfx/client/rdpgfx_main.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/channels/rdpgfx/client/rdpgfx_main.c b/channels/rdpgfx/client/rdpgfx_main.c
+index 94b5b68de..67b3a7db4 100644
+--- a/channels/rdpgfx/client/rdpgfx_main.c
++++ b/channels/rdpgfx/client/rdpgfx_main.c
+@@ -999,6 +999,19 @@ static UINT rdpgfx_recv_wire_to_surface_1_pdu(RDPGFX_CHANNEL_CALLBACK* callback,
+ 	cmd.data = pdu.bitmapData;
+ 	cmd.extra = NULL;
+ 
++	if (cmd.right < cmd.left)
++	{
++		WLog_Print(gfx->log, WLOG_ERROR, "RecvWireToSurface1Pdu right=%" PRIu32 " < left=%" PRIu32,
++		           cmd.right, cmd.left);
++		return ERROR_INVALID_DATA;
++	}
++	if (cmd.bottom < cmd.top)
++	{
++		WLog_Print(gfx->log, WLOG_ERROR, "RecvWireToSurface1Pdu bottom=%" PRIu32 " < top=%" PRIu32,
++		           cmd.bottom, cmd.top);
++		return ERROR_INVALID_DATA;
++	}
++
+ 	if ((error = rdpgfx_decode(gfx, &cmd)))
+ 		WLog_Print(gfx->log, WLOG_ERROR, "rdpgfx_decode failed with error %" PRIu32 "!", error);
+ 
+-- 
+2.30.2
+

@@ -1,0 +1,85 @@
+From 9308d0c6365861fbd2eafa0a0881acef460cfc15 Mon Sep 17 00:00:00 2001
+From: Armin Novak <armin.novak@thincast.com>
+Date: Fri, 12 Mar 2021 09:12:28 +0100
+Subject: [PATCH 24/36] Added bounds checks to gfx commands
+
+(cherry picked from commit dd61853142a07af0eca80c901292075373a6b2d6)
+---
+ libfreerdp/gdi/gfx.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/libfreerdp/gdi/gfx.c b/libfreerdp/gdi/gfx.c
+index 238c8138d..2221cc3f7 100644
+--- a/libfreerdp/gdi/gfx.c
++++ b/libfreerdp/gdi/gfx.c
+@@ -42,6 +42,27 @@ static BOOL is_rect_valid(const RECTANGLE_16* rect, size_t width, size_t height)
+ 	return TRUE;
+ }
+ 
++static BOOL is_within_surface(const gdiGfxSurface* surface, const RDPGFX_SURFACE_COMMAND* cmd)
++{
++	RECTANGLE_16 rect;
++	if (!surface || !cmd)
++		return FALSE;
++	rect.left = cmd->left;
++	rect.top = cmd->top;
++	rect.right = cmd->right;
++	rect.bottom = cmd->bottom;
++	if (!is_rect_valid(&rect, surface->width, surface->height))
++	{
++		WLog_ERR(TAG,
++		         "%s: Command rect %" PRIu32 "x" PRIu32 "-" PRIu32 "x" PRIu32
++		         " not within bounds of " PRIu32 "x" PRIu32,
++		         __FUNCTION__, rect.left, rect.top, cmd->width, cmd->height, surface->width,
++		         surface->height);
++		return FALSE;
++	}
++	return TRUE;
++}
++
+ static DWORD gfx_align_scanline(DWORD widthInBytes, DWORD alignment)
+ {
+ 	const UINT32 align = alignment;
+@@ -259,6 +280,9 @@ static UINT gdi_SurfaceCommand_Uncompressed(rdpGdi* gdi, RdpgfxClientContext* co
+ 		return ERROR_NOT_FOUND;
+ 	}
+ 
++	if (!is_within_surface(surface, cmd))
++		return ERROR_INVALID_DATA;
++
+ 	if (!freerdp_image_copy(surface->data, surface->format, surface->scanline, cmd->left, cmd->top,
+ 	                        cmd->width, cmd->height, cmd->data, cmd->format, 0, 0, 0, NULL,
+ 	                        FREERDP_FLIP_NONE))
+@@ -414,6 +438,9 @@ static UINT gdi_SurfaceCommand_Planar(rdpGdi* gdi, RdpgfxClientContext* context,
+ 
+ 	DstData = surface->data;
+ 
++	if (!is_within_surface(surface, cmd))
++		return ERROR_INVALID_DATA;
++
+ 	if (!planar_decompress(surface->codecs->planar, cmd->data, cmd->length, cmd->width, cmd->height,
+ 	                       DstData, surface->format, surface->scanline, cmd->left, cmd->top,
+ 	                       cmd->width, cmd->height, FALSE))
+@@ -686,6 +713,9 @@ static UINT gdi_SurfaceCommand_Alpha(rdpGdi* gdi, RdpgfxClientContext* context,
+ 		return ERROR_NOT_FOUND;
+ 	}
+ 
++	if (!is_within_surface(surface, cmd))
++		return ERROR_INVALID_DATA;
++
+ 	Stream_Read_UINT16(&s, alphaSig);
+ 	Stream_Read_UINT16(&s, compressed);
+ 
+@@ -815,6 +845,9 @@ static UINT gdi_SurfaceCommand_Progressive(rdpGdi* gdi, RdpgfxClientContext* con
+ 		return ERROR_NOT_FOUND;
+ 	}
+ 
++	if (!is_within_surface(surface, cmd))
++		return ERROR_INVALID_DATA;
++
+ 	rc = progressive_create_surface_context(surface->codecs->progressive, cmd->surfaceId,
+ 	                                        surface->width, surface->height);
+ 
+-- 
+2.30.2
+

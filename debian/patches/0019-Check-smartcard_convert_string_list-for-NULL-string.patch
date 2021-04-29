@@ -1,0 +1,31 @@
+From 42f9dff46f736eb3f58d4bb1731710bda00608f9 Mon Sep 17 00:00:00 2001
+From: akallabeth <akallabeth@posteo.net>
+Date: Tue, 9 Mar 2021 09:22:39 +0100
+Subject: [PATCH 19/36] Check smartcard_convert_string_list for NULL string
+
+In #6821 it has been reported that there are buggy smartcard
+drivers that report a string size but fail to allocate the string
+itself. This check avoids a crash with such input parameters
+
+(cherry picked from commit f8b1e662b33f7b8f77cf6582d549348c2d048a2e)
+---
+ channels/smartcard/client/smartcard_pack.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/channels/smartcard/client/smartcard_pack.c b/channels/smartcard/client/smartcard_pack.c
+index 83c9d3023..f70eb4e5d 100644
+--- a/channels/smartcard/client/smartcard_pack.c
++++ b/channels/smartcard/client/smartcard_pack.c
+@@ -349,6 +349,9 @@ static char* smartcard_convert_string_list(const void* in, size_t bytes, BOOL un
+ 	if (bytes < 1)
+ 		return NULL;
+ 
++	if (in == NULL)
++		return NULL;
++
+ 	if (unicode)
+ 	{
+ 		length = (bytes / sizeof(WCHAR)) - 1;
+-- 
+2.30.2
+

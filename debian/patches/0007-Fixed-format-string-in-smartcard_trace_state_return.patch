@@ -1,0 +1,46 @@
+From 69ff618ebc142b53062115fab1547eb5ff2c25d7 Mon Sep 17 00:00:00 2001
+From: akallabeth <akallabeth@posteo.net>
+Date: Tue, 2 Mar 2021 07:50:17 +0100
+Subject: [PATCH 07/36] Fixed format string in smartcard_trace_state_return
+
+(cherry picked from commit ca96c4450707d39dbd5c94f2b1c4ae807789b012)
+---
+ channels/smartcard/client/smartcard_pack.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/channels/smartcard/client/smartcard_pack.c b/channels/smartcard/client/smartcard_pack.c
+index f5987d4b5..ed0301bb2 100644
+--- a/channels/smartcard/client/smartcard_pack.c
++++ b/channels/smartcard/client/smartcard_pack.c
+@@ -1307,21 +1307,24 @@ static void smartcard_trace_status_return(SMARTCARD_DEVICE* smartcard, const Sta
+ static void smartcard_trace_state_return(SMARTCARD_DEVICE* smartcard, const State_Return* ret)
+ {
+ 	char buffer[1024];
+-
++	char* state;
+ 	WINPR_UNUSED(smartcard);
+ 
+ 	if (!WLog_IsLevelActive(WLog_Get(TAG), g_LogLevel))
+ 		return;
+ 
++	state = SCardGetReaderStateString(ret->dwState);
+ 	WLog_LVL(TAG, g_LogLevel, "Reconnect_Return {");
+ 	WLog_LVL(TAG, g_LogLevel, "  ReturnCode: %s (0x%08" PRIX32 ")",
+ 	         SCardGetErrorString(ret->ReturnCode), ret->ReturnCode);
+-	WLog_LVL(TAG, g_LogLevel, "  dwState:    %s (0x%08" PRIX32 ")", ret->dwState);
+-	WLog_LVL(TAG, g_LogLevel, "  dwProtocol: %s (0x%08" PRIX32 ")", ret->dwProtocol);
+-	WLog_LVL(TAG, g_LogLevel, "  cbAtrLen:   %s (0x%08" PRIX32 ")", ret->cbAtrLen);
++	WLog_LVL(TAG, g_LogLevel, "  dwState:    %s (0x%08" PRIX32 ")", state, ret->dwState);
++	WLog_LVL(TAG, g_LogLevel, "  dwProtocol: %s (0x%08" PRIX32 ")",
++	         SCardGetProtocolString(ret->dwProtocol), ret->dwProtocol);
++	WLog_LVL(TAG, g_LogLevel, "  cbAtrLen:      (0x%08" PRIX32 ")", ret->cbAtrLen);
+ 	WLog_LVL(TAG, g_LogLevel, "  rgAtr:      %s",
+ 	         smartcard_array_dump(ret->rgAtr, sizeof(ret->rgAtr), buffer, sizeof(buffer)));
+ 	WLog_LVL(TAG, g_LogLevel, "}");
++	free(state);
+ }
+ 
+ static void smartcard_trace_reconnect_return(SMARTCARD_DEVICE* smartcard,
+-- 
+2.30.2
+

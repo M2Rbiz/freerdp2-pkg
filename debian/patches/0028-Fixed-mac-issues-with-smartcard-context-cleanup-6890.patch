@@ -1,0 +1,63 @@
+From 9ba06525d6bef66d457264e202fbb8f38473a686 Mon Sep 17 00:00:00 2001
+From: akallabeth <akallabeth@users.noreply.github.com>
+Date: Fri, 12 Mar 2021 08:56:23 +0100
+Subject: [PATCH 28/36] Fixed mac issues with smartcard context cleanup (#6890)
+
+(cherry picked from commit b8a8ae4622a2c426c54c300b32c50316f0af42b0)
+---
+ channels/smartcard/client/smartcard_main.c | 25 +++-------------------
+ 1 file changed, 3 insertions(+), 22 deletions(-)
+
+diff --git a/channels/smartcard/client/smartcard_main.c b/channels/smartcard/client/smartcard_main.c
+index 82fb58728..2df4c14e3 100644
+--- a/channels/smartcard/client/smartcard_main.c
++++ b/channels/smartcard/client/smartcard_main.c
+@@ -180,6 +180,7 @@ void smartcard_context_free(void* pCtx)
+ 
+ 	/* cancel blocking calls like SCardGetStatusChange */
+ 	SCardCancel(pContext->hContext);
++	SCardReleaseContext(pContext->hContext);
+ 
+ 	if (MessageQueue_PostQuit(pContext->IrpQueue, 0) &&
+ 	    (WaitForSingleObject(pContext->thread, INFINITE) == WAIT_FAILED))
+@@ -237,7 +238,7 @@ static void smartcard_release_all_contexts(SMARTCARD_DEVICE* smartcard)
+ 
+ 	/* Put thread to sleep so that PC/SC can process the cancel requests. This fixes a race
+ 	 * condition that sometimes caused the pc/sc daemon to crash on MacOS (_xpc_api_misuse) */
+-	Sleep(100);
++	SleepEx(100, FALSE);
+ 
+ 	/**
+ 	 * Call SCardReleaseContext on remaining contexts and remove them from rgSCardContextList.
+@@ -251,27 +252,7 @@ static void smartcard_release_all_contexts(SMARTCARD_DEVICE* smartcard)
+ 
+ 		for (index = 0; index < keyCount; index++)
+ 		{
+-			pContext = (SMARTCARD_CONTEXT*)ListDictionary_Remove(smartcard->rgSCardContextList,
+-			                                                     (void*)pKeys[index]);
+-
+-			if (!pContext)
+-				continue;
+-
+-			hContext = pContext->hContext;
+-
+-			if (SCardIsValidContext(hContext) == SCARD_S_SUCCESS)
+-			{
+-				SCardReleaseContext(hContext);
+-
+-				if (MessageQueue_PostQuit(pContext->IrpQueue, 0) &&
+-				    (WaitForSingleObject(pContext->thread, INFINITE) == WAIT_FAILED))
+-					WLog_ERR(TAG, "WaitForSingleObject failed with error %" PRIu32 "!",
+-					         GetLastError());
+-
+-				CloseHandle(pContext->thread);
+-				MessageQueue_Free(pContext->IrpQueue);
+-				free(pContext);
+-			}
++			ListDictionary_SetItemValue(smartcard->rgSCardContextList, (void*)pKeys[index], NULL);
+ 		}
+ 
+ 		free(pKeys);
+-- 
+2.30.2
+

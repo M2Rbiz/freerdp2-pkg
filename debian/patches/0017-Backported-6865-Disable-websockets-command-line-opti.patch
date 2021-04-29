@@ -1,0 +1,145 @@
+From f4c87729e393c4f9f522d2731078655f469d9b12 Mon Sep 17 00:00:00 2001
+From: akallabeth <akallabeth@posteo.net>
+Date: Mon, 8 Mar 2021 14:31:17 +0100
+Subject: [PATCH 17/36] Backported #6865: Disable websockets command line
+ option
+
+---
+ client/common/cmdline.c                       | 30 ++++++++++++++-----
+ client/common/cmdline.h                       |  4 +--
+ include/freerdp/settings.h                    |  4 ++-
+ libfreerdp/common/settings_getters.c          |  7 +++++
+ libfreerdp/common/settings_str.c              |  1 +
+ libfreerdp/core/gateway/rdg.c                 |  4 ++-
+ .../core/test/settings_property_lists.h       |  1 +
+ 7 files changed, 39 insertions(+), 12 deletions(-)
+
+--- a/client/common/cmdline.c
++++ b/client/common/cmdline.c
+@@ -2234,15 +2234,29 @@
+ 				settings->GatewayRpcTransport = TRUE;
+ 				settings->GatewayHttpTransport = FALSE;
+ 			}
+-			else if (_stricmp(arg->Value, "http") == 0)
++			else
+ 			{
+-				settings->GatewayRpcTransport = FALSE;
+-				settings->GatewayHttpTransport = TRUE;
+-			}
+-			else if (_stricmp(arg->Value, "auto") == 0)
+-			{
+-				settings->GatewayRpcTransport = TRUE;
+-				settings->GatewayHttpTransport = TRUE;
++				char* c = strchr(arg->Value, ',');
++				if (c)
++				{
++					*c++ = '\0';
++					if (_stricmp(c, "no-websockets") != 0)
++					{
++						return COMMAND_LINE_ERROR_UNEXPECTED_VALUE;
++					}
++					freerdp_settings_set_bool(settings, FreeRDP_GatewayHttpUseWebsockets, FALSE);
++				}
++
++				if (_stricmp(arg->Value, "http") == 0)
++				{
++					settings->GatewayRpcTransport = FALSE;
++					settings->GatewayHttpTransport = TRUE;
++				}
++				else if (_stricmp(arg->Value, "auto") == 0)
++				{
++					settings->GatewayRpcTransport = TRUE;
++					settings->GatewayHttpTransport = TRUE;
++				}
+ 			}
+ 		}
+ 		CommandLineSwitchCase(arg, "gat")
+--- a/client/common/cmdline.h
++++ b/client/common/cmdline.h
+@@ -180,8 +180,8 @@
+ 	{ "gp", COMMAND_LINE_VALUE_REQUIRED, "<password>", NULL, NULL, -1, NULL, "Gateway password" },
+ 	{ "grab-keyboard", COMMAND_LINE_VALUE_BOOL, NULL, BoolValueTrue, NULL, -1, NULL,
+ 	  "Grab keyboard" },
+-	{ "gt", COMMAND_LINE_VALUE_REQUIRED, "[rpc|http|auto]", NULL, NULL, -1, NULL,
+-	  "Gateway transport type" },
++	{ "gt", COMMAND_LINE_VALUE_REQUIRED, "[rpc|http[,no-websockets]|auto[,no-websockets]]", NULL,
++	  NULL, -1, NULL, "Gateway transport type" },
+ 	{ "gu", COMMAND_LINE_VALUE_REQUIRED, "[[<domain>\\]<user>|<user>[@<domain>]]", NULL, NULL, -1,
+ 	  NULL, "Gateway username" },
+ 	{ "gat", COMMAND_LINE_VALUE_REQUIRED, "<access token>", NULL, NULL, -1, NULL,
+--- a/include/freerdp/settings.h
++++ b/include/freerdp/settings.h
+@@ -751,6 +751,7 @@
+ #define FreeRDP_GatewayAccessToken (1997)
+ #define FreeRDP_GatewayAcceptedCert (1998)
+ #define FreeRDP_GatewayAcceptedCertLength (1999)
++#define FreeRDP_GatewayHttpUseWebsockets (2000)
+ #define FreeRDP_ProxyType (2015)
+ #define FreeRDP_ProxyHostname (2016)
+ #define FreeRDP_ProxyPort (2017)
+@@ -1252,7 +1253,8 @@
+ 	ALIGN64 char* GatewayAccessToken;         /* 1997 */
+ 	ALIGN64 char* GatewayAcceptedCert;        /* 1998 */
+ 	ALIGN64 UINT32 GatewayAcceptedCertLength; /* 1999 */
+-	UINT64 padding2015[2015 - 2000];          /* 2000 */
++	ALIGN64 BOOL GatewayHttpUseWebsockets;    /* 2000 */
++	UINT64 padding2015[2015 - 2001];          /* 2001 */
+ 
+ 	/* Proxy */
+ 	ALIGN64 UINT32 ProxyType;        /* 2015 */
+--- a/libfreerdp/common/settings_getters.c
++++ b/libfreerdp/common/settings_getters.c
+@@ -192,6 +192,9 @@
+ 		case FreeRDP_GatewayHttpTransport:
+ 			return settings->GatewayHttpTransport;
+ 
++		case FreeRDP_GatewayHttpUseWebsockets:
++			return settings->GatewayHttpUseWebsockets;
++
+ 		case FreeRDP_GatewayRpcTransport:
+ 			return settings->GatewayRpcTransport;
+ 
+@@ -754,6 +757,10 @@
+ 			settings->GatewayHttpTransport = val;
+ 			break;
+ 
++		case FreeRDP_GatewayHttpUseWebsockets:
++			settings->GatewayHttpUseWebsockets = val;
++			break;
++
+ 		case FreeRDP_GatewayRpcTransport:
+ 			settings->GatewayRpcTransport = val;
+ 			break;
+--- a/libfreerdp/common/settings_str.c
++++ b/libfreerdp/common/settings_str.c
+@@ -74,6 +74,7 @@
+ 	{ FreeRDP_GatewayBypassLocal, 0, "FreeRDP_GatewayBypassLocal" },
+ 	{ FreeRDP_GatewayEnabled, 0, "FreeRDP_GatewayEnabled" },
+ 	{ FreeRDP_GatewayHttpTransport, 0, "FreeRDP_GatewayHttpTransport" },
++	{ FreeRDP_GatewayHttpUseWebsockets, 0, "FreeRDP_GatewayHttpUseWebsockets" },
+ 	{ FreeRDP_GatewayRpcTransport, 0, "FreeRDP_GatewayRpcTransport" },
+ 	{ FreeRDP_GatewayUdpTransport, 0, "FreeRDP_GatewayUdpTransport" },
+ 	{ FreeRDP_GatewayUseSameCredentials, 0, "FreeRDP_GatewayUseSameCredentials" },
+--- a/libfreerdp/core/gateway/rdg.c
++++ b/libfreerdp/core/gateway/rdg.c
+@@ -2547,7 +2547,9 @@
+ 		    !http_context_set_user_agent(rdg->http, "MS-RDGateway/1.0") ||
+ 		    !http_context_set_host(rdg->http, rdg->settings->GatewayHostname) ||
+ 		    !http_context_set_rdg_connection_id(rdg->http, bracedUuid) ||
+-		    !http_context_enable_websocket_upgrade(rdg->http, TRUE))
++		    !http_context_enable_websocket_upgrade(
++		        rdg->http,
++		        freerdp_settings_get_bool(rdg->settings, FreeRDP_GatewayHttpUseWebsockets)))
+ 		{
+ 			goto rdg_alloc_error;
+ 		}
+--- a/libfreerdp/core/test/settings_property_lists.h
++++ b/libfreerdp/core/test/settings_property_lists.h
+@@ -63,6 +63,7 @@
+ 	FreeRDP_GatewayBypassLocal,
+ 	FreeRDP_GatewayEnabled,
+ 	FreeRDP_GatewayHttpTransport,
++	FreeRDP_GatewayHttpUseWebsockets,
+ 	FreeRDP_GatewayRpcTransport,
+ 	FreeRDP_GatewayUdpTransport,
+ 	FreeRDP_GatewayUseSameCredentials,

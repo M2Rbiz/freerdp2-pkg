@@ -1,0 +1,149 @@
+From 73753f8af40de20703858fff37a762b7f5580bb0 Mon Sep 17 00:00:00 2001
+From: akallabeth <akallabeth@posteo.net>
+Date: Sat, 27 Feb 2021 08:35:33 +0100
+Subject: [PATCH 03/36] Reverted connectErrorCode removal
+
+Reverted changes from e4b30a5cb6100a8ea4f320b829c9c5712ed4a783
+removing the symbol/define, keep the changes for the clients.
+Mark as deprecated
+---
+ include/freerdp/error.h   | 25 +++++++++++++++++
+ libfreerdp/core/errinfo.c |  2 ++
+ libfreerdp/core/freerdp.c | 58 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+)
+
+diff --git a/include/freerdp/error.h b/include/freerdp/error.h
+index 0fb51608b..a928a645a 100644
+--- a/include/freerdp/error.h
++++ b/include/freerdp/error.h
+@@ -177,6 +177,31 @@ extern "C"
+ 	FREERDP_API const char* freerdp_get_error_info_name(UINT32 code);
+ 	FREERDP_API const char* freerdp_get_error_info_category(UINT32 code);
+ 
++	/**
++	 * DEPRECATED!
++	 * This static variable holds an error code if the return value from connect is FALSE.
++	 * This variable is always set to 0 in the beginning of the connect sequence.
++	 * The returned code can be used to inform the user of the detailed connect error.
++	 * The value can hold one of the defined error codes below OR an error according to errno
++	 */
++
++	FREERDP_API extern int connectErrorCode;
++
++#define ERRORSTART 10000
++#define PREECONNECTERROR ERRORSTART + 1
++#define UNDEFINEDCONNECTERROR ERRORSTART + 2
++#define POSTCONNECTERROR ERRORSTART + 3
++#define DNSERROR ERRORSTART + 4        /* general DNS ERROR */
++#define DNSNAMENOTFOUND ERRORSTART + 5 /* EAI_NONAME */
++#define CONNECTERROR                                                            \
++	ERRORSTART + 6 /* a connect error if errno is not define during tcp connect \
++	                */
++#define MCSCONNECTINITIALERROR ERRORSTART + 7
++#define TLSCONNECTERROR ERRORSTART + 8
++#define AUTHENTICATIONERROR ERRORSTART + 9
++#define INSUFFICIENTPRIVILEGESERROR ERRORSTART + 10
++#define CANCELEDBYUSER ERRORSTART + 11
++
+ 	/**
+ 	 * FreeRDP Context Error Codes
+ 	 */
+diff --git a/libfreerdp/core/errinfo.c b/libfreerdp/core/errinfo.c
+index abfe96efd..e635847dc 100644
+--- a/libfreerdp/core/errinfo.c
++++ b/libfreerdp/core/errinfo.c
+@@ -34,6 +34,8 @@
+ 		ERRINFO_##_code, "ERRINFO_" #_code, ERRINFO_##_code##_STRING, category \
+ 	}
+ 
++int connectErrorCode;
++
+ /* Protocol-independent codes */
+ 
+ #define ERRINFO_RPC_INITIATED_DISCONNECT_STRING \
+diff --git a/libfreerdp/core/freerdp.c b/libfreerdp/core/freerdp.c
+index 81183e76d..9094bc346 100644
+--- a/libfreerdp/core/freerdp.c
++++ b/libfreerdp/core/freerdp.c
+@@ -55,6 +55,8 @@
+ 
+ #define TAG FREERDP_TAG("core")
+ 
++/* connectErrorCode is 'extern' in error.h. See comment there.*/
++
+ UINT freerdp_channel_add_init_handle_data(rdpChannelHandles* handles, void* pInitHandle,
+                                           void* pUserData)
+ {
+@@ -161,6 +163,7 @@ BOOL freerdp_connect(freerdp* instance)
+ 
+ 	/* We always set the return code to 0 before we start the connect sequence*/
+ 	instance->ConnectionCallbackState = CLIENT_STATE_INITIAL;
++	connectErrorCode = 0;
+ 	freerdp_set_last_error_log(instance->context, FREERDP_ERROR_SUCCESS);
+ 	clearChannelError(instance->context);
+ 	ResetEvent(instance->context->abortEvent);
+@@ -890,6 +893,61 @@ void freerdp_set_last_error_ex(rdpContext* context, UINT32 lastError, const char
+ 	}
+ 
+ 	context->LastError = lastError;
++
++	switch (lastError)
++	{
++		case FREERDP_ERROR_PRE_CONNECT_FAILED:
++			connectErrorCode = PREECONNECTERROR;
++			break;
++
++		case FREERDP_ERROR_CONNECT_UNDEFINED:
++			connectErrorCode = UNDEFINEDCONNECTERROR;
++			break;
++
++		case FREERDP_ERROR_POST_CONNECT_FAILED:
++			connectErrorCode = POSTCONNECTERROR;
++			break;
++
++		case FREERDP_ERROR_DNS_ERROR:
++			connectErrorCode = DNSERROR;
++			break;
++
++		case FREERDP_ERROR_DNS_NAME_NOT_FOUND:
++			connectErrorCode = DNSNAMENOTFOUND;
++			break;
++
++		case FREERDP_ERROR_CONNECT_FAILED:
++			connectErrorCode = CONNECTERROR;
++			break;
++
++		case FREERDP_ERROR_MCS_CONNECT_INITIAL_ERROR:
++			connectErrorCode = MCSCONNECTINITIALERROR;
++			break;
++
++		case FREERDP_ERROR_TLS_CONNECT_FAILED:
++			connectErrorCode = TLSCONNECTERROR;
++			break;
++
++		case FREERDP_ERROR_AUTHENTICATION_FAILED:
++			connectErrorCode = AUTHENTICATIONERROR;
++			break;
++
++		case FREERDP_ERROR_INSUFFICIENT_PRIVILEGES:
++			connectErrorCode = INSUFFICIENTPRIVILEGESERROR;
++			break;
++
++		case FREERDP_ERROR_CONNECT_CANCELLED:
++			connectErrorCode = CANCELEDBYUSER;
++			break;
++
++		case FREERDP_ERROR_SECURITY_NEGO_CONNECT_FAILED:
++			connectErrorCode = CONNECTERROR;
++			break;
++
++		case FREERDP_ERROR_CONNECT_TRANSPORT_FAILED:
++			connectErrorCode = CONNECTERROR;
++			break;
++	}
+ }
+ 
+ const char* freerdp_get_logon_error_info_type(UINT32 type)
+-- 
+2.30.2
+

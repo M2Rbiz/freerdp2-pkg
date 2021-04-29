@@ -1,0 +1,29 @@
+From 9e1e3185128146f74f4b4694b56caa1478a0df77 Mon Sep 17 00:00:00 2001
+From: Armin Novak <armin.novak@thincast.com>
+Date: Fri, 12 Mar 2021 11:53:34 +0100
+Subject: [PATCH 31/36] Fix /monitor-list
+
+---
+ client/X11/cli/xfreerdp.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/client/X11/cli/xfreerdp.c b/client/X11/cli/xfreerdp.c
+index 5b7021944..8db4d39e7 100644
+--- a/client/X11/cli/xfreerdp.c
++++ b/client/X11/cli/xfreerdp.c
+@@ -59,11 +59,9 @@ int main(int argc, char* argv[])
+ 	status = freerdp_client_settings_parse_command_line(context->settings, argc, argv, FALSE);
+ 	if (status)
+ 	{
+-		BOOL list = settings->ListMonitors;
+-
+ 		rc = freerdp_client_settings_command_line_status_print(settings, status, argc, argv);
+ 
+-		if (list)
++		if (settings->ListMonitors)
+ 			xf_list_monitors(xfc);
+ 
+ 		goto out;
+-- 
+2.30.2
+

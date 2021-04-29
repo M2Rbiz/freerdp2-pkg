@@ -1,0 +1,680 @@
+From 7beda29158ece1234c41e5502d44062c79ac9dba Mon Sep 17 00:00:00 2001
+From: akallabeth <akallabeth@posteo.net>
+Date: Mon, 25 Jan 2021 10:06:01 +0100
+Subject: [PATCH 32/36] Fixed CodeQL warnings
+
+(cherry picked from commit 95a9e60827c91cb9b924d7ce3c220c30bd36907d)
+---
+ channels/rdpsnd/server/rdpsnd_main.c          |  2 +-
+ .../urbdrc/client/libusb/libusb_udevman.c     |  2 +-
+ channels/video/client/video_main.c            |  4 +--
+ client/Wayland/wlf_pointer.c                  |  4 +--
+ client/X11/xf_gdi.c                           |  4 +--
+ client/X11/xf_gfx.c                           |  4 +--
+ client/X11/xf_graphics.c                      |  6 ++--
+ client/X11/xf_rail.c                          |  4 +--
+ libfreerdp/codec/clear.c                      |  4 +--
+ libfreerdp/codec/color.c                      |  6 ++--
+ libfreerdp/codec/h264.c                       |  6 ++--
+ libfreerdp/codec/nsc_encode.c                 |  4 +--
+ libfreerdp/codec/nsc_sse2.c                   |  4 +--
+ libfreerdp/codec/progressive.c                |  4 +--
+ libfreerdp/core/gcc.c                         |  8 +++---
+ libfreerdp/gdi/bitmap.c                       |  3 +-
+ libfreerdp/gdi/gdi.c                          |  2 +-
+ libfreerdp/gdi/gfx.c                          |  6 ++--
+ libfreerdp/gdi/graphics.c                     |  2 +-
+ libfreerdp/gdi/shape.c                        |  2 +-
+ libfreerdp/gdi/video.c                        |  2 +-
+ libfreerdp/primitives/prim_copy.c             |  4 +--
+ libfreerdp/primitives/primitives.c            |  2 +-
+ uwac/libuwac/uwac-window.c                    |  9 +++---
+ winpr/include/winpr/print.h                   |  2 +-
+ winpr/libwinpr/utils/lodepng/lodepng.c        | 28 ++++++++++---------
+ winpr/libwinpr/utils/print.c                  | 13 ++++-----
+ 27 files changed, 72 insertions(+), 69 deletions(-)
+
+diff --git a/channels/rdpsnd/server/rdpsnd_main.c b/channels/rdpsnd/server/rdpsnd_main.c
+index cb9f5fe92..be0ca149f 100644
+--- a/channels/rdpsnd/server/rdpsnd_main.c
++++ b/channels/rdpsnd/server/rdpsnd_main.c
+@@ -422,7 +422,7 @@ static UINT rdpsnd_server_send_wave_pdu(RdpsndServerContext* context, UINT16 wTi
+ 	Stream_Seek(s, 3);                                       /* bPad */
+ 	start = Stream_GetPosition(s);
+ 	src = context->priv->out_buffer;
+-	length = context->priv->out_pending_frames * context->priv->src_bytes_per_frame;
++	length = context->priv->out_pending_frames * context->priv->src_bytes_per_frame * 1ULL;
+ 
+ 	if (!freerdp_dsp_encode(context->priv->dsp_context, context->src_format, src, length, s))
+ 		return ERROR_INTERNAL_ERROR;
+diff --git a/channels/urbdrc/client/libusb/libusb_udevman.c b/channels/urbdrc/client/libusb/libusb_udevman.c
+index ec7b0b322..1638b8c13 100644
+--- a/channels/urbdrc/client/libusb/libusb_udevman.c
++++ b/channels/urbdrc/client/libusb/libusb_udevman.c
+@@ -536,7 +536,7 @@ static BOOL device_is_filtered(struct libusb_device* dev,
+ 
+ 				for (x = 0; x < config->bNumInterfaces; x++)
+ 				{
+-					uint8_t y;
++					int y;
+ 					const struct libusb_interface* ifc = &config->interface[x];
+ 					for (y = 0; y < ifc->num_altsetting; y++)
+ 					{
+diff --git a/channels/video/client/video_main.c b/channels/video/client/video_main.c
+index 10fb30d1a..a21e7cdf2 100644
+--- a/channels/video/client/video_main.c
++++ b/channels/video/client/video_main.c
+@@ -666,7 +666,7 @@ static void video_timer(VideoClientContext* video, UINT64 now)
+ 	presentation = frame->presentation;
+ 
+ 	priv->publishedFrames++;
+-	memcpy(presentation->surfaceData, frame->surfaceData, frame->w * frame->h * 4);
++	memcpy(presentation->surfaceData, frame->surfaceData, frame->w * frame->h * 4ULL);
+ 
+ 	video->showSurface(video, presentation->surface);
+ 
+@@ -848,7 +848,7 @@ static UINT video_VideoData(VideoClientContext* context, TSMM_VIDEO_DATA* data)
+ 			frame->w = presentation->SourceWidth;
+ 			frame->h = presentation->SourceHeight;
+ 
+-			frame->surfaceData = BufferPool_Take(priv->surfacePool, frame->w * frame->h * 4);
++			frame->surfaceData = BufferPool_Take(priv->surfacePool, frame->w * frame->h * 4ULL);
+ 			if (!frame->surfaceData)
+ 			{
+ 				WLog_ERR(TAG, "unable to allocate frame data");
+diff --git a/client/Wayland/wlf_pointer.c b/client/Wayland/wlf_pointer.c
+index 64166590c..decde7ff3 100644
+--- a/client/Wayland/wlf_pointer.c
++++ b/client/Wayland/wlf_pointer.c
+@@ -42,7 +42,7 @@ static BOOL wlf_Pointer_New(rdpContext* context, rdpPointer* pointer)
+ 	if (!ptr)
+ 		return FALSE;
+ 
+-	ptr->size = pointer->width * pointer->height * 4;
++	ptr->size = pointer->width * pointer->height * 4ULL;
+ 	ptr->data = _aligned_malloc(ptr->size, 16);
+ 
+ 	if (!ptr->data)
+@@ -92,7 +92,7 @@ static BOOL wlf_Pointer_Set(rdpContext* context, const rdpPointer* pointer)
+ 	    !wlf_scale_coordinates(context, &w, &h, FALSE))
+ 		return FALSE;
+ 
+-	size = w * h * 4;
++	size = w * h * 4ULL;
+ 	data = malloc(size);
+ 
+ 	if (!data)
+diff --git a/client/X11/xf_gdi.c b/client/X11/xf_gdi.c
+index 949e62d12..4f52853bf 100644
+--- a/client/X11/xf_gdi.c
++++ b/client/X11/xf_gdi.c
+@@ -231,7 +231,7 @@ static Pixmap xf_brush_new(xfContext* xfc, UINT32 width, UINT32 height, UINT32 b
+ 	if (data)
+ 	{
+ 		brushFormat = gdi_get_pixel_format(bpp);
+-		cdata = (BYTE*)_aligned_malloc(width * height * 4, 16);
++		cdata = (BYTE*)_aligned_malloc(width * height * 4ULL, 16);
+ 		freerdp_image_copy(cdata, gdi->dstFormat, 0, 0, 0, width, height, data, brushFormat, 0, 0,
+ 		                   0, &xfc->context.gdi->palette, FREERDP_FLIP_NONE);
+ 		image = XCreateImage(xfc->display, xfc->visual, xfc->depth, ZPixmap, 0, (char*)cdata, width,
+@@ -1066,7 +1066,7 @@ static BOOL xf_gdi_surface_bits(rdpContext* context, const SURFACE_BITS_COMMAND*
+ 		case RDP_CODEC_ID_NONE:
+ 			pSrcData = cmd->bmp.bitmapData;
+ 			format = gdi_get_pixel_format(cmd->bmp.bpp);
+-			size = cmd->bmp.width * cmd->bmp.height * GetBytesPerPixel(format);
++			size = cmd->bmp.width * cmd->bmp.height * GetBytesPerPixel(format) * 1ULL;
+ 			if (size > cmd->bmp.bitmapDataLength)
+ 			{
+ 				WLog_ERR(TAG, "Short nocodec message: got %" PRIu32 " bytes, require %" PRIuz,
+diff --git a/client/X11/xf_gfx.c b/client/X11/xf_gfx.c
+index cb3423ea0..97d3ad3cc 100644
+--- a/client/X11/xf_gfx.c
++++ b/client/X11/xf_gfx.c
+@@ -288,7 +288,7 @@ static UINT xf_CreateSurface(RdpgfxClientContext* context,
+ 
+ 	surface->gdi.scanline = surface->gdi.width * GetBytesPerPixel(surface->gdi.format);
+ 	surface->gdi.scanline = x11_pad_scanline(surface->gdi.scanline, xfc->scanline_pad);
+-	size = surface->gdi.scanline * surface->gdi.height;
++	size = surface->gdi.scanline * surface->gdi.height * 1ULL;
+ 	surface->gdi.data = (BYTE*)_aligned_malloc(size, 16);
+ 
+ 	if (!surface->gdi.data)
+@@ -312,7 +312,7 @@ static UINT xf_CreateSurface(RdpgfxClientContext* context,
+ 		UINT32 bytes = GetBytesPerPixel(gdi->dstFormat);
+ 		surface->stageScanline = width * bytes;
+ 		surface->stageScanline = x11_pad_scanline(surface->stageScanline, xfc->scanline_pad);
+-		size = surface->stageScanline * surface->gdi.height;
++		size = surface->stageScanline * surface->gdi.height * 1ULL;
+ 		surface->stage = (BYTE*)_aligned_malloc(size, 16);
+ 
+ 		if (!surface->stage)
+diff --git a/client/X11/xf_graphics.c b/client/X11/xf_graphics.c
+index 1700092f8..8de32c557 100644
+--- a/client/X11/xf_graphics.c
++++ b/client/X11/xf_graphics.c
+@@ -125,7 +125,7 @@ static BOOL xf_Bitmap_New(rdpContext* context, rdpBitmap* bitmap)
+ 
+ 		if ((INT64)depth != xfc->depth)
+ 		{
+-			if (!(data = _aligned_malloc(bitmap->width * bitmap->height * 4, 16)))
++			if (!(data = _aligned_malloc(bitmap->width * bitmap->height * 4ULL, 16)))
+ 				goto unlock;
+ 
+ 			if (!freerdp_image_copy(data, gdi->dstFormat, 0, 0, 0, bitmap->width, bitmap->height,
+@@ -304,7 +304,7 @@ static BOOL _xf_Pointer_GetCursorForCurrentScale(rdpContext* context, const rdpP
+ 		ci.height = yTargetSize;
+ 		ci.xhot = pointer->xPos * xscale;
+ 		ci.yhot = pointer->yPos * yscale;
+-		size = ci.height * ci.width * GetBytesPerPixel(CursorFormat);
++		size = ci.height * ci.width * GetBytesPerPixel(CursorFormat) * 1ULL;
+ 
+ 		if (xscale != 1 || yscale != 1)
+ 		{
+@@ -391,7 +391,7 @@ static BOOL xf_Pointer_New(rdpContext* context, rdpPointer* pointer)
+ 	xpointer->nCursors = 0;
+ 	xpointer->mCursors = 0;
+ 
+-	size = pointer->height * pointer->width * GetBytesPerPixel(CursorFormat);
++	size = pointer->height * pointer->width * GetBytesPerPixel(CursorFormat) * 1ULL;
+ 
+ 	if (!(xpointer->cursorPixels = (XcursorPixel*)_aligned_malloc(size, 16)))
+ 		return FALSE;
+diff --git a/client/X11/xf_rail.c b/client/X11/xf_rail.c
+index 59d30b355..770234f7d 100644
+--- a/client/X11/xf_rail.c
++++ b/client/X11/xf_rail.c
+@@ -532,7 +532,7 @@ static xfRailIconCache* RailIconCache_New(rdpSettings* settings)
+ 
+ 	cache->numCaches = settings->RemoteAppNumIconCaches;
+ 	cache->numCacheEntries = settings->RemoteAppNumIconCacheEntries;
+-	cache->entries = calloc(cache->numCaches * cache->numCacheEntries, sizeof(xfRailIcon));
++	cache->entries = calloc(cache->numCaches * cache->numCacheEntries * 1ULL, sizeof(xfRailIcon));
+ 
+ 	if (!cache->entries)
+ 	{
+@@ -602,7 +602,7 @@ static BOOL convert_rail_icon(const ICON_INFO* iconInfo, xfRailIcon* railIcon)
+ 	long* pixels;
+ 	int i;
+ 	int nelements;
+-	argbPixels = calloc(iconInfo->width * iconInfo->height, 4);
++	argbPixels = calloc(iconInfo->width * iconInfo->height * 1ULL, 4);
+ 
+ 	if (!argbPixels)
+ 		goto error;
+diff --git a/libfreerdp/codec/clear.c b/libfreerdp/codec/clear.c
+index 083f1aa97..fadd98e67 100644
+--- a/libfreerdp/codec/clear.c
++++ b/libfreerdp/codec/clear.c
+@@ -566,7 +566,7 @@ static BOOL resize_vbar_entry(CLEAR_CONTEXT* clear, CLEAR_VBAR_ENTRY* vBarEntry)
+ 		const UINT32 diffSize = (vBarEntry->count - vBarEntry->size) * bpp;
+ 		BYTE* tmp;
+ 		vBarEntry->size = vBarEntry->count;
+-		tmp = (BYTE*)realloc(vBarEntry->pixels, vBarEntry->count * bpp);
++		tmp = (BYTE*)realloc(vBarEntry->pixels, vBarEntry->count * bpp * 1ULL);
+ 
+ 		if (!tmp)
+ 		{
+@@ -980,7 +980,7 @@ static BOOL clear_decompress_glyph_data(CLEAR_CONTEXT* clear, wStream* s, UINT32
+ 		if (glyphEntry->count > glyphEntry->size)
+ 		{
+ 			BYTE* tmp;
+-			tmp = realloc(glyphEntry->pixels, glyphEntry->count * bpp);
++			tmp = realloc(glyphEntry->pixels, glyphEntry->count * bpp * 1ULL);
+ 
+ 			if (!tmp)
+ 			{
+diff --git a/libfreerdp/codec/color.c b/libfreerdp/codec/color.c
+index a0fce37ef..edbfcd4ed 100644
+--- a/libfreerdp/codec/color.c
++++ b/libfreerdp/codec/color.c
+@@ -56,7 +56,7 @@ BYTE* freerdp_glyph_convert(UINT32 width, UINT32 height, const BYTE* data)
+ 	 * means of accessing individual pixels in blitting operations
+ 	 */
+ 	scanline = (width + 7) / 8;
+-	dstData = (BYTE*)_aligned_malloc(width * height, 16);
++	dstData = (BYTE*)_aligned_malloc(width * height * 1ULL, 16);
+ 
+ 	if (!dstData)
+ 		return NULL;
+@@ -545,7 +545,7 @@ BOOL freerdp_image_copy_from_pointer_data(BYTE* pDstData, UINT32 DstFormat, UINT
+ 	for (y = nYDst; y < nHeight; y++)
+ 	{
+ 		BYTE* pDstLine = &pDstData[y * nDstStep + nXDst * dstBytesPerPixel];
+-		memset(pDstLine, 0, dstBytesPerPixel * (nWidth - nXDst));
++		memset(pDstLine, 0, dstBytesPerPixel * (nWidth - nXDst) * 1ULL);
+ 	}
+ 
+ 	switch (xorBpp)
+@@ -742,7 +742,7 @@ BOOL freerdp_image_fill(BYTE* pDstData, DWORD DstFormat, UINT32 nDstStep, UINT32
+ 	for (y = 1; y < nHeight; y++)
+ 	{
+ 		BYTE* pDstLine = &pDstData[(y + nYDst) * nDstStep + nXDst * bpp];
+-		memcpy(pDstLine, pFirstDstLineXOffset, nWidth * bpp);
++		memcpy(pDstLine, pFirstDstLineXOffset, nWidth * bpp * 1ULL);
+ 	}
+ 
+ 	return TRUE;
+diff --git a/libfreerdp/codec/h264.c b/libfreerdp/codec/h264.c
+index 8756c5838..00b812b29 100644
+--- a/libfreerdp/codec/h264.c
++++ b/libfreerdp/codec/h264.c
+@@ -63,9 +63,9 @@ BOOL avc420_ensure_buffer(H264_CONTEXT* h264, UINT32 stride, UINT32 width, UINT3
+ 		_aligned_free(h264->pYUVData[0]);
+ 		_aligned_free(h264->pYUVData[1]);
+ 		_aligned_free(h264->pYUVData[2]);
+-		h264->pYUVData[0] = _aligned_malloc(h264->iStride[0] * height, 16);
+-		h264->pYUVData[1] = _aligned_malloc(h264->iStride[1] * height, 16);
+-		h264->pYUVData[2] = _aligned_malloc(h264->iStride[2] * height, 16);
++		h264->pYUVData[0] = _aligned_malloc(h264->iStride[0] * height * 1ULL, 16);
++		h264->pYUVData[1] = _aligned_malloc(h264->iStride[1] * height * 1ULL, 16);
++		h264->pYUVData[2] = _aligned_malloc(h264->iStride[2] * height * 1ULL, 16);
+ 
+ 		if (!h264->pYUVData[0] || !h264->pYUVData[1] || !h264->pYUVData[2])
+ 			return FALSE;
+diff --git a/libfreerdp/codec/nsc_encode.c b/libfreerdp/codec/nsc_encode.c
+index 501558c1c..fd9626a6d 100644
+--- a/libfreerdp/codec/nsc_encode.c
++++ b/libfreerdp/codec/nsc_encode.c
+@@ -273,8 +273,7 @@ static BOOL nsc_encode_argb_to_aycocg(NSC_CONTEXT* context, const BYTE* data, UI
+ 
+ static BOOL nsc_encode_subsampling(NSC_CONTEXT* context)
+ {
+-	UINT16 x;
+-	UINT16 y;
++	UINT32 y;
+ 	UINT32 tempWidth;
+ 	UINT32 tempHeight;
+ 
+@@ -292,6 +291,7 @@ static BOOL nsc_encode_subsampling(NSC_CONTEXT* context)
+ 
+ 	for (y = 0; y<tempHeight>> 1; y++)
+ 	{
++		UINT32 x;
+ 		BYTE* co_dst = context->priv->PlaneBuffers[1] + y * (tempWidth >> 1);
+ 		BYTE* cg_dst = context->priv->PlaneBuffers[2] + y * (tempWidth >> 1);
+ 		const INT8* co_src0 = (INT8*)context->priv->PlaneBuffers[1] + (y << 1) * tempWidth;
+diff --git a/libfreerdp/codec/nsc_sse2.c b/libfreerdp/codec/nsc_sse2.c
+index 3e393c902..7f101652d 100644
+--- a/libfreerdp/codec/nsc_sse2.c
++++ b/libfreerdp/codec/nsc_sse2.c
+@@ -320,8 +320,7 @@ static BOOL nsc_encode_argb_to_aycocg_sse2(NSC_CONTEXT* context, const BYTE* dat
+ 
+ static void nsc_encode_subsampling_sse2(NSC_CONTEXT* context)
+ {
+-	UINT16 x;
+-	UINT16 y;
++	UINT32 y;
+ 	BYTE* co_dst;
+ 	BYTE* cg_dst;
+ 	INT8* co_src0;
+@@ -338,6 +337,7 @@ static void nsc_encode_subsampling_sse2(NSC_CONTEXT* context)
+ 
+ 	for (y = 0; y<tempHeight>> 1; y++)
+ 	{
++		UINT32 x;
+ 		co_dst = context->priv->PlaneBuffers[1] + y * (tempWidth >> 1);
+ 		cg_dst = context->priv->PlaneBuffers[2] + y * (tempWidth >> 1);
+ 		co_src0 = (INT8*)context->priv->PlaneBuffers[1] + (y << 1) * tempWidth;
+diff --git a/libfreerdp/codec/progressive.c b/libfreerdp/codec/progressive.c
+index 8ef0b9081..8e7a49d5f 100644
+--- a/libfreerdp/codec/progressive.c
++++ b/libfreerdp/codec/progressive.c
+@@ -411,7 +411,7 @@ static INLINE BOOL progressive_tile_allocate(RFX_PROGRESSIVE_TILE* tile)
+ 	tile->stride = 4 * tile->width;
+ 
+ 	{
+-		size_t dataLen = tile->stride * tile->height;
++		size_t dataLen = tile->stride * tile->height * 1ULL;
+ 		tile->data = (BYTE*)_aligned_malloc(dataLen, 16);
+ 	}
+ 
+@@ -2299,7 +2299,7 @@ INT32 progressive_decompress_ex(PROGRESSIVE_CONTEXT* progressive, const BYTE* pS
+ 
+ 	for (i = 0; i < surface->numUpdatedTiles; i++)
+ 	{
+-		UINT32 nbUpdateRects;
++		UINT32 nbUpdateRects, j;
+ 		const RECTANGLE_16* updateRects;
+ 		RECTANGLE_16 updateRect;
+ 		RFX_PROGRESSIVE_TILE* tile = &surface->tiles[surface->updatedTileIndices[i]];
+diff --git a/libfreerdp/core/gcc.c b/libfreerdp/core/gcc.c
+index 06536dc06..52787ad70 100644
+--- a/libfreerdp/core/gcc.c
++++ b/libfreerdp/core/gcc.c
+@@ -35,8 +35,8 @@
+ 
+ static BOOL gcc_read_client_cluster_data(wStream* s, rdpMcs* mcs, UINT16 blockLength);
+ static BOOL gcc_read_client_core_data(wStream* s, rdpMcs* mcs, UINT16 blockLength);
+-static BOOL gcc_read_client_data_blocks(wStream* s, rdpMcs* mcs, int length);
+-static BOOL gcc_read_server_data_blocks(wStream* s, rdpMcs* mcs, int length);
++static BOOL gcc_read_client_data_blocks(wStream* s, rdpMcs* mcs, UINT16 length);
++static BOOL gcc_read_server_data_blocks(wStream* s, rdpMcs* mcs, UINT16 length);
+ static BOOL gcc_read_user_data_header(wStream* s, UINT16* type, UINT16* length);
+ static void gcc_write_user_data_header(wStream* s, UINT16 type, UINT16 length);
+ 
+@@ -379,7 +379,7 @@ void gcc_write_conference_create_response(wStream* s, wStream* userData)
+ 	                       0); /* array of server data blocks */
+ }
+ 
+-BOOL gcc_read_client_data_blocks(wStream* s, rdpMcs* mcs, int length)
++BOOL gcc_read_client_data_blocks(wStream* s, rdpMcs* mcs, UINT16 length)
+ {
+ 	UINT16 type;
+ 	UINT16 blockLength;
+@@ -518,7 +518,7 @@ BOOL gcc_write_client_data_blocks(wStream* s, rdpMcs* mcs)
+ 	return TRUE;
+ }
+ 
+-BOOL gcc_read_server_data_blocks(wStream* s, rdpMcs* mcs, int length)
++BOOL gcc_read_server_data_blocks(wStream* s, rdpMcs* mcs, UINT16 length)
+ {
+ 	UINT16 type;
+ 	UINT16 offset = 0;
+diff --git a/libfreerdp/gdi/bitmap.c b/libfreerdp/gdi/bitmap.c
+index 902cb50a0..8fde46556 100644
+--- a/libfreerdp/gdi/bitmap.c
++++ b/libfreerdp/gdi/bitmap.c
+@@ -147,7 +147,8 @@ HGDI_BITMAP gdi_CreateCompatibleBitmap(HGDI_DC hdc, UINT32 nWidth, UINT32 nHeigh
+ 	hBitmap->format = hdc->format;
+ 	hBitmap->width = nWidth;
+ 	hBitmap->height = nHeight;
+-	hBitmap->data = _aligned_malloc(nWidth * nHeight * GetBytesPerPixel(hBitmap->format), 16);
++	hBitmap->data =
++	    _aligned_malloc(nWidth * nHeight * GetBytesPerPixel(hBitmap->format) * 1ULL, 16);
+ 	hBitmap->free = _aligned_free;
+ 
+ 	if (!hBitmap->data)
+diff --git a/libfreerdp/gdi/gdi.c b/libfreerdp/gdi/gdi.c
+index b624e1174..5ca905b01 100644
+--- a/libfreerdp/gdi/gdi.c
++++ b/libfreerdp/gdi/gdi.c
+@@ -1057,7 +1057,7 @@ static BOOL gdi_surface_bits(rdpContext* context, const SURFACE_BITS_COMMAND* cm
+ 
+ 		case RDP_CODEC_ID_NONE:
+ 			format = gdi_get_pixel_format(cmd->bmp.bpp);
+-			size = cmd->bmp.width * cmd->bmp.height * GetBytesPerPixel(format);
++			size = cmd->bmp.width * cmd->bmp.height * GetBytesPerPixel(format) * 1ULL;
+ 			if (size > cmd->bmp.bitmapDataLength)
+ 			{
+ 				WLog_ERR(TAG, "Short nocodec message: got %" PRIu32 " bytes, require %" PRIuz,
+diff --git a/libfreerdp/gdi/gfx.c b/libfreerdp/gdi/gfx.c
+index 2221cc3f7..a3b7505c5 100644
+--- a/libfreerdp/gdi/gfx.c
++++ b/libfreerdp/gdi/gfx.c
+@@ -726,7 +726,7 @@ static UINT gdi_SurfaceCommand_Alpha(rdpGdi* gdi, RdpgfxClientContext* context,
+ 	{
+ 		UINT32 x, y;
+ 
+-		if (Stream_GetRemainingLength(&s) < cmd->height * cmd->width)
++		if (Stream_GetRemainingLength(&s) < cmd->height * cmd->width * 1ULL)
+ 			return ERROR_INVALID_DATA;
+ 
+ 		for (y = cmd->top; y < cmd->top + cmd->height; y++)
+@@ -1024,8 +1024,8 @@ static UINT gdi_CreateSurface(RdpgfxClientContext* context,
+ 			goto fail;
+ 	}
+ 
+-	surface->scanline = gfx_align_scanline(surface->width * 4, 16);
+-	surface->data = (BYTE*)_aligned_malloc(surface->scanline * surface->height, 16);
++	surface->scanline = gfx_align_scanline(surface->width * 4UL, 16);
++	surface->data = (BYTE*)_aligned_malloc(surface->scanline * surface->height * 1ULL, 16);
+ 
+ 	if (!surface->data)
+ 	{
+diff --git a/libfreerdp/gdi/graphics.c b/libfreerdp/gdi/graphics.c
+index 3bcf3730d..c8b5fc913 100644
+--- a/libfreerdp/gdi/graphics.c
++++ b/libfreerdp/gdi/graphics.c
+@@ -52,7 +52,7 @@ HGDI_BITMAP gdi_create_bitmap(rdpGdi* gdi, UINT32 nWidth, UINT32 nHeight, UINT32
+ 		return NULL;
+ 
+ 	nDstStep = nWidth * GetBytesPerPixel(gdi->dstFormat);
+-	pDstData = _aligned_malloc(nHeight * nDstStep, 16);
++	pDstData = _aligned_malloc(nHeight * nDstStep * 1ULL, 16);
+ 
+ 	if (!pDstData)
+ 		return NULL;
+diff --git a/libfreerdp/gdi/shape.c b/libfreerdp/gdi/shape.c
+index 9d9ae4d80..6c45e0c92 100644
+--- a/libfreerdp/gdi/shape.c
++++ b/libfreerdp/gdi/shape.c
+@@ -158,7 +158,7 @@ BOOL gdi_FillRect(HGDI_DC hdc, const HGDI_RECT rect, HGDI_BRUSH hbr)
+ 			for (y = 1; y < nHeight; y++)
+ 			{
+ 				BYTE* dstp = gdi_get_bitmap_pointer(hdc, nXDest, nYDest + y);
+-				memcpy(dstp, srcp, nWidth * formatSize);
++				memcpy(dstp, srcp, nWidth * formatSize * 1ULL);
+ 			}
+ 
+ 			break;
+diff --git a/libfreerdp/gdi/video.c b/libfreerdp/gdi/video.c
+index a543cbecb..0e12c52e7 100644
+--- a/libfreerdp/gdi/video.c
++++ b/libfreerdp/gdi/video.c
+@@ -66,7 +66,7 @@ static VideoSurface* gdiVideoCreateSurface(VideoClientContext* video, BYTE* data
+ 	ret->base.w = width;
+ 	ret->base.h = height;
+ 	ret->scanline = width * bpp;
+-	ret->image = _aligned_malloc(ret->scanline * height, 16);
++	ret->image = _aligned_malloc(ret->scanline * height * 1ULL, 16);
+ 
+ 	if (!ret->image)
+ 	{
+diff --git a/libfreerdp/primitives/prim_copy.c b/libfreerdp/primitives/prim_copy.c
+index 03f1d7c8c..ae841d0c4 100644
+--- a/libfreerdp/primitives/prim_copy.c
++++ b/libfreerdp/primitives/prim_copy.c
+@@ -60,14 +60,14 @@ static BOOL memory_regions_overlap_2d(const BYTE* p1, int p1Step, int p1Size, co
+ 
+ 	if (p1m <= p2m)
+ 	{
+-		ULONG_PTR p1mEnd = p1m + (height - 1) * p1Step + width * p1Size;
++		ULONG_PTR p1mEnd = p1m + (height - 1) * p1Step * 1ULL + width * p1Size * 1ULL;
+ 
+ 		if (p1mEnd > p2m)
+ 			return TRUE;
+ 	}
+ 	else
+ 	{
+-		ULONG_PTR p2mEnd = p2m + (height - 1) * p2Step + width * p2Size;
++		ULONG_PTR p2mEnd = p2m + (height - 1) * p2Step * 1ULL + width * p2Size * 1ULL;
+ 
+ 		if (p2mEnd > p1m)
+ 			return TRUE;
+diff --git a/libfreerdp/primitives/primitives.c b/libfreerdp/primitives/primitives.c
+index a1cd7ea85..26c6338f6 100644
+--- a/libfreerdp/primitives/primitives.c
++++ b/libfreerdp/primitives/primitives.c
+@@ -157,7 +157,7 @@ static primitives_YUV_benchmark* primitives_YUV_benchmark_init(primitives_YUV_be
+ 		if (!buf)
+ 			goto fail;
+ 
+-		winpr_RAND(buf, roi->width * roi->height);
++		winpr_RAND(buf, roi->width * roi->height * 1ULL);
+ 		ret->steps[i] = roi->width;
+ 	}
+ 
+diff --git a/uwac/libuwac/uwac-window.c b/uwac/libuwac/uwac-window.c
+index 13a2c2e78..bf70af2f1 100644
+--- a/uwac/libuwac/uwac-window.c
++++ b/uwac/libuwac/uwac-window.c
+@@ -316,14 +316,14 @@ int UwacWindowShmAllocBuffers(UwacWindow* w, int nbuffers, int allocSize, uint32
+ 
+ 	w->buffers = newBuffers;
+ 	memset(w->buffers + w->nbuffers, 0, sizeof(UwacBuffer) * nbuffers);
+-	fd = uwac_create_anonymous_file(allocSize * nbuffers);
++	fd = uwac_create_anonymous_file(allocSize * nbuffers * 1ULL);
+ 
+ 	if (fd < 0)
+ 	{
+ 		return UWAC_ERROR_INTERNAL;
+ 	}
+ 
+-	data = mmap(NULL, allocSize * nbuffers, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	data = mmap(NULL, allocSize * nbuffers * 1ULL, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+ 
+ 	if (data == MAP_FAILED)
+ 	{
+@@ -335,7 +335,7 @@ int UwacWindowShmAllocBuffers(UwacWindow* w, int nbuffers, int allocSize, uint32
+ 
+ 	if (!pool)
+ 	{
+-		munmap(data, allocSize * nbuffers);
++		munmap(data, allocSize * nbuffers * 1ULL);
+ 		ret = UWAC_ERROR_NOMEMORY;
+ 		goto error_mmap;
+ 	}
+@@ -755,7 +755,8 @@ UwacReturnCode UwacWindowSubmitBuffer(UwacWindow* window, bool copyContentForNex
+ 		return UWAC_ERROR_NOMEMORY;
+ 
+ 	if (copyContentForNextFrame)
+-		memcpy(nextDrawingBuffer->data, pendingBuffer->data, window->stride * window->height);
++		memcpy(nextDrawingBuffer->data, pendingBuffer->data,
++		       window->stride * window->height * 1ULL);
+ 
+ 	UwacSubmitBufferPtr(window, pendingBuffer);
+ 	return UWAC_SUCCESS;
+diff --git a/winpr/include/winpr/print.h b/winpr/include/winpr/print.h
+index 5adf0c445..d75ffdba5 100644
+--- a/winpr/include/winpr/print.h
++++ b/winpr/include/winpr/print.h
+@@ -40,7 +40,7 @@ extern "C"
+ 	WINPR_API void winpr_CArrayDump(const char* tag, UINT32 lvl, const BYTE* data, int length,
+ 	                                int width);
+ 
+-	WINPR_API char* winpr_BinToHexString(const BYTE* data, int length, BOOL space);
++	WINPR_API char* winpr_BinToHexString(const BYTE* data, size_t length, BOOL space);
+ 
+ 	WINPR_API int wprintfx(const char* fmt, ...);
+ 	WINPR_API int wvprintfx(const char* fmt, va_list args);
+diff --git a/winpr/libwinpr/utils/lodepng/lodepng.c b/winpr/libwinpr/utils/lodepng/lodepng.c
+index 87f85080e..89878e074 100644
+--- a/winpr/libwinpr/utils/lodepng/lodepng.c
++++ b/winpr/libwinpr/utils/lodepng/lodepng.c
+@@ -3026,7 +3026,7 @@ size_t lodepng_get_raw_size(unsigned w, unsigned h, const LodePNGColorMode* colo
+ /*in an idat chunk, each scanline is a multiple of 8 bits, unlike the lodepng output buffer*/
+ static size_t lodepng_get_raw_size_idat(unsigned w, unsigned h, const LodePNGColorMode* color)
+ {
+-	return h * ((w * lodepng_get_bpp(color) + 7) / 8);
++	return h * ((w * lodepng_get_bpp(color) + 7ULL) / 8ULL);
+ }
+ #endif /*LODEPNG_COMPILE_DECODER*/
+ #endif /*LODEPNG_COMPILE_PNG*/
+@@ -3814,7 +3814,7 @@ unsigned lodepng_convert(unsigned char* out, const unsigned char* in, LodePNGCol
+ {
+ 	size_t i;
+ 	ColorTree tree;
+-	size_t numpixels = w * h;
++	size_t numpixels = w * h * 1ULL;
+ 
+ 	if (lodepng_color_mode_equal(mode_out, mode_in))
+ 	{
+@@ -3917,7 +3917,7 @@ unsigned get_color_profile(LodePNGColorProfile* profile, const unsigned char* in
+ 	unsigned error = 0;
+ 	size_t i;
+ 	ColorTree tree;
+-	size_t numpixels = w * h;
++	size_t numpixels = w * h * 1ULL;
+ 
+ 	unsigned colored_done = lodepng_is_greyscale_type(mode) ? 1 : 0;
+ 	unsigned alpha_done = lodepng_can_have_alpha(mode) ? 0 : 1;
+@@ -4223,11 +4223,11 @@ static void Adam7_getpassvalues(unsigned passw[7], unsigned passh[7], size_t fil
+ 		/*if passw[i] is 0, it's 0 bytes, not 1 (no filtertype-byte)*/
+ 		filter_passstart[i + 1] =
+ 		    filter_passstart[i] +
+-		    ((passw[i] && passh[i]) ? passh[i] * (1 + (passw[i] * bpp + 7) / 8) : 0);
++		    ((passw[i] && passh[i]) ? passh[i] * (1ULL + (passw[i] * bpp + 7ULL) / 8ULL) : 0);
+ 		/*bits padded if needed to fill full byte at end of each scanline*/
+-		padded_passstart[i + 1] = padded_passstart[i] + passh[i] * ((passw[i] * bpp + 7) / 8);
++		padded_passstart[i + 1] = padded_passstart[i] + passh[i] * ((passw[i] * bpp + 7ULL) / 8ULL);
+ 		/*only padded at end of reduced image*/
+-		passstart[i + 1] = passstart[i] + (passh[i] * passw[i] * bpp + 7) / 8;
++		passstart[i + 1] = passstart[i] + (passh[i] * passw[i] * bpp + 7ULL) / 8ULL;
+ 	}
+ }
+ 
+@@ -4538,7 +4538,7 @@ static unsigned postProcessScanlines(unsigned char* out, unsigned char* in, unsi
+ 		if (bpp < 8 && w * bpp != ((w * bpp + 7) / 8) * 8)
+ 		{
+ 			CERROR_TRY_RETURN(unfilter(in, in, w, h, bpp));
+-			removePaddingBits(out, in, w * bpp, ((w * bpp + 7) / 8) * 8, h);
++			removePaddingBits(out, in, w * bpp * 1ULL, ((w * bpp + 7ULL) / 8ULL) * 8ULL, h);
+ 		}
+ 		/*we can immediatly filter into the out buffer, no other steps needed*/
+ 		else
+@@ -4563,8 +4563,9 @@ static unsigned postProcessScanlines(unsigned char* out, unsigned char* in, unsi
+ 				/*remove padding bits in scanlines; after this there still may be padding
+ 				bits between the different reduced images: each reduced image still starts nicely at
+ 				a byte*/
+-				removePaddingBits(&in[passstart[i]], &in[padded_passstart[i]], passw[i] * bpp,
+-				                  ((passw[i] * bpp + 7) / 8) * 8, passh[i]);
++				removePaddingBits(&in[passstart[i]], &in[padded_passstart[i]],
++				                  passw[i] * bpp * 1ULL, ((passw[i] * bpp + 7ULL) / 8ULL) * 8ULL,
++				                  passh[i]);
+ 			}
+ 		}
+ 
+@@ -6049,12 +6050,12 @@ static unsigned preProcessScanlines(unsigned char** out, size_t* outsize, const
+ 			/*non multiple of 8 bits per scanline, padding bits needed per scanline*/
+ 			if (bpp < 8 && w * bpp != ((w * bpp + 7) / 8) * 8)
+ 			{
+-				unsigned char* padded = (unsigned char*)calloc(h * ((w * bpp + 7) / 8), 1);
++				unsigned char* padded = (unsigned char*)calloc(h * ((w * bpp + 7ULL) / 8ULL), 1);
+ 				if (!padded)
+ 					error = 83; /*alloc fail*/
+ 				if (!error)
+ 				{
+-					addPaddingBits(padded, in, ((w * bpp + 7) / 8) * 8, w * bpp, h);
++					addPaddingBits(padded, in, ((w * bpp + 7ULL) / 8ULL) * 8ULL, w * bpp * 1ULL, h);
+ 					error = filter(*out, padded, w, h, &info_png->color, settings);
+ 				}
+ 				free(padded);
+@@ -6097,8 +6098,9 @@ static unsigned preProcessScanlines(unsigned char** out, size_t* outsize, const
+ 					    padded_passstart[i + 1] - padded_passstart[i], sizeof(unsigned char));
+ 					if (!padded)
+ 						ERROR_BREAK(83); /*alloc fail*/
+-					addPaddingBits(padded, &adam7[passstart[i]], ((passw[i] * bpp + 7) / 8) * 8,
+-					               passw[i] * bpp, passh[i]);
++					addPaddingBits(padded, &adam7[passstart[i]],
++					               ((passw[i] * bpp + 7ULL) / 8ULL) * 8ULL, passw[i] * bpp * 1ULL,
++					               passh[i] * 1ULL);
+ 					error = filter(&(*out)[filter_passstart[i]], padded, passw[i], passh[i],
+ 					               &info_png->color, settings);
+ 					free(padded);
+diff --git a/winpr/libwinpr/utils/print.c b/winpr/libwinpr/utils/print.c
+index c56cf5f6f..e3257b146 100644
+--- a/winpr/libwinpr/utils/print.c
++++ b/winpr/libwinpr/utils/print.c
+@@ -158,23 +158,22 @@ void winpr_CArrayDump(const char* tag, UINT32 level, const BYTE* data, int lengt
+ 	free(buffer);
+ }
+ 
+-char* winpr_BinToHexString(const BYTE* data, int length, BOOL space)
++char* winpr_BinToHexString(const BYTE* data, size_t length, BOOL space)
+ {
+-	int i;
++	size_t i;
+ 	int n;
+ 	char* p;
+-	int ln, hn;
+-	char bin2hex[] = "0123456789ABCDEF";
++	const char bin2hex[] = "0123456789ABCDEF";
+ 	n = space ? 3 : 2;
+-	p = (char*)malloc((length + 1) * n);
++	p = (char*)malloc((length + 1ULL) * n);
+ 
+ 	if (!p)
+ 		return NULL;
+ 
+ 	for (i = 0; i < length; i++)
+ 	{
+-		ln = data[i] & 0xF;
+-		hn = (data[i] >> 4) & 0xF;
++		int ln = data[i] & 0xF;
++		int hn = (data[i] >> 4) & 0xF;
+ 		p[i * n] = bin2hex[hn];
+ 		p[(i * n) + 1] = bin2hex[ln];
+ 
+-- 
+2.30.2
+
