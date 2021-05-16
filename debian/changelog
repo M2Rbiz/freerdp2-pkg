@@ -1,4 +1,4 @@
-freerdp2 (2.3.0+dfsg1-2) UNRELEASED; urgency=medium
+freerdp2 (2.3.0+dfsg1-2) unstable; urgency=medium
 
   * debian/watch:
     + Fix Github watch URL.
@@ -26,8 +26,13 @@ freerdp2 (2.3.0+dfsg1-2) UNRELEASED; urgency=medium
       - 0031-Fix-monitor-list.patch
       - 0032-Fixed-CodeQL-warnings.patch
       - 0033-Reverted-winpr_BinToHexString-argument-change.patch
+  * debian/patches:
+    + Add 0034-Fixed-6938-Remote-app-mode-clipboard-fix.patch. In remote app
+      mode the _FREERDP_TIMESTAMP_PROPERTY does not work. Therefore ignore it.
+    + Add 0035-Fixed-6989-Use-X509_STORE_set_default_paths.patch. Fix Windows
+      10 logon when using an internal trusted root CA.
 
- -- Mike Gabriel <sunweaver@debian.org>  Thu, 29 Apr 2021 12:06:48 +0200
+ -- Mike Gabriel <sunweaver@debian.org>  Sun, 16 May 2021 23:42:19 +0200
 
 freerdp2 (2.3.0+dfsg1-1) unstable; urgency=medium
 
