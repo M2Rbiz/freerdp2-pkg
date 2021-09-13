@@ -500,7 +500,6 @@ Files: channels/CMakeLists.txt
  winpr/libwinpr/synch/semaphore.c
  winpr/libwinpr/synch/sleep.c
  winpr/libwinpr/synch/synch.h
- winpr/libwinpr/synch/timer.c
  winpr/libwinpr/sysinfo/CMakeLists.txt
  winpr/libwinpr/thread/CMakeLists.txt
  winpr/libwinpr/thread/argv.c
@@ -780,7 +779,6 @@ Files: CMakeCPack.cmake
  scripts/android-build-jpeg.sh
  scripts/android-build-openh264.sh
  scripts/android-build-openssl.sh
- scripts/android-build-release.conf
  scripts/android-build.conf
  scripts/blacklist-memory-sanitizer.txt
  scripts/create_release_taball.sh
@@ -983,6 +981,7 @@ Files: CMakeCPack.cmake
  winpr/libwinpr/sspi/test/TestSchannel.c
  winpr/libwinpr/sspicli/ModuleOptions.cmake
  winpr/libwinpr/synch/ModuleOptions.cmake
+ winpr/libwinpr/synch/pollset.c
  winpr/libwinpr/synch/test/CMakeLists.txt
  winpr/libwinpr/synch/test/TestSynchBarrier.c
  winpr/libwinpr/synch/test/TestSynchCritical.c
@@ -1357,6 +1356,42 @@ Copyright: 2012, Hewlett-Packard Development Company, L.P.
 License: Apache License 2.0
  FIXME
 
+Files: channels/geometry/CMakeLists.txt
+ channels/geometry/client/CMakeLists.txt
+ channels/geometry/client/geometry_main.c
+ channels/geometry/client/geometry_main.h
+ channels/printer/printer.h
+ channels/video/CMakeLists.txt
+ channels/video/client/CMakeLists.txt
+ channels/video/client/video_main.c
+ channels/video/client/video_main.h
+ client/X11/xf_disp.c
+ client/X11/xf_disp.h
+ client/X11/xf_video.c
+ client/X11/xf_video.h
+ client/common/geometry.c
+ cmake/FindWayland.cmake
+ include/freerdp/channels/geometry.h
+ include/freerdp/channels/video.h
+ include/freerdp/client/geometry.h
+ include/freerdp/client/video.h
+ include/freerdp/codec/yuv.h
+ include/freerdp/gdi/video.h
+ include/freerdp/license.h
+ libfreerdp/gdi/video.c
+ winpr/libwinpr/synch/event.h
+ winpr/libwinpr/synch/pollset.h
+ winpr/libwinpr/synch/test/TestSynchAPC.c
+ winpr/libwinpr/thread/apc.c
+ winpr/libwinpr/thread/apc.h
+Copyright: 2015, David Fort <contact@hardening-consulting.com>
+  2016, David Fort <contact@hardening-consulting.com>
+  2017, David Fort <contact@hardening-consulting.com>
+  2018, David Fort <contact@hardening-consulting.com>
+  2021, David Fort <contact@hardening-consulting.com>
+License: Apache License 2.0
+ FIXME
+
 Files: channels/disp/disp_common.c
  channels/disp/disp_common.h
  channels/disp/server/CMakeLists.txt
@@ -1384,36 +1419,6 @@ Files: channels/disp/disp_common.c
  server/proxy/pf_rdpsnd.c
  server/proxy/pf_rdpsnd.h
 Copyright: 2019, Kobi Mizrachi <kmizrachi18@gmail.com>
-License: Apache License 2.0
- FIXME
-
-Files: channels/geometry/CMakeLists.txt
- channels/geometry/client/CMakeLists.txt
- channels/geometry/client/geometry_main.c
- channels/geometry/client/geometry_main.h
- channels/printer/printer.h
- channels/video/CMakeLists.txt
- channels/video/client/CMakeLists.txt
- channels/video/client/video_main.c
- channels/video/client/video_main.h
- client/X11/xf_disp.c
- client/X11/xf_disp.h
- client/X11/xf_video.c
- client/X11/xf_video.h
- client/common/geometry.c
- cmake/FindWayland.cmake
- include/freerdp/channels/geometry.h
- include/freerdp/channels/video.h
- include/freerdp/client/geometry.h
- include/freerdp/client/video.h
- include/freerdp/codec/yuv.h
- include/freerdp/gdi/video.h
- include/freerdp/license.h
- libfreerdp/gdi/video.c
-Copyright: 2015, David Fort <contact@hardening-consulting.com>
-  2016, David Fort <contact@hardening-consulting.com>
-  2017, David Fort <contact@hardening-consulting.com>
-  2018, David Fort <contact@hardening-consulting.com>
 License: Apache License 2.0
  FIXME
 
@@ -1745,19 +1750,6 @@ Copyright: 2014, Hardening <contact@hardening-consulting.com>
 License: Apache License 2.0
  FIXME
 
-Files: channels/tsmf/client/CMakeLists.txt
- winpr/libwinpr/comm/comm.h
- winpr/libwinpr/comm/test/TestCommConfig.c
- winpr/libwinpr/thread/thread.c
- winpr/libwinpr/thread/thread.h
-Copyright: 2012, Hewlett-Packard Development Company, L.P.
-  2012, Marc-Andre Moreau <marcandre.moreau@gmail.com>
-  2014, Hewlett-Packard Development Company, L.P.
-  2014, Marc-Andre Moreau <marcandre.moreau@gmail.com>
-  2015, Hewlett-Packard Development Company, L.P.
-License: Apache License 2.0
- FIXME
-
 Files: client/X11/xf_gdi.c
  winpr/include/winpr/synch.h
  winpr/libwinpr/error/test/TestErrorSetLastError.c
@@ -1936,11 +1928,31 @@ Copyright: 2014, Manuel Bachmann <tarnyko@tarnyko.net>
 License: Apache License 2.0
  FIXME
 
+Files: channels/rdpei/rdpei_common.c
+ channels/rdpei/rdpei_common.h
+ winpr/libwinpr/synch/timer.c
+Copyright: 2012, Marc-Andre Moreau <marcandre.moreau@gmail.com>
+  2013, Marc-Andre Moreau <marcandre.moreau@gmail.com>
+  2014, David Fort <contact@hardening-consulting.com>
+  2021, David Fort <contact@hardening-consulting.com>
+License: Apache License 2.0
+ FIXME
+
 Files: winpr/include/winpr/file.h
  winpr/include/winpr/string.h
  winpr/libwinpr/path/shell.c
 Copyright: 2012, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2016, David PHAM-VAN <d.phamvan@inuvika.com>
+License: Apache License 2.0
+ FIXME
+
+Files: channels/tsmf/client/CMakeLists.txt
+ winpr/libwinpr/comm/comm.h
+ winpr/libwinpr/comm/test/TestCommConfig.c
+Copyright: 2012, Hewlett-Packard Development Company, L.P.
+  2012, Marc-Andre Moreau <marcandre.moreau@gmail.com>
+  2014, Hewlett-Packard Development Company, L.P.
+  2014, Marc-Andre Moreau <marcandre.moreau@gmail.com>
 License: Apache License 2.0
  FIXME
 
@@ -2135,10 +2147,11 @@ Copyright: 2015, DI (FH) Martin Haimberger <martin.haimberger@thincast.com>
 License: Apache License 2.0
  FIXME
 
-Files: channels/rdpei/rdpei_common.c
- channels/rdpei/rdpei_common.h
-Copyright: 2013, Marc-Andre Moreau <marcandre.moreau@gmail.com>
-  2014, David Fort <contact@hardening-consulting.com>
+Files: winpr/libwinpr/thread/thread.c
+ winpr/libwinpr/thread/thread.h
+Copyright: 2012, Marc-Andre Moreau <marcandre.moreau@gmail.com>
+  2015, Hewlett-Packard Development Company, L.P.
+  2021, David Fort <contact@hardening-consulting.com>
 License: Apache License 2.0
  FIXME
 
@@ -2910,11 +2923,6 @@ Copyright: 2006, Andreas Schneider <mail@cynapses.org>
 License: BSD 3-clause "New" or "Revised" License
  FIXME
 
-Files: debian/.copyright.swp
-Copyright:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        utf-8
-License: GNU Lesser General Public License
- FIXME
-
 Files: uwac/protocols/server-decoration.xml
 Copyright: 2015, Martin GrÃ¤Ãlin
 License: GNU Lesser General Public License v2.1 or later
@@ -3053,7 +3061,7 @@ License: UNKNOWN
  FIXME
 
 Files: debian/changelog
-Copyright: attributions.
+Copyright: attributions:
 License: UNKNOWN
  FIXME
 
