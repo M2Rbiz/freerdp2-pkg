@@ -308,10 +308,14 @@ static BOOL rdg_read_http_unicode_string(wStream* s, const WCHAR** string, UINT1
 {
 	WCHAR* str;
 	UINT16 strLenBytes;
+	size_t rem = Stream_GetRemainingLength(s);
 
 	/* Read length of the string */
-	if (Stream_GetRemainingLength(s) < 4)
+	if (rem < 4)
+	{
+		WLog_ERR(TAG, "[%s]: Could not read stream length, only have % " PRIuz " bytes", rem);
 		return FALSE;
+	}
 	Stream_Read_UINT16(s, strLenBytes);
 
 	/* Remember position of our string */
@@ -319,7 +323,12 @@ static BOOL rdg_read_http_unicode_string(wStream* s, const WCHAR** string, UINT1
 
 	/* seek past the string - if this fails something is wrong */
 	if (!Stream_SafeSeek(s, strLenBytes))
+	{
+		WLog_ERR(TAG,
+		         "[%s]: Could not read stream data, only have % " PRIuz " bytes, expected %" PRIu16,
+		         rem - 4, strLenBytes);
 		return FALSE;
+	}
 
 	/* return the string data (if wanted) */
 	if (string)
@@ -1295,7 +1304,7 @@ static BOOL rdg_process_tunnel_response_optional(rdpRdg* rdg, wStream* s, UINT16
 		/* Seek over tunnelId (4 bytes) */
 		if (!Stream_SafeSeek(s, 4))
 		{
-			WLog_ERR(TAG, "[%s] Short packet %" PRIuz ", expected 4", __FUNCTION__,
+			WLog_ERR(TAG, "[%s] Short tunnelId, got %" PRIuz ", expected 4", __FUNCTION__,
 			         Stream_GetRemainingLength(s));
 			return FALSE;
 		}
@@ -1306,7 +1315,7 @@ static BOOL rdg_process_tunnel_response_optional(rdpRdg* rdg, wStream* s, UINT16
 		UINT32 caps;
 		if (Stream_GetRemainingLength(s) < 4)
 		{
-			WLog_ERR(TAG, "[%s] Short packet %" PRIuz ", expected 4", __FUNCTION__,
+			WLog_ERR(TAG, "[%s] Short capsFlags, got %" PRIuz ", expected 4", __FUNCTION__,
 			         Stream_GetRemainingLength(s));
 			return FALSE;
 		}
@@ -1320,7 +1329,7 @@ static BOOL rdg_process_tunnel_response_optional(rdpRdg* rdg, wStream* s, UINT16
 		/* Seek over nonce (20 bytes) */
 		if (!Stream_SafeSeek(s, 20))
 		{
-			WLog_ERR(TAG, "[%s] Short packet %" PRIuz ", expected 20", __FUNCTION__,
+			WLog_ERR(TAG, "[%s] Short nonce, got %" PRIuz ", expected 20", __FUNCTION__,
 			         Stream_GetRemainingLength(s));
 			return FALSE;
 		}
@@ -1328,7 +1337,7 @@ static BOOL rdg_process_tunnel_response_optional(rdpRdg* rdg, wStream* s, UINT16
 		/* Read serverCert */
 		if (!rdg_read_http_unicode_string(s, NULL, NULL))
 		{
-			WLog_ERR(TAG, "[%s] Failed to read string", __FUNCTION__);
+			WLog_ERR(TAG, "[%s] Failed to read server certificate", __FUNCTION__);
 			return FALSE;
 		}
 	}
@@ -1345,7 +1354,7 @@ static BOOL rdg_process_tunnel_response_optional(rdpRdg* rdg, wStream* s, UINT16
 		/* Read message string and invoke callback */
 		if (!rdg_read_http_unicode_string(s, &msg, &msgLenBytes))
 		{
-			WLog_ERR(TAG, "[%s] Failed to read string", __FUNCTION__);
+			WLog_ERR(TAG, "[%s] Failed to read consent message", __FUNCTION__);
 			return FALSE;
 		}
 
@@ -1537,7 +1546,7 @@ DWORD rdg_get_event_handles(rdpRdg* rdg, HANDLE* events, DWORD count)
 			return 0;
 	}
 
-	if (rdg->tlsIn && rdg->tlsIn->bio)
+	if (!rdg->transferEncoding.isWebsocketTransport && rdg->tlsIn && rdg->tlsIn->bio)
 	{
 		if (events && (nCount < count))
 		{
@@ -2403,7 +2412,8 @@ static long rdg_bio_ctrl(BIO* bio, int cmd, long arg1, void* arg2)
 	if (cmd == BIO_CTRL_FLUSH)
 	{
 		(void)BIO_flush(tlsOut->bio);
-		(void)BIO_flush(tlsIn->bio);
+		if (!rdg->transferEncoding.isWebsocketTransport)
+			(void)BIO_flush(tlsIn->bio);
 		status = 1;
 	}
 	else if (cmd == BIO_C_SET_NONBLOCK)
@@ -2418,6 +2428,10 @@ static long rdg_bio_ctrl(BIO* bio, int cmd, long arg1, void* arg2)
 	else if (cmd == BIO_C_WRITE_BLOCKED)
 	{
 		BIO* bio = tlsIn->bio;
+
+		if (rdg->transferEncoding.isWebsocketTransport)
+			bio = tlsOut->bio;
+
 		status = BIO_write_blocked(bio);
 	}
 	else if (cmd == BIO_C_WAIT_READ)
@@ -2436,6 +2450,9 @@ static long rdg_bio_ctrl(BIO* bio, int cmd, long arg1, void* arg2)
 	{
 		int timeout = (int)arg1;
 		BIO* bio = tlsIn->bio;
+
+		if (rdg->transferEncoding.isWebsocketTransport)
+			bio = tlsOut->bio;
 
 		if (BIO_write_blocked(bio))
 			status = BIO_wait_write(bio, timeout);
@@ -2547,7 +2564,9 @@ rdpRdg* rdg_new(rdpContext* context)
 		    !http_context_set_user_agent(rdg->http, "MS-RDGateway/1.0") ||
 		    !http_context_set_host(rdg->http, rdg->settings->GatewayHostname) ||
 		    !http_context_set_rdg_connection_id(rdg->http, bracedUuid) ||
-		    !http_context_enable_websocket_upgrade(rdg->http, TRUE))
+		    !http_context_enable_websocket_upgrade(
+		        rdg->http,
+		        freerdp_settings_get_bool(rdg->settings, FreeRDP_GatewayHttpUseWebsockets)))
 		{
 			goto rdg_alloc_error;
 		}
