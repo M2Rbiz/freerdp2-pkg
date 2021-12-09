@@ -841,6 +841,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  QuerySecurityContextToken@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  QuerySecurityPackageInfoA@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  QuerySecurityPackageInfoW@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
+ QueueUserAPC@Base 2.4.1+dfsg1
  Queue_Clear@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  Queue_Contains@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  Queue_Count@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -1515,6 +1516,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  winpr_CreateThreadpoolTimer@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_CreateThreadpoolWait@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_CreateThreadpoolWork@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
+ winpr_DeleteFile@Base 2.4.1+dfsg1
  winpr_DeleteSynchronizationBarrier@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_Digest@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_Digest_Allow_FIPS@Base 2.0.0~git20180411.1.7a7b1802+dfsg1
@@ -1545,6 +1547,9 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  winpr_InitializeSynchronizationBarrier@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_IsThreadpoolTimerSet@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_LeaveCriticalSectionWhenCallbackReturns@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
+ winpr_MoveFile@Base 2.4.1+dfsg1
+ winpr_PathFileExists@Base 2.4.1+dfsg1
+ winpr_PathMakePath@Base 2.4.1+dfsg1
  winpr_RAND@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_RAND_pseudo@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_RC4_Free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -1553,6 +1558,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  winpr_RC4_Update@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_ReleaseMutexWhenCallbackReturns@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_ReleaseSemaphoreWhenCallbackReturns@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
+ winpr_RemoveDirectory@Base 2.4.1+dfsg1
  winpr_SetEventWhenCallbackReturns@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
  winpr_SetThreadpoolCallbackCleanupGroup@Base 2.0.0~git20180411.1.7a7b1802+dfsg1
  winpr_SetThreadpoolThreadMaximum@Base 2.0.0~git20161130.1.e60d0d5+dfsg1
@@ -1572,6 +1578,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  winpr_backtrace_symbols_fd@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_bitmap_construct_header@Base 2.1.2+dfsg1
  winpr_bitmap_write@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ winpr_fopen@Base 2.4.1+dfsg1
  winpr_get_build_config@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_get_build_date@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  winpr_get_build_revision@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
