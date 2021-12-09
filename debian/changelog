@@ -1,14 +1,23 @@
-freerdp2 (2.4.1+dfsg1-1) UNRELEASED; urgency=medium
+freerdp2 (2.4.1+dfsg1-1) unstable; urgency=medium
 
-  * New upstream release.
+  * New upstream release. (Closes: #999727).
+    - CVE-2021-41160: Fix improper region checks in all clients that allowed
+      out of bound write to memory. (Closes: #1001062).
+    - CVE-2021-41159: Fix improper client input validation for gateway
+      connections that allowed one to overwrite memory. (Closes: #1001061).
   * debian/patches/:
     + Drop all patches pulled in from upstream recently. All part of 2.4.0.
   * debian/copyright:
     + Update auto-generated copyright.in template/reference file.
   * debian/control:
     + Bump Standards-Version: to 4.6.0. No changes needed.
+  * debian/libwinpr2-2.symbols:
+    + Update symbols.
+  * debian/copyright:
+    + Update copyright attributions.
+    + Update auto-generated copyright.in reference file.
 
- -- Mike Gabriel <sunweaver@debian.org>  Mon, 13 Sep 2021 22:24:56 +0200
+ -- Mike Gabriel <sunweaver@debian.org>  Thu, 09 Dec 2021 23:16:59 +0100
 
 freerdp2 (2.3.0+dfsg1-2) unstable; urgency=medium
 
