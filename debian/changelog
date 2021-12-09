@@ -1,6 +1,12 @@
-freerdp2 (2.4.0+dfsg1-1) UNRELEASED; urgency=medium
+freerdp2 (2.4.1+dfsg1-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * debian/patches/:
+    + Drop all patches pulled in from upstream recently. All part of 2.4.0.
+  * debian/copyright:
+    + Update auto-generated copyright.in template/reference file.
+  * debian/control:
+    + Bump Standards-Version: to 4.6.0. No changes needed.
 
  -- Mike Gabriel <sunweaver@debian.org>  Mon, 13 Sep 2021 22:24:56 +0200
 
