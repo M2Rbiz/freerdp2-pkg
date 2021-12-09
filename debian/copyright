@@ -143,7 +143,6 @@ Files: .clang-format
  cmake/FindGSM.cmake
  cmake/FindGSSAPI.cmake
  cmake/FindGlib.cmake
- cmake/FindIPP.cmake
  cmake/FindLAME.cmake
  cmake/FindMbedTLS.cmake
  cmake/FindOSS.cmake
@@ -165,13 +164,7 @@ Files: .clang-format
  cmake/compat_2.8.11/BasicConfigVersion-AnyNewerVersion.cmake.in
  cmake/compat_2.8.11/BasicConfigVersion-ExactVersion.cmake.in
  cmake/compat_2.8.11/BasicConfigVersion-SameMajorVersion.cmake.in
- cmake/compat_2.8.11/CMakePackageConfigHelpers.cmake
- cmake/compat_2.8.2/FindPkgConfig.cmake
- cmake/compat_2.8.3/CMakeParseArguments.cmake
- cmake/compat_2.8.3/FindPackageHandleStandardArgs.cmake
- cmake/compat_2.8.6/FeatureSummary.cmake
  cmake/compat_3.7.0/FindICU.cmake
- cmake/iOSToolchain.cmake
  cmake/today.cmake
  config.h.in
  docs/PrintFormatSpecifiers.md
@@ -352,6 +345,7 @@ Files: .clang-format
  winpr/libwinpr/file/test/TestFilePatternMatch.c
  winpr/libwinpr/file/test/TestFileReadFile.c
  winpr/libwinpr/file/test/TestFileWriteFile.c
+ winpr/libwinpr/file/test/TestSetFileAttributes.c
  winpr/libwinpr/handle/ModuleOptions.cmake
  winpr/libwinpr/heap/ModuleOptions.cmake
  winpr/libwinpr/input/ModuleOptions.cmake
@@ -447,6 +441,7 @@ Files: .clang-format
  winpr/libwinpr/sspi/test/TestSchannel.c
  winpr/libwinpr/sspicli/ModuleOptions.cmake
  winpr/libwinpr/synch/ModuleOptions.cmake
+ winpr/libwinpr/synch/pollset.c
  winpr/libwinpr/synch/test/CMakeLists.txt
  winpr/libwinpr/synch/test/TestSynchBarrier.c
  winpr/libwinpr/synch/test/TestSynchCritical.c
@@ -638,7 +633,6 @@ Files:
  client/common/client.c
  client/common/compatibility.h
  client/common/file.c
- cmake/FindPixman.cmake
  include/freerdp/addin.h
  include/freerdp/altsec.h
  include/freerdp/assistance.h
@@ -1220,7 +1214,6 @@ Files: channels/audin/client/mac/CMakeLists.txt
  client/Wayland/wlf_disp.h
  client/Wayland/wlf_pointer.c
  client/Wayland/wlf_pointer.h
- cmake/FindDbusGlib.cmake
  cmake/Findsoxr.cmake
  include/freerdp/channels/tsmf.h
  include/freerdp/channels/urbdrc.h
@@ -1425,7 +1418,6 @@ Files: channels/geometry/CMakeLists.txt
  client/X11/xf_video.c
  client/X11/xf_video.h
  client/common/geometry.c
- cmake/FindWayland.cmake
  include/freerdp/channels/geometry.h
  include/freerdp/channels/video.h
  include/freerdp/client/geometry.h
@@ -1434,10 +1426,16 @@ Files: channels/geometry/CMakeLists.txt
  include/freerdp/gdi/video.h
  include/freerdp/license.h
  libfreerdp/gdi/video.c
+ winpr/libwinpr/synch/event.h
+ winpr/libwinpr/synch/pollset.h
+ winpr/libwinpr/synch/test/TestSynchAPC.c
+ winpr/libwinpr/thread/apc.c
+ winpr/libwinpr/thread/apc.h
 Copyright: 2015, David Fort <contact@hardening-consulting.com>
   2016, David Fort <contact@hardening-consulting.com>
   2017, David Fort <contact@hardening-consulting.com>
   2018, David Fort <contact@hardening-consulting.com>
+  2021, David Fort <contact@hardening-consulting.com>
 License: Apache-2.0
 
 Files: channels/disp/disp_common.c
@@ -1525,7 +1523,6 @@ License: Apache-2.0
 
 Files: client/X11/xf_input.c
  client/X11/xf_input.h
- cmake/FindXrender.cmake
  server/Mac/mf_event.c
  server/Mac/mf_event.h
  server/Mac/mf_info.c
@@ -1685,7 +1682,6 @@ Copyright: 2019, Idan Freiberg <speidy@gmail.com>
 License: Apache-2.0
 
 Files: client/common/cmdline.h
- cmake/ConfigOptionsAndroid.cmake
  include/freerdp/version.h.in
  winpr/include/winpr/intrin.h
  winpr/include/winpr/version.h.in
@@ -2913,21 +2909,6 @@ License: BSD-3-clause
 
 Files: cmake/FindWayland.cmake
 Copyright: 2015, David Fort <contact@hardening-consulting.com>
-License: Apache-2.0
-
-Files: cmake/FindX11.cmake
- cmake/FindXKBFile.cmake
- cmake/FindXShm.cmake
- cmake/FindXTest.cmake
- cmake/FindXcursor.cmake
- cmake/FindXdamage.cmake
- cmake/FindXext.cmake
- cmake/FindXfixes.cmake
- cmake/FindXinerama.cmake
- cmake/FindXv.cmake
-Copyright: 2011, O.S. Systems Software Ltda.
-  2011, Otavio Salvador <otavio@ossystems.com.br>
-  2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
 License: Apache-2.0
 
 Files: cmake/FindXrender.cmake
