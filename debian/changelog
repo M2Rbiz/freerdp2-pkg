@@ -1,3 +1,10 @@
+freerdp2 (2.5.0+dfsg1-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+    - Support OpenSSL 3.0. (Closes: #996286).
+
+ -- Mike Gabriel <sunweaver@debian.org>  Mon, 14 Feb 2022 07:58:49 +0100
+
 freerdp2 (2.4.1+dfsg1-1) unstable; urgency=medium
 
   * New upstream release. (Closes: #999727).
