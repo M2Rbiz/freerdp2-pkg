@@ -773,7 +773,6 @@ Files:
  libfreerdp/locale/keyboard_xkbfile.c
  libfreerdp/locale/keyboard_xkbfile.h
  libfreerdp/locale/liblocale.h
- libfreerdp/locale/locale.c
  libfreerdp/locale/xkb_layout_ids.h
  libfreerdp/utils/CMakeLists.txt
  libfreerdp/utils/pcap.c
@@ -1947,6 +1946,15 @@ Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2011, Roman Barabanov <romanbarabanov@gmail.com>
 License: Apache-2.0
 
+Files: cmake/ConfigOptionsiOS.cmake
+ libfreerdp/locale/keyboard_apple.c
+ libfreerdp/locale/keyboard_apple.h
+Copyright: 2013, Martin Fleisz <martin.fleisz@thincast.com>
+  2013, Thincast Technologies GmbH
+  2021, Martin Fleisz <martin.fleisz@thincast.com>
+  2021, Thincast Technologies GmbH
+License: Apache-2.0
+
 Files: winpr/include/winpr/ssl.h
  winpr/libwinpr/utils/ssl.c
  winpr/test/TestTypes.c
@@ -2725,6 +2733,12 @@ Files: client/Wayland/wlfreerdp.h
 Copyright: 2014, Manuel Bachmann <tarnyko@tarnyko.net>
 License: Apache-2.0
 
+Files: libfreerdp/locale/locale.c
+Copyright: 2009-2012, Marc-Andre Moreau <marcandre.moreau@gmail.com>
+  2021, Martin Fleisz <martin.fleisz@thincast.com>
+  2021, Thincast Technologies GmbH
+License: Apache-2.0
+
 Files: server/Sample/sfreerdp.c
 Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2011, Vic Lee
@@ -2739,11 +2753,6 @@ Files: libfreerdp/codec/h264_ffmpeg.c
 Copyright: 2014, Mike McDonald <Mike.McDonald@software.dell.com>
   2014, erbth <t.erbesdobler@team103.com>
   2015, Marc-Andre Moreau <marcandre.moreau@gmail.com>
-License: Apache-2.0
-
-Files: cmake/ConfigOptionsiOS.cmake
-Copyright: 2013, Martin Fleisz <martin.fleisz@thincast.com>
-  2013, Thincast Technologies GmbH
 License: Apache-2.0
 
 Files: cmake/FindXmlto.cmake
