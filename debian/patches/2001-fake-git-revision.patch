@@ -1,5 +1,6 @@
 Description: avoid Git interaction during build
 Author: Konstantin Demin <rockdrilla@gmail.com>
+Forwarded: Not needed; Debian-specific patch
 
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
