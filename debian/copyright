@@ -370,6 +370,7 @@ Files: .clang-format
  winpr/libwinpr/path/include/PathCchAddSeparator.c
  winpr/libwinpr/path/include/PathCchAddSeparatorEx.c
  winpr/libwinpr/path/include/PathCchAppend.c
+ winpr/libwinpr/path/shell_ios.h
  winpr/libwinpr/path/test/CMakeLists.txt
  winpr/libwinpr/path/test/TestPathAllocCanonicalize.c
  winpr/libwinpr/path/test/TestPathAllocCombine.c
@@ -2740,6 +2741,11 @@ Files: server/Sample/sfreerdp.c
 Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2011, Vic Lee
   2014, Norbert Federa <norbert.federa@thincast.com>
+License: Apache-2.0
+
+Files: include/freerdp/codec/h264.h
+ libfreerdp/codec/h264_mf.c
+Copyright: 2014, Mike McDonald <Mike.McDonald@software.dell.com>
 License: Apache-2.0
 
 Files: libfreerdp/codec/h264_ffmpeg.c
