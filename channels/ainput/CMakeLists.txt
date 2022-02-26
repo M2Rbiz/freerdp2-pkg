@@ -1,7 +1,8 @@
-# WinPR: Windows Portable Runtime
-# libwinpr-crt cmake build script
+# FreeRDP: A Remote Desktop Protocol Implementation
+# FreeRDP cmake build script
 #
-# Copyright 2012 Marc-Andre Moreau <marcandre.moreau@gmail.com>
+# Copyright 2022 Armin Novak <anovak@thincast.com>
+# Copyright 2022 Thincast Technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,27 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set (CRT_FILES alignment.c
-	conversion.c
-	buffer.c
-	memory.c
-	unicode.c
-	string.c)
+define_channel("ainput")
 
-if (NOT WITH_ICU)
-	set (CRT_FILES ${CRT_FILES}
-		utf.c
-		utf.h)
-endif(NOT WITH_ICU)
+if(WITH_CLIENT_CHANNELS)
+	add_channel_client(${MODULE_PREFIX} ${CHANNEL_NAME})
+endif()
 
-if (WITH_ICU)
-	find_package(ICU REQUIRED i18n uc io)
-	winpr_include_directory_add(${ICU_INCLUDE_DIRS})
-	winpr_library_add_private(${ICU_LIBRARIES})
-endif (WITH_ICU)
-
-winpr_module_add(${CRT_FILES})
-
-if(BUILD_TESTING)
-	add_subdirectory(test)
+if(WITH_SERVER_CHANNELS)
+	add_channel_server(${MODULE_PREFIX} ${CHANNEL_NAME})
 endif()

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * FreeRDP: A Remote Desktop Protocol Implementation
  * Graphics Pipeline Extension
  *
@@ -24,8 +24,11 @@
 #endif
 
 #include <winpr/crt.h>
+#include <assert.h>
 #include <winpr/stream.h>
 #include <freerdp/channels/log.h>
+
+#define WINPR_ASSERT(x) assert(x)
 
 #define TAG CHANNELS_TAG("rdpgfx.common")
 
@@ -110,6 +113,9 @@ const char* rdpgfx_get_codec_id_string(UINT16 codecId)
  */
 UINT rdpgfx_read_header(wStream* s, RDPGFX_HEADER* header)
 {
+	WINPR_ASSERT(s);
+	WINPR_ASSERT(header);
+
 	if (Stream_GetRemainingLength(s) < 8)
 	{
 		WLog_ERR(TAG, "calloc failed!");
@@ -119,6 +125,13 @@ UINT rdpgfx_read_header(wStream* s, RDPGFX_HEADER* header)
 	Stream_Read_UINT16(s, header->cmdId);     /* cmdId (2 bytes) */
 	Stream_Read_UINT16(s, header->flags);     /* flags (2 bytes) */
 	Stream_Read_UINT32(s, header->pduLength); /* pduLength (4 bytes) */
+
+	if ((header->pduLength < 8) || (Stream_GetRemainingLength(s) < (header->pduLength - 8)))
+	{
+        WLog_ERR(TAG, "header->pduLength %u less than 8!", header->pduLength);
+		return ERROR_INVALID_DATA;
+	}
+
 	return CHANNEL_RC_OK;
 }
 

@@ -1,7 +1,8 @@
-# FreeRDP cmake android options
+# FreeRDP: A Remote Desktop Protocol Implementation
+# FreeRDP cmake build script
 #
-# Copyright 2013 Thincast Technologies GmbH
-# Copyright 2013 Bernhard Miklautz <bernhard.miklautz@thincast.com>
+# Copyright 2022 Armin Novak <anovak@thincast.com>
+# Copyright 2022 Thincast Technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,8 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-option(WITH_OPENSLES "Enable sound and microphone redirection using OpenSLES" ON)
+define_channel_server("ainput")
 
-set(ANDROID_APP_TARGET_SDK 21 CACHE STRING "Application target android SDK")
-set(ANDROID_APP_MIN_SDK 14 CACHE STRING "Application minimum android SDK requirement")
+set(${MODULE_PREFIX}_SRCS
+	ainput_main.c)
 
+add_channel_server_library(${MODULE_PREFIX} ${MODULE_NAME} ${CHANNEL_NAME} FALSE "DVCPluginEntry")
+
+target_link_libraries(${MODULE_NAME} freerdp)
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Channels/${CHANNEL_NAME}/Server")
