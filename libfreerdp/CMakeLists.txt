@@ -220,12 +220,6 @@ if(WITH_JPEG)
     freerdp_library_add(${JPEG_LIBRARIES})
 endif()
 
-if(WITH_X264)
-    set(CODEC_SRCS ${CODEC_SRCS} codec/h264_x264.c)
-    freerdp_include_directory_add(${X264_INCLUDE_DIR})
-    freerdp_library_add(${X264_LIBRARIES})
-endif()
-
 if(WITH_OPENH264)
     set(CODEC_SRCS ${CODEC_SRCS} codec/h264_openh264.c)
     freerdp_include_directory_add(${OPENH264_INCLUDE_DIR})
@@ -242,6 +236,10 @@ endif()
 
 if(WIN32 AND WITH_MEDIA_FOUNDATION)
     set(CODEC_SRCS ${CODEC_SRCS} codec/h264_mf.c)
+endif()
+
+if(ANDROID AND WITH_MEDIACODEC)
+    list(APPEND CODEC_SRCS codec/h264_mediacodec.c)
 endif()
 
 freerdp_module_add(${CODEC_SRCS})

@@ -25,6 +25,7 @@
 #cmakedefine HAVE_VALGRIND_MEMCHECK_H
 #cmakedefine HAVE_EXECINFO_H
 #cmakedefine HAVE_GETLOGIN_R
+#cmakedefine HAVE_GETPWUID_R
 
 /* Features */
 #cmakedefine SWRESAMPLE_FOUND
@@ -63,9 +64,9 @@
 #cmakedefine WITH_FFMPEG
 #cmakedefine WITH_DSP_EXPERIMENTAL
 #cmakedefine WITH_DSP_FFMPEG
-#cmakedefine WITH_X264
 #cmakedefine WITH_OPENCL
 #cmakedefine WITH_MEDIA_FOUNDATION
+#cmakedefine WITH_MEDIACODEC
 
 #cmakedefine WITH_VAAPI
 
@@ -74,6 +75,9 @@
 #cmakedefine WITH_RDPDR
 
 /* Channels */
+#cmakedefine CHANNEL_AINPUT
+#cmakedefine CHANNEL_AINPUT_CLIENT
+#cmakedefine CHANNEL_AINPUT_SERVER
 #cmakedefine CHANNEL_AUDIN
 #cmakedefine CHANNEL_AUDIN_CLIENT
 #cmakedefine CHANNEL_AUDIN_SERVER
