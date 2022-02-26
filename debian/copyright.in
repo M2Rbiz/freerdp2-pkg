@@ -581,8 +581,10 @@ License: Apache License 2.0
 
 Files: CMakeCPack.cmake
  CMakeCPackOptions.cmake.in
+ ChangeLog
  README.md
  buildflags.h.in
+ channels/ainput/ChannelOptions.cmake
  channels/audin/ChannelOptions.cmake
  channels/cliprdr/ChannelOptions.cmake
  channels/disp/ChannelOptions.cmake
@@ -606,13 +608,6 @@ Files: CMakeCPack.cmake
  channels/tsmf/ChannelOptions.cmake
  channels/urbdrc/ChannelOptions.cmake
  channels/video/ChannelOptions.cmake
- ci/cmake-preloads/config-android.txt
- ci/cmake-preloads/config-debian-squeeze.txt
- ci/cmake-preloads/config-ios.txt
- ci/cmake-preloads/config-linux-all.txt
- ci/cmake-preloads/config-macosx.txt
- ci/cmake-preloads/config-ubuntu-1204.txt
- ci/cmake-preloads/config-windows.txt
  client/FreeRDP-ClientConfig.cmake.in
  client/Sample/ModuleOptions.cmake
  client/Wayland/wlfreerdp.1.in
@@ -655,7 +650,6 @@ Files: CMakeCPack.cmake
  cmake/FindPulse.cmake
  cmake/FindSWScale.cmake
  cmake/Findlibsystemd.cmake
- cmake/Findx264.cmake
  cmake/GNUInstallDirsWrapper.cmake
  cmake/InstallFreeRDPMan.cmake
  cmake/LibFindMacros.cmake
@@ -668,7 +662,6 @@ Files: CMakeCPack.cmake
  cmake/compat_2.8.3/FindPackageHandleStandardArgs.cmake
  cmake/compat_2.8.6/FeatureSummary.cmake
  cmake/compat_3.7.0/FindICU.cmake
- cmake/iOSToolchain.cmake
  cmake/today.cmake
  config.h.in
  debian/control
@@ -710,9 +703,6 @@ Files: CMakeCPack.cmake
  debian/winpr-utils.install
  docs/Doxyfile
  docs/PrintFormatSpecifiers.md
- docs/README.android
- docs/README.ios
- docs/README.macOS
  docs/README.timezones
  docs/valgrind.supp
  docs/wlog.md
@@ -768,14 +758,6 @@ Files: CMakeCPack.cmake
  resources/FreeRDP_Logo_Icon.svg
  scripts/LECHash.c
  scripts/LOMHash.c
- scripts/android-build-32.conf
- scripts/android-build-64.conf
- scripts/android-build-common.sh
- scripts/android-build-freerdp.sh
- scripts/android-build-jpeg.sh
- scripts/android-build-openh264.sh
- scripts/android-build-openssl.sh
- scripts/android-build.conf
  scripts/blacklist-memory-sanitizer.txt
  scripts/create_release_taball.sh
  scripts/fetch_language_identifiers.py
@@ -1269,6 +1251,7 @@ Files: channels/client/addin.c
  channels/remdesk/client/remdesk_main.c
  channels/remdesk/client/remdesk_main.h
  channels/remdesk/server/remdesk_main.c
+ include/freerdp/client/ainput.h
  include/freerdp/client/disp.h
  include/freerdp/client/drdynvc.h
  include/freerdp/client/encomsp.h
@@ -1532,6 +1515,29 @@ Copyright: 2012, Alfred Liu <alfred.liu@atruscorp.com>
 License: Apache License 2.0
  FIXME
 
+Files: channels/ainput/CMakeLists.txt
+ channels/ainput/client/CMakeLists.txt
+ channels/ainput/client/ainput_main.c
+ channels/ainput/client/ainput_main.h
+ channels/ainput/common/ainput_common.h
+ channels/ainput/server/CMakeLists.txt
+ channels/ainput/server/ainput_main.c
+ include/freerdp/channels/ainput.h
+ include/freerdp/channels/echo.h
+ include/freerdp/server/ainput.h
+ libfreerdp/codec/h264.h
+ libfreerdp/codec/progressive.h
+Copyright: 2017, Armin Novak <anovak@thincast.com>
+  2017, Thincast Technologies GmbH
+  2018, Armin Novak <anovak@thincast.com>
+  2018, Thincast Technologies GmbH
+  2020, Armin Novak <anovak@thincast.com>
+  2020, Thincast Technologies GmbH
+  2022, Armin Novak <anovak@thincast.com>
+  2022, Thincast Technologies GmbH
+License: Apache License 2.0
+ FIXME
+
 Files: client/X11/CMakeLists.txt
  server/Mac/mf_audin.h
  server/Mac/mf_interface.h
@@ -1645,21 +1651,6 @@ Copyright: 2019, Idan Freiberg <speidy@gmail.com>
 License: Apache License 2.0
  FIXME
 
-Files: client/common/cmdline.h
- cmake/ConfigOptionsAndroid.cmake
- include/freerdp/version.h.in
- winpr/include/winpr/intrin.h
- winpr/include/winpr/version.h.in
- winpr/libwinpr/file/test/TestFileGetStdHandle.c
-Copyright: 2013, Bernhard Miklautz <bernhard.miklautz@thincast.com>
-  2013, Thincast Technologies GmbH
-  2015, Bernhard Miklautz <bernhard.miklautz@thincast.com>
-  2015, Thincast Technologies GmbH
-  2018, Bernhard Miklautz <bernhard.miklautz@thincast.com>
-  2018, Thincast Technologies GmbH
-License: Apache License 2.0
- FIXME
-
 Files: winpr/include/winpr/comm.h
  winpr/libwinpr/comm/comm.c
  winpr/libwinpr/comm/comm_ioctl.c
@@ -1723,6 +1714,20 @@ Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2017, Thincast Technologies GmbH
   2020, Armin Novak <armin.novak@thincast.com>
   2020, Thincast Technologies GmbH
+License: Apache License 2.0
+ FIXME
+
+Files: client/common/cmdline.h
+ include/freerdp/version.h.in
+ winpr/include/winpr/intrin.h
+ winpr/include/winpr/version.h.in
+ winpr/libwinpr/file/test/TestFileGetStdHandle.c
+Copyright: 2013, Bernhard Miklautz <bernhard.miklautz@thincast.com>
+  2013, Thincast Technologies GmbH
+  2015, Bernhard Miklautz <bernhard.miklautz@thincast.com>
+  2015, Thincast Technologies GmbH
+  2018, Bernhard Miklautz <bernhard.miklautz@thincast.com>
+  2018, Thincast Technologies GmbH
 License: Apache License 2.0
  FIXME
 
@@ -1842,18 +1847,6 @@ Files: channels/audin/client/opensles/opensl_io.c
  channels/rdpsnd/client/opensles/opensl_io.h
 Copyright: 2012, Victor Lazzarini
 License: BSD 3-clause "New" or "Revised" License
- FIXME
-
-Files: include/freerdp/channels/echo.h
- libfreerdp/codec/h264.h
- libfreerdp/codec/progressive.h
-Copyright: 2017, Armin Novak <anovak@thincast.com>
-  2017, Thincast Technologies GmbH
-  2018, Armin Novak <anovak@thincast.com>
-  2018, Thincast Technologies GmbH
-  2020, Armin Novak <anovak@thincast.com>
-  2020, Thincast Technologies GmbH
-License: Apache License 2.0
  FIXME
 
 Files: include/freerdp/codec/rfx.h
@@ -2814,6 +2807,11 @@ Copyright: 2014, Dell Software <Mike.McDonald@software.dell.com>
 License: Apache License 2.0
  FIXME
 
+Files: libfreerdp/codec/h264_mediacodec.c
+Copyright: 2022, Ely Ronnen <elyronnen@gmail.com>
+License: Apache License 2.0
+ FIXME
+
 Files: client/X11/cli/xfreerdp.c
 Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2012, HP Development Company, LLC
@@ -2884,11 +2882,6 @@ Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
 License: Apache License 2.0
  FIXME
 
-Files: libfreerdp/codec/h264_x264.c
-Copyright: 2015, Marc-AndrÃ© Moreau <marcandre.moreau@gmail.com>
-License: Apache License 2.0
- FIXME
-
 Files: libfreerdp/codec/h264_ffmpeg.c
 Copyright: 2014, Mike McDonald <Mike.McDonald@software.dell.com>
   2014, erbth <t.erbesdobler@team103.com>
@@ -2929,11 +2922,6 @@ Files: cmake/Findlibusb-1.0.cmake
 Copyright: 2006, Andreas Schneider <mail@cynapses.org>
   2008, Kyle Machulis <kyle@nonpolynomial.com>
 License: BSD 3-clause "New" or "Revised" License
- FIXME
-
-Files: ChangeLog
-Copyright: NONE
-License: GNU General Public License
  FIXME
 
 Files: uwac/protocols/server-decoration.xml
