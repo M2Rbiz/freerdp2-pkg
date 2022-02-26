@@ -3,17 +3,23 @@ Upstream-Name: FreeRDP
 Upstream-Contact: FreeRDP project <freerdp-devel@lists.sourceforge.net>
 Source: https://github.com/FreeRDP/FreeRDP
 Files-Excluded:
+ ci
  client/Android
  client/iOS
  client/Mac
  client/Windows
+ cmake/ConfigOptionsAndroid.cmake
+ cmake/iOSToolchain.cmake
  docs/FreeRDP.vsd
+ docs/README.android
+ docs/README.ios
+ docs/README.macOS
  packaging
  server/Sample/rfx_test.pcap
  resources/FreeRDP_OSX.icns
  resources/FreeRDP_Logo_Icon.ai
  scripts/OpenSSL-DownloadAndBuild.command
- scripts/android-build-release.conf
+ scripts/android-*
  winpr/libwinpr/crt/utf.*
 
 Files: .clang-format
