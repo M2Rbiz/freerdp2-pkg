@@ -88,6 +88,7 @@ Files: .clang-format
  ChangeLog
  README.md
  buildflags.h.in
+ channels/ainput/ChannelOptions.cmake
  channels/audin/ChannelOptions.cmake
  channels/cliprdr/ChannelOptions.cmake
  channels/disp/ChannelOptions.cmake
@@ -111,13 +112,6 @@ Files: .clang-format
  channels/tsmf/ChannelOptions.cmake
  channels/urbdrc/ChannelOptions.cmake
  channels/video/ChannelOptions.cmake
- ci/cmake-preloads/config-android.txt
- ci/cmake-preloads/config-debian-squeeze.txt
- ci/cmake-preloads/config-ios.txt
- ci/cmake-preloads/config-linux-all.txt
- ci/cmake-preloads/config-macosx.txt
- ci/cmake-preloads/config-ubuntu-1204.txt
- ci/cmake-preloads/config-windows.txt
  client/FreeRDP-ClientConfig.cmake.in
  client/Sample/ModuleOptions.cmake
  client/Wayland/wlfreerdp.1.in
@@ -160,7 +154,6 @@ Files: .clang-format
  cmake/FindPulse.cmake
  cmake/FindSWScale.cmake
  cmake/Findlibsystemd.cmake
- cmake/Findx264.cmake
  cmake/GNUInstallDirsWrapper.cmake
  cmake/InstallFreeRDPMan.cmake
  cmake/LibFindMacros.cmake
@@ -174,9 +167,6 @@ Files: .clang-format
  cmake/today.cmake
  config.h.in
  docs/PrintFormatSpecifiers.md
- docs/README.android
- docs/README.ios
- docs/README.macOS
  docs/README.timezones
  docs/valgrind.supp
  docs/wlog.md
@@ -240,14 +230,6 @@ Files: .clang-format
  resources/FreeRDP_Logo_Icon.svg
  scripts/LECHash.c
  scripts/LOMHash.c
- scripts/android-build-32.conf
- scripts/android-build-64.conf
- scripts/android-build-common.sh
- scripts/android-build-freerdp.sh
- scripts/android-build-jpeg.sh
- scripts/android-build-openh264.sh
- scripts/android-build-openssl.sh
- scripts/android-build.conf
  scripts/blacklist-address-sanitizer.txt
  scripts/blacklist-memory-sanitizer.txt
  scripts/blacklist-thread-sanitizer.txt
@@ -388,7 +370,6 @@ Files: .clang-format
  winpr/libwinpr/path/include/PathCchAddSeparator.c
  winpr/libwinpr/path/include/PathCchAddSeparatorEx.c
  winpr/libwinpr/path/include/PathCchAppend.c
- winpr/libwinpr/path/shell_ios.h
  winpr/libwinpr/path/test/CMakeLists.txt
  winpr/libwinpr/path/test/TestPathAllocCanonicalize.c
  winpr/libwinpr/path/test/TestPathAllocCombine.c
@@ -1327,6 +1308,7 @@ Files: channels/client/addin.c
  channels/remdesk/client/remdesk_main.c
  channels/remdesk/client/remdesk_main.h
  channels/remdesk/server/remdesk_main.c
+ include/freerdp/client/ainput.h
  include/freerdp/client/disp.h
  include/freerdp/client/drdynvc.h
  include/freerdp/client/encomsp.h
@@ -1579,6 +1561,27 @@ Copyright: 2012, Alfred Liu <alfred.liu@atruscorp.com>
   2012, Atrust corp.
 License: Apache-2.0
 
+Files: channels/ainput/CMakeLists.txt
+ channels/ainput/client/CMakeLists.txt
+ channels/ainput/client/ainput_main.c
+ channels/ainput/client/ainput_main.h
+ channels/ainput/common/ainput_common.h
+ channels/ainput/server/CMakeLists.txt
+ channels/ainput/server/ainput_main.c
+ include/freerdp/channels/ainput.h
+ include/freerdp/channels/echo.h
+ include/freerdp/server/ainput.h
+ libfreerdp/codec/h264.h
+ libfreerdp/codec/progressive.h
+Copyright: 2017, Armin Novak <anovak@thincast.com>
+  2017, Thincast Technologies GmbH
+  2018, Armin Novak <anovak@thincast.com>
+  2018, Thincast Technologies GmbH
+  2020, Armin Novak <anovak@thincast.com>
+  2020, Thincast Technologies GmbH
+  2022, Armin Novak <anovak@thincast.com>
+  2022, Thincast Technologies GmbH
+License: Apache-2.0
 
 Files: client/X11/CMakeLists.txt
  server/Mac/mf_audin.h
@@ -1686,19 +1689,6 @@ Copyright: 2019, Idan Freiberg <speidy@gmail.com>
   2019, Kobi Mizrachi <kmizrachi18@gmail.com>
 License: Apache-2.0
 
-Files: client/common/cmdline.h
- include/freerdp/version.h.in
- winpr/include/winpr/intrin.h
- winpr/include/winpr/version.h.in
- winpr/libwinpr/file/test/TestFileGetStdHandle.c
-Copyright: 2013, Bernhard Miklautz <bernhard.miklautz@thincast.com>
-  2013, Thincast Technologies GmbH
-  2015, Bernhard Miklautz <bernhard.miklautz@thincast.com>
-  2015, Thincast Technologies GmbH
-  2018, Bernhard Miklautz <bernhard.miklautz@thincast.com>
-  2018, Thincast Technologies GmbH
-License: Apache-2.0
-
 Files: winpr/include/winpr/comm.h
  winpr/libwinpr/comm/comm.c
  winpr/libwinpr/comm/comm_ioctl.c
@@ -1758,6 +1748,19 @@ Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2017, Thincast Technologies GmbH
   2020, Armin Novak <armin.novak@thincast.com>
   2020, Thincast Technologies GmbH
+License: Apache-2.0
+
+Files: client/common/cmdline.h
+ include/freerdp/version.h.in
+ winpr/include/winpr/intrin.h
+ winpr/include/winpr/version.h.in
+ winpr/libwinpr/file/test/TestFileGetStdHandle.c
+Copyright: 2013, Bernhard Miklautz <bernhard.miklautz@thincast.com>
+  2013, Thincast Technologies GmbH
+  2015, Bernhard Miklautz <bernhard.miklautz@thincast.com>
+  2015, Thincast Technologies GmbH
+  2018, Bernhard Miklautz <bernhard.miklautz@thincast.com>
+  2018, Thincast Technologies GmbH
 License: Apache-2.0
 
 Files: libfreerdp/core/gateway/ntlm.c
@@ -2184,11 +2187,6 @@ Files: libfreerdp/codec/rfx_neon.c
 Copyright: 2011, Martin Fleisz <martin.fleisz@thincast.com>
 License: Apache-2.0
 
-Files: include/freerdp/codec/h264.h
- libfreerdp/codec/h264_mf.c
-Copyright: 2014, Mike McDonald <Mike.McDonald@software.dell.com>
-License: Apache-2.0
-
 Files: libfreerdp/crypto/opensslcompat.c
  libfreerdp/crypto/opensslcompat.h
 Copyright: 2016, Norbert Federa <norbert.federa@thincast.com>
@@ -2251,17 +2249,6 @@ Copyright: 2011, Anthony Tong <atong@trustedcs.com>
   2015, DI (FH) Martin Haimberger <martin.haimberger@thincast.com>
   2015, Thincast Technologies GmbH
   2016, David PHAM-VAN <d.phamvan@inuvika.com>
-License: Apache-2.0
-
-Files: include/freerdp/channels/echo.h
- libfreerdp/codec/h264.h
- libfreerdp/codec/progressive.h
-Copyright: 2017, Armin Novak <anovak@thincast.com>
-  2017, Thincast Technologies GmbH
-  2018, Armin Novak <anovak@thincast.com>
-  2018, Thincast Technologies GmbH
-  2020, Armin Novak <anovak@thincast.com>
-  2020, Thincast Technologies GmbH
 License: Apache-2.0
 
 Files: channels/printer/client/printer_main.c
@@ -2699,6 +2686,10 @@ Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2012, HP Development Company, LLC
 License: Apache-2.0
 
+Files: libfreerdp/codec/h264_mediacodec.c
+Copyright: 2022, Ely Ronnen <elyronnen@gmail.com>
+License: Apache-2.0
+
 Files: client/X11/cli/xfreerdp.c
 Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2012, HP Development Company, LLC
@@ -2749,10 +2740,6 @@ Files: server/Sample/sfreerdp.c
 Copyright: 2011, Marc-Andre Moreau <marcandre.moreau@gmail.com>
   2011, Vic Lee
   2014, Norbert Federa <norbert.federa@thincast.com>
-License: Apache-2.0
-
-Files: libfreerdp/codec/h264_x264.c
-Copyright: 2015, Marc-Andre Moreau <marcandre.moreau@gmail.com>
 License: Apache-2.0
 
 Files: libfreerdp/codec/h264_ffmpeg.c
@@ -2858,11 +2845,6 @@ Files: winpr/libwinpr/thread/test/TestThreadExitThread.c
 Copyright: 2015, Hewlett-Packard Development Company, L.P.
 License: Apache-2.0
 
-Files: cmake/ConfigOptionsAndroid.cmake
-Copyright: 2013 Thincast Technologies GmbH
-  2013, Bernhard Miklautz <bernhard.miklautz@thincast.com>
-License: Apache-2.0
-
 Files: cmake/FindDBus.cmake
 Copyright: 2008, Kevin Kofler, <kevin.kofler@chello.at>
   2006, Alexander Neundorf, <neundorf@kde.org>
@@ -2939,10 +2921,6 @@ License: BSL-1.0
 Files: cmake/MergeStaticLibs.cmake
 Copyright: 2012, Modelon AB
 License: FMILIB
-
-Files: cmake/iOSToolchain.cmake
-Copyright: 2006-2009, Kitware, Inc
-License: BSD-3-clause
 
 Files: uwac/protocols/xdg-shell.xml
 Copyright: 2008-2013, Kristian Høgsberg
