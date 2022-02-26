@@ -1,8 +1,14 @@
-freerdp2 (2.6.0+dfsg1-1) UNRELEASED; urgency=medium
+freerdp2 (2.6.0+dfsg1-1) unstable; urgency=medium
 
   * New upstream release.
+  * debian/copyright:
+    + Update list of files in Files-Excluded: field.
+    + Update copyright attributions.
+    + Update auto-generated copyright.in file.
+  * debian/libfreerdp-server2-2.symbols:
+    + Update symbols.
 
- -- Mike Gabriel <sunweaver@debian.org>  Sat, 26 Feb 2022 21:13:55 +0100
+ -- Mike Gabriel <sunweaver@debian.org>  Sat, 26 Feb 2022 21:46:12 +0100
 
 freerdp2 (2.5.0+dfsg1-1) unstable; urgency=medium
 
