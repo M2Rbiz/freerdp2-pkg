@@ -271,7 +271,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  DsCrackSpnW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  DsMakeSpnA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  DsMakeSpnW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
- DumpThreadHandles@Base 2.1.0+dfsg1
+#MISSING: 2.6.1+dfsg1-2# DumpThreadHandles@Base 2.1.0+dfsg1
  DuplicateHandle@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  EncryptMessage@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  EnterCriticalSection@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
