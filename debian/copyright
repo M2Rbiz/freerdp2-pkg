@@ -169,6 +169,7 @@ Files: .clang-format
  docs/PrintFormatSpecifiers.md
  docs/README.timezones
  docs/valgrind.supp
+ docs/version_detection.md
  docs/wlog.md
  external/README
  include/freerdp/build-config.h.in
@@ -1217,6 +1218,8 @@ Files: channels/audin/client/mac/CMakeLists.txt
  libfreerdp/core/errbase.c
  libfreerdp/core/errconnect.c
  libfreerdp/core/settings.h
+ libfreerdp/core/utils.c
+ libfreerdp/core/utils.h
  libfreerdp/crypto/test/TestKnownHosts.c
  libfreerdp/gdi/test/helpers.c
  libfreerdp/gdi/test/helpers.h
@@ -1242,6 +1245,8 @@ Copyright: 2013, Armin Novak <armin.novak@thincast.com>
   2019, Thincast Technologies GmbH
   2020, Armin Novak <armin.novak@thincast.com>
   2020, Thincast Technologies GmbH
+  2021, Armin Novak <armin.novak@thincast.com>
+  2021, Thincast Technologies GmbH
 License: Apache-2.0
 
 Files: channels/audin/client/audin_main.h
