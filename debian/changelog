@@ -1,3 +1,16 @@
+freerdp2 (2.3.0+dfsg1-2+deb11u1) bullseye; urgency=medium
+
+  [ Bernhard Miklautz ]
+  * debian/rules:
+    + Disable additional debug logging. (Closes: #1006683).
+
+  [ Mike Gabriel ]
+  * debian/patches:
+    + Add 1001_keep-symbol-DumpThreadHandles-if-debugging-is-disabled.patch.
+      Keep DumpThreadHandles as a symbol even if WITH_DEBUG_THREADS is OFF.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 08 Mar 2022 08:45:48 +0100
+
 freerdp2 (2.3.0+dfsg1-2) unstable; urgency=medium
 
   * debian/watch:
