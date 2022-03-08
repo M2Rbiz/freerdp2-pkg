@@ -15,8 +15,6 @@ Build-Depends:
  libcairo2-dev,
  libcups2-dev,
  libgsm1-dev,
- libgstreamer1.0-dev,
- libgstreamer-plugins-base1.0-dev,
  libicu-dev,
  libjpeg-dev,
  libpam0g-dev,
