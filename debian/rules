@@ -31,8 +31,6 @@ DEB_CMAKE_EXTRA_FLAGS = \
     -DWITH_CUPS=ON \
     -DWITH_PCSC=ON \
     -DWITH_JPEG=ON \
-    -DWITH_GSTREAMER_1_0=ON \
-    -DWITH_GSTREAMER_0_10=OFF \
     $(empty)
 
 ifneq (,$(filter armel,$(DEB_HOST_ARCH)))
@@ -70,6 +68,7 @@ else
     DEB_CMAKE_EXTRA_FLAGS += \
         -DWITH_GSM=ON \
         -DWITH_SWSCALE=ON \
+        -DWITH_DSP_FFMPEG=ON \
         -DSWScale_INCLUDE_DIRS=/usr/include/$(DEB_HOST_MULTIARCH) \
         -DWITH_CAIRO=OFF \
         $(empty)
