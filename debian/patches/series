@@ -22,3 +22,4 @@
 0033-Reverted-winpr_BinToHexString-argument-change.patch
 0034-Fixed-6938-Remote-app-mode-clipboard-fix.patch
 0035-Fixed-6989-Use-X509_STORE_set_default_paths.patch
+1001_keep-symbol-DumpThreadHandles-if-debugging-is-disabled.patch
