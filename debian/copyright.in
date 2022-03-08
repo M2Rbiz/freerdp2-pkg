@@ -693,9 +693,7 @@ Files: CMakeCPack.cmake
  debian/libwinpr2-2.symbols.kfreebsd-amd64
  debian/libwinpr2-2.symbols.kfreebsd-i386
  debian/libwinpr2-dev.install
- debian/patches/2001-fake-git-revision.patch
  debian/patches/README
- debian/patches/series
  debian/rules
  debian/source/format
  debian/upstream
@@ -705,6 +703,7 @@ Files: CMakeCPack.cmake
  docs/PrintFormatSpecifiers.md
  docs/README.timezones
  docs/valgrind.supp
+ docs/version_detection.md
  docs/wlog.md
  external/README
  include/freerdp/build-config.h.in
@@ -1156,6 +1155,8 @@ Files: channels/audin/client/mac/CMakeLists.txt
  libfreerdp/core/errbase.c
  libfreerdp/core/errconnect.c
  libfreerdp/core/settings.h
+ libfreerdp/core/utils.c
+ libfreerdp/core/utils.h
  libfreerdp/crypto/test/TestKnownHosts.c
  libfreerdp/gdi/test/helpers.c
  libfreerdp/gdi/test/helpers.h
@@ -1181,6 +1182,8 @@ Copyright: 2013, Armin Novak <armin.novak@thincast.com>
   2019, Thincast Technologies GmbH
   2020, Armin Novak <armin.novak@thincast.com>
   2020, Thincast Technologies GmbH
+  2021, Armin Novak <armin.novak@thincast.com>
+  2021, Thincast Technologies GmbH
 License: Apache License 2.0
  FIXME
 
