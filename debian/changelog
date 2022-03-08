@@ -1,3 +1,18 @@
+freerdp2 (2.6.1+dfsg1-2) unstable; urgency=medium
+
+  [ Bernhard Miklautz ]
+  * debian/rules:
+    + Disable additional debug logging. (Closes: #1006683).
+    + Use ffmpeg for audio decoding if available to support additional
+      audio formats.
+  * debian/control:
+    + Drop unused gstreamer dependencies libgstreamer1.0-dev and
+      libgstreamer-plugins-base1.0-dev.
+  * debian/libwinpr2-2.symbols:
+    + Update symbols.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 08 Mar 2022 08:02:25 +0100
+
 freerdp2 (2.6.1+dfsg1-1) unstable; urgency=medium
 
   * New upstream release.
