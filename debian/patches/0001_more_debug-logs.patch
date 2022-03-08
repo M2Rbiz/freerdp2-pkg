@@ -1,0 +1,161 @@
+From 631e71bebd041fbac2932555f17de050f6def91f Mon Sep 17 00:00:00 2001
+From: Armin Novak <armin.novak@thincast.com>
+Date: Tue, 8 Mar 2022 15:01:09 +0100
+Subject: [PATCH] Added more log messages for SurfaceCommand failures
+
+(cherry picked from commit c6f204091291990f85c23450778fcab35571eed5)
+---
+ libfreerdp/core/surface.c | 40 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 37 insertions(+), 3 deletions(-)
+
+diff --git a/libfreerdp/core/surface.c b/libfreerdp/core/surface.c
+index ca89d230cf4..a99da01f3f5 100644
+--- a/libfreerdp/core/surface.c
++++ b/libfreerdp/core/surface.c
+@@ -37,7 +37,11 @@ static BOOL update_recv_surfcmd_bitmap_header_ex(wStream* s, TS_COMPRESSED_BITMA
+ 		return FALSE;
+ 
+ 	if (Stream_GetRemainingLength(s) < 24)
++	{
++		WLog_ERR(TAG, "got %" PRIuz ", expected %" PRIuz " bytes", Stream_GetRemainingLength(s),
++		         24);
+ 		return FALSE;
++	}
+ 
+ 	Stream_Read_UINT32(s, header->highUniqueId);
+ 	Stream_Read_UINT32(s, header->lowUniqueId);
+@@ -54,7 +58,11 @@ static BOOL update_recv_surfcmd_bitmap_ex(wStream* s, TS_BITMAP_DATA_EX* bmp)
+ 		return FALSE;
+ 
+ 	if (Stream_GetRemainingLength(s) < 12)
++	{
++		WLog_ERR(TAG, "got %" PRIuz ", expected %" PRIuz " bytes", Stream_GetRemainingLength(s),
++		         12);
+ 		return FALSE;
++	}
+ 
+ 	Stream_Read_UINT8(s, bmp->bpp);
+ 	Stream_Read_UINT8(s, bmp->flags);
+@@ -86,7 +94,11 @@ static BOOL update_recv_surfcmd_bitmap_ex(wStream* s, TS_BITMAP_DATA_EX* bmp)
+ 	}
+ 
+ 	if (Stream_GetRemainingLength(s) < bmp->bitmapDataLength)
++	{
++		WLog_ERR(TAG, "expected bitmapDataLength %" PRIu32 ", not enough data",
++		         bmp->bitmapDataLength);
+ 		return FALSE;
++	}
+ 
+ 	pos = Stream_GetPosition(s) + bmp->bitmapDataLength;
+ 	bmp->bitmapData = Stream_Pointer(s);
+@@ -132,7 +144,10 @@ static BOOL update_recv_surfcmd_surface_bits(rdpUpdate* update, wStream* s, UINT
+ 	SURFACE_BITS_COMMAND cmd = { 0 };
+ 
+ 	if (Stream_GetRemainingLength(s) < 8)
++	{
++		WLog_ERR(TAG, "got %" PRIuz ", expected %" PRIuz " bytes", Stream_GetRemainingLength(s), 8);
+ 		goto fail;
++	}
+ 
+ 	cmd.cmdType = cmdType;
+ 	Stream_Read_UINT16(s, cmd.destLeft);
+@@ -152,7 +167,12 @@ static BOOL update_recv_surfcmd_surface_bits(rdpUpdate* update, wStream* s, UINT
+ 		goto fail;
+ 	}
+ 
+-	return update->SurfaceBits(update->context, &cmd);
++	if (!update->SurfaceBits(update->context, &cmd))
++	{
++		WLog_DBG(TAG, "update->SurfaceBits implementation failed");
++		goto fail;
++	}
++	return TRUE;
+ fail:
+ 	return FALSE;
+ }
+@@ -162,7 +182,10 @@ static BOOL update_recv_surfcmd_frame_marker(rdpUpdate* update, wStream* s)
+ 	SURFACE_FRAME_MARKER marker;
+ 
+ 	if (Stream_GetRemainingLength(s) < 6)
++	{
++		WLog_ERR(TAG, "got %" PRIuz ", expected %" PRIuz " bytes", Stream_GetRemainingLength(s), 6);
+ 		return FALSE;
++	}
+ 
+ 	Stream_Read_UINT16(s, marker.frameAction);
+ 	Stream_Read_UINT32(s, marker.frameId);
+@@ -176,7 +199,13 @@ static BOOL update_recv_surfcmd_frame_marker(rdpUpdate* update, wStream* s)
+ 		return FALSE;
+ 	}
+ 
+-	return update->SurfaceFrameMarker(update->context, &marker);
++	if (!update->SurfaceFrameMarker(update->context, &marker))
++	{
++		WLog_DBG(TAG, "update->SurfaceFrameMarker implementation failed");
++		return FALSE;
++	}
++
++	return TRUE;
+ }
+ 
+ int update_recv_surfcmds(rdpUpdate* update, wStream* s)
+@@ -246,10 +275,15 @@ static BOOL update_write_surfcmd_bitmap_ex(wStream* s, const TS_BITMAP_DATA_EX*
+ 	if (!Stream_EnsureRemainingCapacity(s, 12))
+ 		return FALSE;
+ 
++	if (bmp->codecID > UINT8_MAX)
++	{
++		WLog_ERR(TAG, "Invalid TS_BITMAP_DATA_EX::codecID=0x%04" PRIx16 "", bmp->codecID);
++		return FALSE;
++	}
+ 	Stream_Write_UINT8(s, bmp->bpp);
+ 	Stream_Write_UINT8(s, bmp->flags);
+ 	Stream_Write_UINT8(s, 0); /* reserved1, reserved2 */
+-	Stream_Write_UINT8(s, bmp->codecID);
++	Stream_Write_UINT8(s, (UINT8)bmp->codecID);
+ 	Stream_Write_UINT16(s, bmp->width);
+ 	Stream_Write_UINT16(s, bmp->height);
+ 	Stream_Write_UINT32(s, bmp->bitmapDataLength);
+---
+From 79207e6700e83ffcbd707985086bb3a6dc06dfb9 Mon Sep 17 00:00:00 2001
+From: Armin Novak <armin.novak@thincast.com>
+Date: Tue, 8 Mar 2022 15:21:23 +0100
+Subject: [PATCH] rfx_process_message verbose error log
+
+(cherry picked from commit c194a68b1bb44af3a180d7bdad678655bd673dc9)
+---
+ libfreerdp/codec/rfx.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/libfreerdp/codec/rfx.c b/libfreerdp/codec/rfx.c
+index 8c65e750837..b41c15794da 100644
+--- a/libfreerdp/codec/rfx.c
++++ b/libfreerdp/codec/rfx.c
+@@ -1071,7 +1071,10 @@ BOOL rfx_process_message(RFX_CONTEXT* context, const BYTE* data, UINT32 length,
+ 			UINT8 channelId;
+ 
+ 			if (Stream_GetRemainingLength(s) < 2)
++			{
++				WLog_ERR(TAG, "extraBlockLen too small(%" PRIuz ")", Stream_GetRemainingLength(s));
+ 				return FALSE;
++			}
+ 
+ 			extraBlockLen = 2;
+ 			Stream_Read_UINT8(s, codecId);   /* codecId (1 byte) must be set to 0x01 */
+@@ -1212,6 +1215,9 @@ BOOL rfx_process_message(RFX_CONTEXT* context, const BYTE* data, UINT32 length,
+ 				                        NULL, FREERDP_FLIP_NONE))
+ 				{
+ 					region16_uninit(&updateRegion);
++					WLog_ERR(TAG,
++					         "nbUpdateRectx[% " PRIu32 " (%" PRIu32 ")] freerdp_image_copy failed",
++					         j, nbUpdateRects);
+ 					return FALSE;
+ 				}
+ 
+@@ -1226,6 +1232,7 @@ BOOL rfx_process_message(RFX_CONTEXT* context, const BYTE* data, UINT32 length,
+ 		return TRUE;
+ 	}
+ 
++	WLog_ERR(TAG, "%s failed", __FUNCTION__);
+ 	return FALSE;
+ }
