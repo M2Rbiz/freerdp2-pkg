@@ -85,7 +85,7 @@ if ($ENV{BUILD_NUMBER})
 endif()
 set(WITH_LIBRARY_VERSIONING "ON")
 
-set(RAW_VERSION_STRING "2.6.0")
+set(RAW_VERSION_STRING "2.6.1")
 if(EXISTS "${CMAKE_SOURCE_DIR}/.source_tag")
 	file(READ ${CMAKE_SOURCE_DIR}/.source_tag RAW_VERSION_STRING)
 elseif(USE_VERSION_FROM_GIT_TAG)
@@ -110,6 +110,24 @@ else()
 	set(FREERDP_VERSION_FULL "${FREERDP_VERSION}")
 endif()
 message("FREERDP_VERSION=${FREERDP_VERSION_FULL}")
+
+if(EXISTS "${PROJECT_SOURCE_DIR}/.source_version" )
+	file(READ ${PROJECT_SOURCE_DIR}/.source_version GIT_REVISION)
+
+  string(STRIP ${GIT_REVISION} GIT_REVISION)
+elseif(USE_VERSION_FROM_GIT_TAG)
+	git_get_exact_tag(GIT_REVISION --tags --always)
+
+	if (${GIT_REVISION} STREQUAL "n/a")
+		git_rev_parse (GIT_REVISION --short)
+	endif()
+endif()
+
+if (NOT GIT_REVISION)
+	set(GIT_REVISION ${FREERDP_VERSION})
+endif()
+
+message(STATUS "Git Revision ${GIT_REVISION}")
 
 set(FREERDP_INCLUDE_DIR "include/freerdp${FREERDP_VERSION_MAJOR}/")
 
@@ -147,24 +165,10 @@ if(CCACHE AND WITH_CCACHE)
 	endif()
 endif(CCACHE AND WITH_CCACHE)
 
-if(EXISTS "${CMAKE_SOURCE_DIR}/.source_version" )
-	file(READ ${CMAKE_SOURCE_DIR}/.source_version GIT_REVISION)
-
-  string(STRIP ${GIT_REVISION} GIT_REVISION)
-else()
-	git_get_exact_tag(GIT_REVISION --tags --always)
-
-	if (${GIT_REVISION} STREQUAL "n/a")
-		git_rev_parse (GIT_REVISION --short)
-	endif()
-endif()
-
 if(CMAKE_CROSSCOMPILING)
 	SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY)
 endif(CMAKE_CROSSCOMPILING)
 # /Allow to search the host machine for git/ccache
-
-message(STATUS "Git Revision ${GIT_REVISION}")
 
 # Turn on solution folders (2.8.4+)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
