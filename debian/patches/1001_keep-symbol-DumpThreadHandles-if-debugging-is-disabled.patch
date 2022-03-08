@@ -4,7 +4,7 @@ Forwarded: https://github.com/FreeRDP/FreeRDP/pull/7708
 
 --- a/winpr/libwinpr/thread/thread.c
 +++ b/winpr/libwinpr/thread/thread.c
-@@ -783,9 +783,9 @@
+@@ -760,9 +760,9 @@
  	return TRUE;
  }
  
@@ -15,7 +15,7 @@ Forwarded: https://github.com/FreeRDP/FreeRDP/pull/7708
  	char** msg;
  	size_t used, i;
  	void* stack = winpr_backtrace(20);
-@@ -846,6 +846,6 @@
+@@ -823,6 +823,6 @@
  	}
  
  	WLog_DBG(TAG, "---------------- End Dumping thread handles -------------");
@@ -25,7 +25,7 @@ Forwarded: https://github.com/FreeRDP/FreeRDP/pull/7708
  #endif
 --- a/winpr/include/winpr/thread.h
 +++ b/winpr/include/winpr/thread.h
-@@ -248,10 +248,7 @@
+@@ -245,10 +245,7 @@
  	/* CommandLineToArgvA is not present in the original Windows API, WinPR always exports it */
  
  	WINPR_API LPSTR* CommandLineToArgvA(LPCSTR lpCmdLine, int* pNumArgs);
