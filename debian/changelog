@@ -1,3 +1,10 @@
+freerdp2 (2.6.1+dfsg1-3~bpo10+0.3) buster-backports; urgency=medium
+
+  * Workaround for [MS-RDPBCGR] 2.2.9.2.3 Frame Marker Command
+    (TS_FRAME_MARKER), ignore short frame marker to prevent disconnect
+
+ -- Fabio Fantoni <fabio.fantoni@m2r.biz>  Wed, 09 Mar 2022 11:53:49 +0100
+
 freerdp2 (2.6.1+dfsg1-3~bpo10+0.2) buster-backports; urgency=medium
 
   * d/control: -DWITH_DEBUG_ALL=ON
