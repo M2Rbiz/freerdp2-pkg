@@ -1,3 +1,9 @@
+freerdp2 (2.6.1+dfsg1-3~bpo10+0.4) buster-backports; urgency=medium
+
+  * d/control: -DWITH_DEBUG_ALL=OFF
+
+ -- Fabio Fantoni <fabio.fantoni@m2r.biz>  Wed, 16 Mar 2022 11:32:19 +0100
+
 freerdp2 (2.6.1+dfsg1-3~bpo10+0.3) buster-backports; urgency=medium
 
   * Workaround for [MS-RDPBCGR] 2.2.9.2.3 Frame Marker Command
