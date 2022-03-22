@@ -1,3 +1,9 @@
+freerdp2 (2.6.1+dfsg1-3~bpo11+0.1) bullseye-backports; urgency=medium
+
+  * Unofficial bullseye backports
+
+ -- Fabio Fantoni <fabio.fantoni@m2r.biz>  Tue, 22 Mar 2022 16:53:09 +0100
+
 freerdp2 (2.6.1+dfsg1-3~bpo10+0.4) buster-backports; urgency=medium
 
   * d/control: -DWITH_DEBUG_ALL=OFF
