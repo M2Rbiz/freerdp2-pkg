@@ -1,3 +1,9 @@
+freerdp2 (2.6.1+dfsg1-3~bpo11+0.2) bullseye-backports; urgency=medium
+
+  * Urbrdc fixes
+
+ -- Fabio Fantoni <fabio.fantoni@m2r.biz>  Thu, 07 Apr 2022 12:07:11 +0200
+
 freerdp2 (2.6.1+dfsg1-3~bpo11+0.1) bullseye-backports; urgency=medium
 
   * Unofficial bullseye backports

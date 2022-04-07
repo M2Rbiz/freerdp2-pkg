@@ -1,3 +1,4 @@
 1001_keep-symbol-DumpThreadHandles-if-debugging-is-disabled.patch
 0001_more_debug-logs.patch
 0002_workaround-short-frame-marker.patch
+0003_urbrdc_fix.patch
