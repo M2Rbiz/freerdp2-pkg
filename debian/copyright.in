@@ -693,7 +693,9 @@ Files: CMakeCPack.cmake
  debian/libwinpr2-2.symbols.kfreebsd-amd64
  debian/libwinpr2-2.symbols.kfreebsd-i386
  debian/libwinpr2-dev.install
+ debian/patches/1001_keep-symbol-DumpThreadHandles-if-debugging-is-disabled.patch
  debian/patches/README
+ debian/patches/series
  debian/rules
  debian/source/format
  debian/upstream
@@ -1161,6 +1163,7 @@ Files: channels/audin/client/mac/CMakeLists.txt
  libfreerdp/gdi/test/helpers.c
  libfreerdp/gdi/test/helpers.h
  scripts/test-scard.cpp
+ winpr/include/winpr/assert.h
  winpr/include/winpr/debug.h
  winpr/libwinpr/nt/ntstatus.c
  winpr/libwinpr/sysinfo/cpufeatures/CMakeLists.txt
@@ -2888,7 +2891,7 @@ License: Apache License 2.0
 Files: libfreerdp/codec/h264_ffmpeg.c
 Copyright: 2014, Mike McDonald <Mike.McDonald@software.dell.com>
   2014, erbth <t.erbesdobler@team103.com>
-  2015, Marc-AndrÃ© Moreau <marcandre.moreau@gmail.com>
+  2015, Marc-André Moreau <marcandre.moreau@gmail.com>
 License: Apache License 2.0
  FIXME
 
@@ -2928,7 +2931,7 @@ License: BSD 3-clause "New" or "Revised" License
  FIXME
 
 Files: uwac/protocols/server-decoration.xml
-Copyright: 2015, Martin GrÃ¤Ãlin
+Copyright: 2015, Martin Gräßlin
 License: GNU Lesser General Public License v2.1 or later
  FIXME
 
@@ -2950,7 +2953,7 @@ License: NTP License (legal disclaimer)
  FIXME
 
 Files: uwac/libuwac/uwac-utils.c
-Copyright: 2008, Kristian HÃ¸gsberg
+Copyright: 2008, Kristian Høgsberg
   2012, Collabora, Ltd.
   2014, David FORT <contact@hardening-consulting.com>
 License: NTP License (legal disclaimer)
@@ -3008,7 +3011,7 @@ License: UNKNOWN
  FIXME
 
 Files: uwac/protocols/xdg-shell.xml
-Copyright: 2008-2013, Kristian HÃ¸gsberg
+Copyright: 2008-2013, Kristian Høgsberg
   2010-2013, Intel Corporation
   2013, Jasper St. Pierre
   2013, Rafael Antognolli
