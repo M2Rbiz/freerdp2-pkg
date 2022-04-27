@@ -96,6 +96,7 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  CertFindCertificateInStore@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CertGetNameStringA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CertGetNameStringW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ CertOpenStore@Base 2.7.0+dfsg1
  CertOpenSystemStoreA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CertOpenSystemStoreW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  ChangeTimerQueueTimer@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -245,8 +246,12 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  CredWriteDomainCredentialsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CredWriteDomainCredentialsW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CredWriteW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ CryptBinaryToStringA@Base 2.7.0+dfsg1
+ CryptBinaryToStringW@Base 2.7.0+dfsg1
  CryptProtectData@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CryptProtectMemory@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ CryptStringToBinaryA@Base 2.7.0+dfsg1
+ CryptStringToBinaryW@Base 2.7.0+dfsg1
  CryptUnprotectData@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  CryptUnprotectMemory@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  DceErrorInqTextA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -301,6 +306,8 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  FindWindowW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  FlushFileBuffers@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  FlushViewOfFile@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ FormatMessageA@Base 2.7.0+dfsg1
+ FormatMessageW@Base 2.7.0+dfsg1
  FreeContextBuffer@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  FreeCredentialsHandle@Base 2.0.0~git20181120.1.e21b72c95+dfsg1
  FreeEnvironmentStringsA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -1476,6 +1483,9 @@ libwinpr2.so.2 libwinpr2-2 #MINVER#
  _wcsnlen@Base 2.0.0~git20190204.1.2693389a+dfsg1
  _wcsrchr@Base 2.0.0~git20170725.1.1648deb+dfsg1
  closesocket@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ g_rgSCardRawPci@Base 2.7.0+dfsg1
+ g_rgSCardT0Pci@Base 2.7.0+dfsg1
+ g_rgSCardT1Pci@Base 2.7.0+dfsg1
  lstrcmpA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  lstrcmpW@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  lstrlenA@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
