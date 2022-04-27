@@ -23,7 +23,7 @@
 #include "config.h"
 #endif
 
-#include <assert.h>
+#include <winpr/assert.h>
 #include <winpr/crt.h>
 #include <winpr/print.h>
 #include <winpr/bitstream.h>
@@ -40,8 +40,6 @@
 #include "rfx_rlgr.h"
 #include "rfx_types.h"
 #include "progressive.h"
-
-#define WINPR_ASSERT(x) assert(x)
 
 #define TAG FREERDP_TAG("codec.progressive")
 
@@ -370,13 +368,11 @@ static INLINE PROGRESSIVE_SURFACE_CONTEXT*
 progressive_get_surface_data(PROGRESSIVE_CONTEXT* progressive, UINT16 surfaceId)
 {
 	void* key = (void*)(((ULONG_PTR)surfaceId) + 1);
-	void* pData = NULL;
 
 	if (!progressive)
 		return NULL;
 
-	pData = HashTable_GetItemValue(progressive->SurfaceContexts, key);
-	return pData;
+	return HashTable_GetItemValue(progressive->SurfaceContexts, key);
 }
 
 static void progressive_tile_free(RFX_PROGRESSIVE_TILE* tile)
@@ -389,9 +385,13 @@ static void progressive_tile_free(RFX_PROGRESSIVE_TILE* tile)
 	}
 }
 
-static void progressive_surface_context_free(PROGRESSIVE_SURFACE_CONTEXT* surface)
+static void progressive_surface_context_free(void* ptr)
 {
+	PROGRESSIVE_SURFACE_CONTEXT* surface = ptr;
 	UINT32 index;
+
+	if (!surface)
+		return;
 
 	for (index = 0; index < surface->gridSize; index++)
 	{
@@ -612,13 +612,7 @@ INT32 progressive_create_surface_context(PROGRESSIVE_CONTEXT* progressive, UINT1
 
 int progressive_delete_surface_context(PROGRESSIVE_CONTEXT* progressive, UINT16 surfaceId)
 {
-	PROGRESSIVE_SURFACE_CONTEXT* surface = progressive_get_surface_data(progressive, surfaceId);
-
-	if (surface)
-	{
-		progressive_set_surface_data(progressive, surfaceId, NULL);
-		progressive_surface_context_free(surface);
-	}
+	progressive_set_surface_data(progressive, surfaceId, NULL);
 
 	return 1;
 }
@@ -1113,7 +1107,7 @@ static INLINE INT16 progressive_rfx_srl_read(RFX_PROGRESSIVE_UPGRADE_STATE* stat
 			if (k)
 			{
 				bs->mask = ((1 << k) - 1);
-				state->nz = ((bs->accumulator >> (32 - k)) & bs->mask);
+				state->nz = ((bs->accumulator >> (32u - k)) & bs->mask);
 				BitStream_Shift(bs, k);
 			}
 
@@ -1664,6 +1658,9 @@ static void CALLBACK progressive_process_tiles_tile_work_callback(PTP_CALLBACK_I
                                                                   void* context, PTP_WORK work)
 {
 	PROGRESSIVE_TILE_PROCESS_WORK_PARAM* param = (PROGRESSIVE_TILE_PROCESS_WORK_PARAM*)context;
+
+	WINPR_UNUSED(instance);
+	WINPR_UNUSED(work);
 
 	switch (param->tile->blockType)
 	{
@@ -2400,8 +2397,8 @@ INT32 progressive_decompress_ex(PROGRESSIVE_CONTEXT* progressive, const BYTE* pS
 	{
 		RECTANGLE_16 clippingRect;
 		const RFX_RECT* rect = &(region->rects[i]);
-		clippingRect.left = nXDst + rect->x;
-		clippingRect.top = nYDst + rect->y;
+		clippingRect.left = (UINT16)nXDst + rect->x;
+		clippingRect.top = (UINT16)nYDst + rect->y;
 		clippingRect.right = clippingRect.left + rect->width;
 		clippingRect.bottom = clippingRect.top + rect->height;
 		region16_union_rect(&clippingRects, &clippingRects, &clippingRect);
@@ -2744,6 +2741,8 @@ PROGRESSIVE_CONTEXT* progressive_context_new(BOOL Compressor)
 	if (!progressive_context_reset(progressive))
 		goto fail;
 
+	progressive->SurfaceContexts->valueFree = progressive_surface_context_free;
+
 	return progressive;
 fail:
 	progressive_context_free(progressive);
@@ -2752,11 +2751,6 @@ fail:
 
 void progressive_context_free(PROGRESSIVE_CONTEXT* progressive)
 {
-	int count;
-	int index;
-	ULONG_PTR* pKeys = NULL;
-	PROGRESSIVE_SURFACE_CONTEXT* surface;
-
 	if (!progressive)
 		return;
 
@@ -2765,21 +2759,7 @@ void progressive_context_free(PROGRESSIVE_CONTEXT* progressive)
 	rfx_context_free(progressive->rfx_context);
 
 	BufferPool_Free(progressive->bufferPool);
-
-	if (progressive->SurfaceContexts)
-	{
-		count = HashTable_GetKeys(progressive->SurfaceContexts, &pKeys);
-
-		for (index = 0; index < count; index++)
-		{
-			surface = (PROGRESSIVE_SURFACE_CONTEXT*)HashTable_GetItemValue(
-			    progressive->SurfaceContexts, (void*)pKeys[index]);
-			progressive_surface_context_free(surface);
-		}
-
-		free(pKeys);
-		HashTable_Free(progressive->SurfaceContexts);
-	}
+	HashTable_Free(progressive->SurfaceContexts);
 
 	free(progressive);
 }

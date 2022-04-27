@@ -1,7 +1,26 @@
+# 2022-04-25 Version 2.7.0
+
+Noteworthy changes:
+* Backported OpenSSL3 gateway support (#7822)
+* Backported various NTLM fixes
+* Backported WINPR_ASSERT to ease future backports
+
+Fixed issues:
+* Backported #6786: Use /network:auto by default
+* Backported #7714: Workaround for broken surface frame marker
+* Backported #7733: Support 10bit X11 color (BGRX32 only)
+* Backported #7745: GFX progressive double free
+* Backported #7808: Disable websockets with /gt:rpc
+* Backported #7815: RAIL expect LOGON_MSG_SESSION_CONTINUE
+
+Important notes:
+
+For a complete and detailed change log since the last release run:
+git log 2.6.1..2.7.0
+
 # 2022-03-07 Version 2.6.1
 
 Noteworthy changes:
-* Decreased logging verbosity, now freerdp is much less verbose by default
 
 Fixed issues:
 * Backported freerdp_abort_connect during freerdp_connect fix (#7700)
