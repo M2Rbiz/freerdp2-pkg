@@ -1224,6 +1224,7 @@ Files: channels/audin/client/mac/CMakeLists.txt
  libfreerdp/gdi/test/helpers.c
  libfreerdp/gdi/test/helpers.h
  scripts/test-scard.cpp
+ winpr/include/winpr/assert.h
  winpr/include/winpr/debug.h
  winpr/libwinpr/nt/ntstatus.c
  winpr/libwinpr/sysinfo/cpufeatures/CMakeLists.txt
