@@ -401,13 +401,9 @@ rdpSettings* freerdp_settings_new(DWORD flags)
 	if (!settings->ClientProductId)
 		goto out_fail;
 
-	settings->ClientHostname = calloc(1, 32);
-
-	if (!settings->ClientHostname)
+	if (!freerdp_settings_set_string(settings, FreeRDP_ClientHostname, settings->ComputerName))
 		goto out_fail;
 
-	gethostname(settings->ClientHostname, 31);
-	settings->ClientHostname[31] = 0;
 	settings->ColorPointerFlag = TRUE;
 	settings->LargePointerFlag = (LARGE_POINTER_FLAG_96x96 | LARGE_POINTER_FLAG_384x384);
 	settings->PointerCacheSize = 20;
@@ -492,6 +488,7 @@ rdpSettings* freerdp_settings_new(DWORD flags)
 	settings->GatewayRpcTransport = TRUE;
 	settings->GatewayHttpTransport = TRUE;
 	settings->GatewayUdpTransport = TRUE;
+	settings->GatewayHttpUseWebsockets = TRUE;
 	settings->FastPathInput = TRUE;
 	settings->FastPathOutput = TRUE;
 	settings->LongCredentialsSupported = TRUE;

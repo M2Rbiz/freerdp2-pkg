@@ -21,6 +21,12 @@ project(WinPR C)
 
 set(CMAKE_COLOR_MAKEFILE ON)
 
+option(WITH_VERBOSE_WINPR_ASSERT "Compile with verbose WINPR_ASSERT." ON)
+
+if (WITH_VERBOSE_WINPR_ASSERT)
+    add_definitions(-DWITH_VERBOSE_WINPR_ASSERT)
+endif()
+
 if(FREERDP_VERSION)
 	set(FREERDP_BUILD 1)
 endif()
@@ -51,7 +57,7 @@ if (NOT WIN32)
 endif()
 
 # Soname versioning
-set(RAW_VERSION_STRING "2.6.1")
+set(RAW_VERSION_STRING "2.7.0")
 if(EXISTS "${CMAKE_SOURCE_DIR}/.source_tag")
 	file(READ ${CMAKE_SOURCE_DIR}/.source_tag RAW_VERSION_STRING)
 elseif(USE_VERSION_FROM_GIT_TAG)
