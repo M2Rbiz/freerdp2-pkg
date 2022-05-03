@@ -1,0 +1,66 @@
+From 50bc2d59e881ff70ccb148f28ffe41e6d0cbbe13 Mon Sep 17 00:00:00 2001
+From: Armin Novak <armin.novak@thincast.com>
+Date: Wed, 7 Jul 2021 08:58:02 +0200
+Subject: [PATCH] Fixed #7158: detection of arm neon.
+
+(cherry picked from commit 6e075a6a7dda9ca32be730c947af785080f92aa5)
+---
+ CMakeLists.txt              | 6 ++++++
+ libfreerdp/CMakeLists.txt   | 7 ++++++-
+ libfreerdp/codec/rfx_neon.c | 4 ++--
+ 3 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 172832f8fc3..bfdb7a82683 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -598,6 +598,12 @@ if(ANDROID)
+ 		set (WITH_NEON OFF)
+ 	endif()
+ 
++	if(ANDROID_ABI STREQUAL arm64-v8a)
++		# https://github.com/android/ndk/issues/910
++		add_definitions(-D__ARM_NEON)
++		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=softfp")
++	endif()
++
+ 	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+ 		add_definitions(-DNDK_DEBUG=1)
+ 
+diff --git a/libfreerdp/CMakeLists.txt b/libfreerdp/CMakeLists.txt
+index 5b7461498bf..0b55388168e 100644
+--- a/libfreerdp/CMakeLists.txt
++++ b/libfreerdp/CMakeLists.txt
+@@ -211,7 +211,12 @@ if(FAAC_FOUND)
+ endif()
+ 
+ if(WITH_NEON)
+-    set_source_files_properties(${CODEC_NEON_SRCS} PROPERTIES COMPILE_FLAGS "-mfpu=neon -Wno-unused-variable" )
++    check_symbol_exists("_M_AMD64"     ""  MSVC_ARM64)
++    check_symbol_exists("__aarch64__"  ""  ARCH_ARM64)
++
++    if (NOT MSVC_ARM64 AND NOT ARCH_ARM64)
++        set_source_files_properties(${CODEC_NEON_SRCS} PROPERTIES COMPILE_FLAGS "-mfpu=neon" )
++    endif()
+     set(CODEC_SRCS ${CODEC_SRCS} ${CODEC_NEON_SRCS})
+ endif()
+ 
+diff --git a/libfreerdp/codec/rfx_neon.c b/libfreerdp/codec/rfx_neon.c
+index c98955adeed..8a9bd8bcf1c 100644
+--- a/libfreerdp/codec/rfx_neon.c
++++ b/libfreerdp/codec/rfx_neon.c
+@@ -21,7 +21,7 @@
+ #include "config.h"
+ #endif
+ 
+-#if defined(__ARM_NEON__)
++#if defined(__ARM_NEON)
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -241,4 +241,4 @@ void rfx_init_neon(RFX_CONTEXT* context)
+ 	}
+ }
+ 
+-#endif // __ARM_NEON__
++#endif // __ARM_NEON
