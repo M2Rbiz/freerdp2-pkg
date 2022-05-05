@@ -1,2 +1,4 @@
 1001_keep-symbol-DumpThreadHandles-if-debugging-is-disabled.patch
 0001_fixed_neon_detection-arm64.patch
+0002_fix-neon-rfx.patch
+0003_unified-neon-source-options.patch
