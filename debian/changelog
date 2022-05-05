@@ -1,3 +1,9 @@
+freerdp2 (2.7.0+dfsg1-1~bpo11+0.3) bullseye-backports; urgency=medium
+
+  * d/rules: remove force enable of neon on configure on arm64
+
+ -- Fabio Fantoni <fabio.fantoni@m2r.biz>  Thu, 05 May 2022 15:28:44 +0200
+
 freerdp2 (2.7.0+dfsg1-1~bpo11+0.2) bullseye-backports; urgency=medium
 
   * d/rules: force enable of neon on configure on arm64

@@ -39,12 +39,6 @@ ifneq (,$(filter armel,$(DEB_HOST_ARCH)))
         $(empty)
 endif
 
-ifneq (,$(filter arm64,$(DEB_HOST_ARCH)))
-    DEB_CMAKE_EXTRA_FLAGS += \
-        -DWITH_NEON=ON \
-        $(empty)
-endif
-
 ifneq (,$(filter linux,$(DEB_HOST_ARCH_OS)))
     DEB_CMAKE_EXTRA_FLAGS += \
         -DCHANNEL_URBDRC=ON \
