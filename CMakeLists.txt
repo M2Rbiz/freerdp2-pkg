@@ -85,7 +85,7 @@ if ($ENV{BUILD_NUMBER})
 endif()
 set(WITH_LIBRARY_VERSIONING "ON")
 
-set(RAW_VERSION_STRING "2.7.0")
+set(RAW_VERSION_STRING "2.8.0")
 if(EXISTS "${CMAKE_SOURCE_DIR}/.source_tag")
 	file(READ ${CMAKE_SOURCE_DIR}/.source_tag RAW_VERSION_STRING)
 elseif(USE_VERSION_FROM_GIT_TAG)
@@ -355,7 +355,7 @@ if(NOT IOS)
 	find_package(Threads REQUIRED)
 endif()
 
-if(NOT WIN32)
+if(NOT WIN32 AND NOT IOS)
 	CHECK_SYMBOL_EXISTS(pthread_mutex_timedlock pthread.h HAVE_PTHREAD_MUTEX_TIMEDLOCK_SYMBOL)
 	if (NOT HAVE_PTHREAD_MUTEX_TIMEDLOCK_SYMBOL)
 		CHECK_LIBRARY_EXISTS(pthread pthread_mutex_timedlock "" HAVE_PTHREAD_MUTEX_TIMEDLOCK_LIB)
@@ -596,6 +596,11 @@ if(ANDROID)
 
 	if (${ANDROID_ABI} STREQUAL "armeabi")
 		set (WITH_NEON OFF)
+	endif()
+
+	if(ANDROID_ABI STREQUAL arm64-v8a)
+		# https://github.com/android/ndk/issues/910
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=softfp")
 	endif()
 
 	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -1031,15 +1036,6 @@ endif()
 add_subdirectory(include)
 
 add_subdirectory(libfreerdp)
-
-if (IOS)
-	set(CMAKE_OSX_DEPLOYMENT_TARGET "10.0")
-	if (IOS_PLATFORM MATCHES "SIMULATOR")
-		set(CMAKE_OSX_SYSROOT "iphonesimulator")
-	else()
-		set(CMAKE_OSX_SYSROOT "iphoneos")
-	endif()
-endif()
 
 # RdTk
 include_directories("${CMAKE_SOURCE_DIR}/rdtk/include")

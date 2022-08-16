@@ -656,6 +656,8 @@ typedef struct _RDPDR_PARALLEL RDPDR_PARALLEL;
 #define FreeRDP_NtlmSamFile (1103)
 #define FreeRDP_FIPSMode (1104)
 #define FreeRDP_TlsSecLevel (1105)
+#define FreeRDP_TLSMinVersion (1106)
+#define FreeRDP_TLSMaxVersion (1107)
 #define FreeRDP_MstscCookieMode (1152)
 #define FreeRDP_CookieMaxLength (1153)
 #define FreeRDP_PreconnectionId (1154)
@@ -1108,7 +1110,9 @@ struct rdp_settings
 	ALIGN64 char* NtlmSamFile;                 /* 1103 */
 	ALIGN64 BOOL FIPSMode;                     /* 1104 */
 	ALIGN64 UINT32 TlsSecLevel;                /* 1105 */
-	UINT64 padding1152[1152 - 1106];           /* 1106 */
+	ALIGN64 UINT16 TLSMinVersion;              /* 1106 */
+	ALIGN64 UINT16 TLSMaxVersion;              /* 1107 */
+	UINT64 padding1152[1152 - 1108];           /* 1108 */
 
 	/* Connection Cookie */
 	ALIGN64 BOOL MstscCookieMode;      /* 1152 */
@@ -1704,6 +1708,9 @@ extern "C"
 	FREERDP_API SSIZE_T freerdp_settings_get_type_for_name(const char* value);
 	FREERDP_API SSIZE_T freerdp_settings_get_type_for_key(size_t key);
 	FREERDP_API const char* freerdp_settings_get_name_for_key(size_t key);
+
+	FREERDP_API char* freerdp_rail_support_flags_to_string(UINT32 flags, char* buffer,
+	                                                       size_t length);
 
 #ifdef __cplusplus
 }
