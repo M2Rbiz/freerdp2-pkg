@@ -1,3 +1,19 @@
+freerdp2 (2.8.0+dfsg1-1) unstable; urgency=medium
+
+  * New upstream version. (Closes: #1016491).
+  * debian/control:
+    + Bump Standards-Version: to 4.6.1. No changes needed.
+  * debian/copyright:
+    + Update auto-generated copyright.in file.
+    + Update copyright attributions.
+  * debian/patches:
+    + Drop 1001_keep-symbol-DumpThreadHandles-if-debugging-is-disabled.patch.
+      Similar solution applied upstream, but only partially, it seems.
+    + Add 1001_amend-DumpThreadHandles-inclusion.patch. Amend missing adjustment
+      in thread.h.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 16 Aug 2022 23:19:34 +0200
+
 freerdp2 (2.7.0+dfsg1-1) unstable; urgency=medium
 
   * New upstream release.
