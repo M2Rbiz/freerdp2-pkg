@@ -11,6 +11,8 @@ freerdp2 (2.8.0+dfsg1-1) unstable; urgency=medium
       Similar solution applied upstream, but only partially, it seems.
     + Add 1001_amend-DumpThreadHandles-inclusion.patch. Amend missing adjustment
       in thread.h.
+  * debian/*.symbols:
+    + Update .symbols files for 2.8.0.
 
  -- Mike Gabriel <sunweaver@debian.org>  Tue, 16 Aug 2022 23:19:34 +0200
 
