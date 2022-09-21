@@ -9,9 +9,12 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  WTSChannelGetHandleById@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WTSChannelGetHandleByName@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WTSChannelGetId@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ WTSChannelGetIdByHandle@Base 2.8.0+dfsg1
  WTSChannelGetName@Base 2.1.0+dfsg1
+ WTSChannelGetOptions@Base 2.8.0+dfsg1
  WTSChannelSetHandleById@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WTSChannelSetHandleByName@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ WTSGetAcceptedChannelNames@Base 2.8.0+dfsg1
  WTSIsChannelJoinedById@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WTSIsChannelJoinedByName@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WTSVirtualChannelManagerCheckFileDescriptor@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -19,6 +22,7 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  WTSVirtualChannelManagerGetEventHandle@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WTSVirtualChannelManagerGetFileDescriptor@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  WTSVirtualChannelManagerIsChannelJoined@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ WTSVirtualChannelManagerSetDVCCreationCallback@Base 2.8.0+dfsg1
  _ber_sizeof_length@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  _der_skip_length@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  _er_skip_length@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -92,6 +96,9 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  clear_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  clear_context_reset@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  clear_decompress@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ cliprdr_parse_file_list@Base 2.8.0+dfsg1
+ cliprdr_serialize_file_list@Base 2.8.0+dfsg1
+ cliprdr_serialize_file_list_ex@Base 2.8.0+dfsg1
  codecs_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  codecs_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  connectErrorCode@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
@@ -309,9 +316,12 @@ libfreerdp2.so.2 libfreerdp2-2 #MINVER#
  freerdp_peer_context_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_peer_free@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_peer_new@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
+ freerdp_peer_os_major_type_string@Base 2.8.0+dfsg1
+ freerdp_peer_os_minor_type_string@Base 2.8.0+dfsg1
  freerdp_performance_flags_make@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_performance_flags_split@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_planar_switch_bgr@Base 2.3.0+dfsg1
+ freerdp_rail_support_flags_to_string@Base 2.8.0+dfsg1
  freerdp_reconnect@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_register_addin_provider@Base 2.0.0~git20160317.1.75ae3f5+dfsg1
  freerdp_send_error_info@Base 2.1.0+dfsg1
